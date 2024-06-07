@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "pl3x_markers",
+  "version": "${version}",
+  "name": "Pl3x Markers",
+  "description": "",
+  "authors": [],
+  "contact": {
+    "repo": "https://github.com/Gjorgdy/Pl3x Markers"
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/markers/logo.png",
+  "environment": "server",
+  "entrypoints": {
+    "client": [],
+    "main": [],
+    "server": [
+      "eu.hexasis.helixmarkers.HelixMarkers"
+    ]
+  },
+  "mixins": [
+    "helixmarkers.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
