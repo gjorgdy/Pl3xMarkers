@@ -16,6 +16,13 @@ public class MarkerUtils {
         }
     }
 
+    public static void removeMarker(Identifier worldIdentifier, String layerKey, BlockPos pos) {
+        Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(layerKey);
+        if (layer instanceof SimpleWorldLayer swl) {
+            swl.removeMarker(pos);
+        }
+    }
+
     private static World getWorld(Identifier worldIdentifier) {
         World world = Pl3xMap.api().getWorldRegistry().get(worldIdentifier.toString());
         if (world == null) throw new RuntimeException("World not found " + worldIdentifier);

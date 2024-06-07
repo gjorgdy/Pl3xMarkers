@@ -1,21 +1,41 @@
 package eu.hexasis.helixmarkers.mixin;
 
 import eu.hexasis.helixmarkers.MarkerUtils;
+import eu.hexasis.helixmarkers.interfaces.BeaconBlockEntityInterface;
 import net.minecraft.block.entity.BeaconBlockEntity;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(BeaconBlockEntity.class)
-public class BeaconBlockEntityMixin {
+public class BeaconBlockEntityMixin implements BeaconBlockEntityInterface {
+
+    @Shadow
+    int level;
 
     @Inject(method = "updateLevel", at = @At("RETURN"))
-    private static void tick(World world, int x, int y, int z, CallbackInfoReturnable<Integer> cir) {
-        MarkerUtils.addMarker(world.getRegistryKey().getValue(), "beacons", new BlockPos(x, y, z));
-//        System.out.println(cir.getReturnValue());
+    private static void updateLevel(World world, int x, int y, int z, CallbackInfoReturnable<Integer> cir) {
+        BlockPos blockPos = new BlockPos(x, y, z);
+        BlockEntity blockEntity = world.getBlockEntity(blockPos);
+        if (blockEntity instanceof BeaconBlockEntityInterface beaconBlockEntityInterface
+                && cir.getReturnValue() != beaconBlockEntityInterface.helixMarkers$getLevel()
+        ) {
+            if (cir.getReturnValue() > 0) {
+                MarkerUtils.addMarker(world.getRegistryKey().getValue(), "beacons", blockPos);
+            } else {
+                MarkerUtils.removeMarker(world.getRegistryKey().getValue(), "beacons", blockPos);
+            }
+        }
+    }
+
+    @Override
+    public int helixMarkers$getLevel() {
+        return this.level;
     }
 
 }

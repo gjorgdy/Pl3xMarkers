@@ -1,8 +1,6 @@
 package eu.hexasis.helixmarkers;
 
-import eu.hexasis.helixmarkers.layers.BeaconWorldLayer;
-import eu.hexasis.helixmarkers.layers.EndPortalWorldLayer;
-import eu.hexasis.helixmarkers.layers.NetherPortalWorldLayer;
+import eu.hexasis.helixmarkers.layers.LocalWorldLayer;
 import eu.hexasis.helixmarkers.objects.IconAddress;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -24,11 +22,11 @@ public class HelixMarkers implements DedicatedServerModInitializer {
         SQLITE = new SQLite().connection;
         API = new Pl3xApiHandler();
         // register default markers
-        API.registerSimpleWorldLayer(BeaconWorldLayer::new);
+        API.registerSimpleWorldLayer(w -> new LocalWorldLayer("beacon", "beacons", "Beacons", "Beacon", w));
         API.registerIconAddress(new IconAddress("/assets/markers/icons/", "beacon", "png"));
-        API.registerSimpleWorldLayer(EndPortalWorldLayer::new);
+        API.registerSimpleWorldLayer(w -> new LocalWorldLayer("end_portal", "end_portals", "End Portals", "End Portal", w));
         API.registerIconAddress(new IconAddress("/assets/markers/icons/", "end_portal", "png"));
-        API.registerSimpleWorldLayer(NetherPortalWorldLayer::new);
+        API.registerSimpleWorldLayer(w -> new LocalWorldLayer("nether_portal", "nether_portals", "Nether Portals", "Nether Portal", w));
         API.registerIconAddress(new IconAddress("/assets/markers/icons/", "nether_portal", "png"));
     }
 

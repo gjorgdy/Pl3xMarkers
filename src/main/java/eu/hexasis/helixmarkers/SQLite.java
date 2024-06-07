@@ -3,7 +3,6 @@ package eu.hexasis.helixmarkers;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -25,14 +24,14 @@ public class SQLite {
             connection = DriverManager.getConnection(connectionStringBase + configPath + "/markers.db");
             // markers table
             String query = """
-                CREATE TABLE IF NOT EXISTS markers (
-                    layer VARCHAR(32),
-                    world VARCHAR(32),
-                    x int,
-                    z int,
-                    PRIMARY KEY (layer, world, x, z)
-                )
-                """;
+                    CREATE TABLE IF NOT EXISTS markers (
+                        world VARCHAR(32),
+                        layer VARCHAR(32),
+                        x int,
+                        z int,
+                        PRIMARY KEY (world, layer, x, z)
+                    )
+                    """;
             connection.prepareStatement(query).execute();
 
         } catch (SQLException | ClassNotFoundException e) {
