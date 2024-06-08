@@ -26,10 +26,12 @@ public class PortalForcerMixin {
     @Inject(method = "createPortal", at = @At("RETURN"))
     public void createPortal(BlockPos pos, Direction.Axis axis, CallbackInfoReturnable<Optional<BlockLocating.Rectangle>> cir) {
         Identifier identifier = world.getRegistryKey().getValue();
+        if (cir.getReturnValue().isEmpty()) return;
+        BlockPos corner = cir.getReturnValue().get().lowerLeft;
         BlockPos center =
             (axis == Direction.Axis.X)
-                ? pos.add(1, 0, 0)
-                : pos.add(0, 0, 1);
+                ? corner.add(1, 0, 0)
+                : corner.add(0, 0, 1);
         MarkerUtils.addMarker(identifier, "nether_portals", center);
     }
 

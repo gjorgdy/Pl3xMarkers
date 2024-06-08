@@ -32,13 +32,20 @@ public class NetherPortalMixin {
     @Shadow
     private WorldAccess world;
 
+    @Shadow
+    private int foundPortalBlocks;
+
     @Shadow @Final private int width;
 
-    @Inject(method = "createPortal", at = @At("RETURN"))
+    @Inject(method = "<init>", at = @At("RETURN"))
     private void constructor(CallbackInfo ci) {
-        if (world instanceof ServerWorld sw && getSelf().isValid()) {
+        if (world instanceof ServerWorld sw) {
             Identifier identifier = sw.getRegistryKey().getValue();
-            MarkerUtils.addMarker(identifier, "nether_portals", getCenter());
+            if (foundPortalBlocks == 0 && getSelf().isValid()) {
+                MarkerUtils.addMarker(identifier, "nether_portals", getCenter());
+            } else {
+                MarkerUtils.removeMarker(identifier, "nether_portals", getCenter());
+            }
         }
     }
 
