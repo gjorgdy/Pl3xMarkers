@@ -14,9 +14,6 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Optional;
 
 @Mixin(NetherPortal.class)
 public class NetherPortalMixin {
@@ -35,7 +32,9 @@ public class NetherPortalMixin {
     @Shadow
     private int foundPortalBlocks;
 
-    @Shadow @Final private int width;
+    @Shadow
+    @Final
+    private int width;
 
     @Inject(method = "<init>", at = @At("RETURN"))
     private void constructor(CallbackInfo ci) {
