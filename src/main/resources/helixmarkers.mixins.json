@@ -4,7 +4,9 @@
   "package": "eu.hexasis.helixmarkers.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "BeaconBlockEntityMixin"
+    "BeaconBlockEntityMixin",
+    "NetherPortalMixin",
+    "PortalForcerMixin"
   ],
   "client": [
   ],
