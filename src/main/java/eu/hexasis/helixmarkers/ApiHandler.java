@@ -1,6 +1,6 @@
 package eu.hexasis.helixmarkers;
 
-import eu.hexasis.helixmarkers.layers.SimpleWorldLayer;
+import eu.hexasis.helixmarkers.layers.MarkerLayer;
 import eu.hexasis.helixmarkers.objects.IconAddress;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.event.EventHandler;
@@ -19,17 +19,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class Pl3xApiHandler {
+public class ApiHandler {
 
-    private final List<Function<World, SimpleWorldLayer>> worldLayerFunctions = new ArrayList<>();
+    private final List<Function<World, MarkerLayer>> worldLayerFunctions = new ArrayList<>();
     private final List<IconAddress> iconAddresses = new ArrayList<>();
 
-    public void registerSimpleWorldLayer(Function<World, SimpleWorldLayer> function) {
+    public Pl3xMap pl3x() {
+        return Pl3xMap.api();
+    }
+
+    public void registerMarkerLayer(Function<World, MarkerLayer> function) {
         worldLayerFunctions.add(function);
     }
 
-    public void registerIconAddress(IconAddress iconAddress) {
-        iconAddresses.add(iconAddress);
+    public void registerIcon(String path, String filename, String filetype) {
+        iconAddresses.add(
+            new IconAddress(path, filename, filetype)
+        );
     }
 
     public Pl3xEventListener getEventListener() {
@@ -43,8 +49,9 @@ public class Pl3xApiHandler {
         @EventHandler
         public void onWorldLoad(WorldLoadedEvent event) {
             worldLayerFunctions.forEach(function -> {
-                SimpleWorldLayer swl = function.apply(event.getWorld());
+                MarkerLayer swl = function.apply(event.getWorld());
                 event.getWorld().getLayerRegistry().register(swl);
+                swl.load();
             });
         }
 
@@ -63,11 +70,11 @@ public class Pl3xApiHandler {
 
     private void registerIcon(IconAddress address) throws IOException {
         // get registry
-        IconRegistry iconRegistry = Pl3xMap.api().getIconRegistry();
+        IconRegistry iconRegistry = pl3x().getIconRegistry();
         if (iconRegistry.has(address.fileName())) return;
         // get file
         String path = address.path() + address.fileName() + "." + address.fileType();
-        InputStream inputStream = Pl3xApiHandler.class.getResourceAsStream(path);
+        InputStream inputStream = ApiHandler.class.getResourceAsStream(path);
         if (inputStream == null) throw new IOException("Resource not found: " + path);
         // read file
         BufferedImage image = ImageIO.read(inputStream);

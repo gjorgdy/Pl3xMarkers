@@ -34,13 +34,10 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
-    implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.46.0.0'
     // Pl3xmap Marker
-    compileOnly "maven.modrinth:pl3xmap:1.20.4-476"
+    modImplementation "maven.modrinth:pl3xmap:1.20.4-476"
 }
 
 processResources {
@@ -88,7 +85,7 @@ jar {
 // configure the maven publication
 publishing {
     publications {
-        create("mavenJava", MavenPublication) {
+        create(MavenPublication) {
             artifactId = project.archives_base_name
             from components.java
         }
@@ -100,5 +97,8 @@ publishing {
         // Notice: This block does NOT have the same function as the block in the top level.
         // The repositories here will be used for publishing your artifact, not for
         // retrieving dependencies.
+        maven {
+            url = uri('../helix-maven')
+        }
     }
 }

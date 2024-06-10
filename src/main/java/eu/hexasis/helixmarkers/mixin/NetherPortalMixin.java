@@ -41,9 +41,9 @@ public class NetherPortalMixin {
         if (world instanceof ServerWorld sw) {
             Identifier identifier = sw.getRegistryKey().getValue();
             if (foundPortalBlocks == 0 && getSelf().isValid()) {
-                MarkerUtils.addMarker(identifier, "nether_portals", getCenter());
+                MarkerUtils.addSimpleMarker(identifier, "nether_portals", getCenter());
             } else {
-                MarkerUtils.removeMarker(identifier, "nether_portals", getCenter());
+                MarkerUtils.removeSimpleMarker(identifier, "nether_portals", getCenter());
             }
         }
     }
