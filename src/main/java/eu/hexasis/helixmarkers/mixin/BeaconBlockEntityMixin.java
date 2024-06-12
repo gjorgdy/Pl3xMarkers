@@ -1,6 +1,6 @@
 package eu.hexasis.helixmarkers.mixin;
 
-import eu.hexasis.helixmarkers.MarkerUtils;
+import eu.hexasis.helixmarkers.HelixMarkers;
 import eu.hexasis.helixmarkers.interfaces.BeaconBlockEntityInterface;
 import net.minecraft.block.entity.BeaconBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
@@ -26,9 +26,9 @@ public class BeaconBlockEntityMixin implements BeaconBlockEntityInterface {
                 && cir.getReturnValue() != beaconBlockEntityInterface.helixMarkers$getLevel()
         ) {
             if (cir.getReturnValue() > 0) {
-                MarkerUtils.addSimpleMarker(world.getRegistryKey().getValue(), "beacons", blockPos);
+                HelixMarkers.api().addSimpleMarker(world.getRegistryKey().getValue(), "beacons", blockPos);
             } else {
-                MarkerUtils.removeSimpleMarker(world.getRegistryKey().getValue(), "beacons", blockPos);
+                HelixMarkers.api().removeSimpleMarker(world.getRegistryKey().getValue(), "beacons", blockPos);
             }
         }
     }

@@ -1,5 +1,6 @@
 package eu.hexasis.helixmarkers.layers;
 
+import eu.hexasis.helixmarkers.markers.MarkerBuilder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.pl3x.map.core.markers.layer.WorldLayer;
@@ -26,6 +27,10 @@ public abstract class MarkerLayer extends WorldLayer {
 
     final public String toMarkerKey(int x, int z) {
         return x + ":" + z;
+    }
+
+    public void addMarker(MarkerBuilder markerBuilder) {
+        addMarker(markerBuilder.build());
     }
 
 }

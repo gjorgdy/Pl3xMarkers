@@ -27,6 +27,10 @@ repositories {
         name = "Nova Committee - Snapshot"
         url = "https://maven.nova-committee.cn/snapshots/"
     }
+    maven {
+        name = "Local Helix Maven"
+        url = uri('../helix-maven')
+    }
 }
 
 dependencies {
@@ -38,6 +42,8 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     // Pl3xmap Marker
     modImplementation "maven.modrinth:pl3xmap:1.20.4-476"
+    // Helix Core
+    modImplementation "eu.hexasis:HelixCore:1.0.0-1.20.6"
 }
 
 processResources {

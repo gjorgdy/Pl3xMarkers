@@ -19,14 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class ApiHandler {
+public class ApiHandler implements EventListener {
 
     private final List<Function<World, MarkerLayer>> worldLayerFunctions = new ArrayList<>();
     private final List<IconAddress> iconAddresses = new ArrayList<>();
-
-    public Pl3xMap pl3x() {
-        return Pl3xMap.api();
-    }
 
     public void registerMarkerLayer(Function<World, MarkerLayer> function) {
         worldLayerFunctions.add(function);
@@ -34,43 +30,33 @@ public class ApiHandler {
 
     public void registerIcon(String path, String filename, String filetype) {
         iconAddresses.add(
-            new IconAddress(path, filename, filetype)
+                new IconAddress(path, filename, filetype)
         );
     }
 
-    public Pl3xEventListener getEventListener() {
-        return new Pl3xEventListener();
+    @EventHandler
+    public void onWorldLoad(WorldLoadedEvent event) {
+        worldLayerFunctions.forEach(function -> {
+            MarkerLayer swl = function.apply(event.getWorld());
+            event.getWorld().getLayerRegistry().register(swl);
+            swl.load();
+        });
     }
 
-    public class Pl3xEventListener implements EventListener {
-
-        private Pl3xEventListener() {}
-
-        @EventHandler
-        public void onWorldLoad(WorldLoadedEvent event) {
-            worldLayerFunctions.forEach(function -> {
-                MarkerLayer swl = function.apply(event.getWorld());
-                event.getWorld().getLayerRegistry().register(swl);
-                swl.load();
-            });
-        }
-
-        @EventHandler
-        public void onEnable(Pl3xMapEnabledEvent event) {
-            iconAddresses.forEach(address -> {
-                try {
-                    registerIcon(address);
-                } catch (IOException e) {
-                    HelixMarkers.LOGGER.error("Failed to register icon", e);
-                }
-            });
-        }
-
+    @EventHandler
+    public void onEnable(Pl3xMapEnabledEvent event) {
+        iconAddresses.forEach(address -> {
+            try {
+                registerIcon(address);
+            } catch (IOException e) {
+                HelixMarkers.LOGGER.error("Failed to register icon", e);
+            }
+        });
     }
 
     private void registerIcon(IconAddress address) throws IOException {
         // get registry
-        IconRegistry iconRegistry = pl3x().getIconRegistry();
+        IconRegistry iconRegistry = Pl3xMap.api().getIconRegistry();
         if (iconRegistry.has(address.fileName())) return;
         // get file
         String path = address.path() + address.fileName() + "." + address.fileType();
@@ -81,5 +67,6 @@ public class ApiHandler {
         // register
         iconRegistry.register(new IconImage(address.fileName(), image, address.fileType()));
     }
+
 
 }

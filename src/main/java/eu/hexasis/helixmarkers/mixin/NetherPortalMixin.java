@@ -1,6 +1,6 @@
 package eu.hexasis.helixmarkers.mixin;
 
-import eu.hexasis.helixmarkers.MarkerUtils;
+import eu.hexasis.helixmarkers.HelixMarkers;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -41,9 +41,9 @@ public class NetherPortalMixin {
         if (world instanceof ServerWorld sw) {
             Identifier identifier = sw.getRegistryKey().getValue();
             if (foundPortalBlocks == 0 && getSelf().isValid()) {
-                MarkerUtils.addSimpleMarker(identifier, "nether_portals", getCenter());
+                HelixMarkers.api().addSimpleMarker(identifier, "nether_portals", getCenter());
             } else {
-                MarkerUtils.removeSimpleMarker(identifier, "nether_portals", getCenter());
+                HelixMarkers.api().removeSimpleMarker(identifier, "nether_portals", getCenter());
             }
         }
     }

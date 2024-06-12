@@ -1,6 +1,6 @@
 package eu.hexasis.helixmarkers.mixin;
 
-import eu.hexasis.helixmarkers.MarkerUtils;
+import eu.hexasis.helixmarkers.HelixMarkers;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -32,7 +32,7 @@ public class PortalForcerMixin {
             (axis == Direction.Axis.X)
                 ? corner.add(1, 0, 0)
                 : corner.add(0, 0, 1);
-        MarkerUtils.addSimpleMarker(identifier, "nether_portals", center);
+        HelixMarkers.api().addSimpleMarker(identifier, "nether_portals", center);
     }
 
 }

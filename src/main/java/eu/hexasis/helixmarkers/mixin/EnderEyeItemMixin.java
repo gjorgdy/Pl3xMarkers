@@ -1,7 +1,7 @@
 package eu.hexasis.helixmarkers.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import eu.hexasis.helixmarkers.MarkerUtils;
+import eu.hexasis.helixmarkers.HelixMarkers;
 import net.minecraft.item.EnderEyeItem;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.util.ActionResult;
@@ -18,7 +18,7 @@ public class EnderEyeItemMixin {
     @Inject(method = "useOnBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;syncGlobalEvent(ILnet/minecraft/util/math/BlockPos;I)V"))
     public void onUseOnBlock(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir, @Local(ordinal = 1) BlockPos blockPos2) {
         Identifier identifier = context.getWorld().getRegistryKey().getValue();
-        MarkerUtils.addSimpleMarker(identifier, "end_portals", blockPos2.add(1, 0, 1));
+        HelixMarkers.api().addSimpleMarker(identifier, "end_portals", blockPos2.add(1, 0, 1));
     }
 
 }
