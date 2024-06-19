@@ -9,8 +9,7 @@
     "NetherPortalMixin",
     "PortalForcerMixin"
   ],
-  "client": [
-  ],
+  "client": [],
   "injectors": {
     "defaultRequire": 1
   }

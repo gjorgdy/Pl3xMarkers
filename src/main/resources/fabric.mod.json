@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "id": "pl3x_markers",
+  "id": "helixmarkers",
   "version": "${version}",
-  "name": "Pl3x Markers",
+  "name": "Helix Markers",
   "description": "",
   "authors": [],
   "contact": {
