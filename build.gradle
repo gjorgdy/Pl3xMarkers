@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.6-SNAPSHOT'
+    id 'fabric-loom' version '1.9-SNAPSHOT'
     id 'maven-publish'
 }
 
@@ -43,7 +43,7 @@ dependencies {
     // Pl3xmap Marker
     modImplementation "maven.modrinth:pl3xmap:1.21-500"
     // Helix Core
-    modImplementation "eu.hexasis:HelixCore:1.0.0-1.21"
+    modImplementation "eu.hexasis:HelixCore:1.0.2-1.21.4"
 }
 
 processResources {
