@@ -18,16 +18,19 @@ public class MarkerBuilder {
         this.options = new Options();
     }
 
+    @SuppressWarnings("unused")
     public Marker<?> build() {
         marker.setOptions(options);
         return marker;
     }
 
+    @SuppressWarnings("unused")
     public static MarkerBuilder newIconMarker(String key, String icon, int x, int z) {
         Icon iconMarker = new Icon(key, x, z, icon);
         return new MarkerBuilder(iconMarker);
     }
 
+    @SuppressWarnings("unused")
     public MarkerBuilder centerIcon(int width, int height) {
         if (marker instanceof Icon icon) {
             int xOffset = width / 2;
@@ -41,6 +44,7 @@ public class MarkerBuilder {
         return this;
     }
 
+    @SuppressWarnings("unused")
     public MarkerBuilder addTooltip(@Language("HTML") String content) {
         options.setTooltip(
             new Tooltip(content)
@@ -48,6 +52,7 @@ public class MarkerBuilder {
         return this;
     }
 
+    @SuppressWarnings("unused")
     public MarkerBuilder addPopup(@Language("HTML") String content) {
         options.setPopup(
                 new Popup(content)

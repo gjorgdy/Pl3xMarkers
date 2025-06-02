@@ -6,8 +6,10 @@
   "mixins": [
     "BeaconBlockEntityMixin",
     "EnderEyeItemMixin",
+    "EntityMixin",
     "NetherPortalMixin",
-    "PortalForcerMixin"
+    "PortalForcerMixin",
+    "ServerWorldMixin"
   ],
   "client": [],
   "injectors": {

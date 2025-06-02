@@ -23,11 +23,6 @@
   "mixins": [
     "helixmarkers.mixins.json"
   ],
-  "custom" : {
-    "loom:injected_interfaces": {
-      "net/minecraft/block/entity/BeaconBlockEntity": ["eu/hexasis/helixmarkers/interfaces/BeaconBlockEntityInterface"]
-    }
-  },
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",

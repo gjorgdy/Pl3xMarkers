@@ -54,6 +54,8 @@ public class HelixMarkers implements ModInitializer, DedicatedServerModInitializ
         api().registerIcon("/assets/helix/markers/icons/", "end_portal", "png");
         api().registerMarkerLayer(w -> new SimpleIconMarkerLayer("nether_portal", "nether_portals", "Nether Portals", "Nether Portal", w));
         api().registerIcon("/assets/helix/markers/icons/", "nether_portal", "png");
+        api().registerMarkerLayer(w -> new SimpleIconMarkerLayer("lodestone", "lodestones", "Lodestones", "Lodestone", w));
+        api().registerIcon("/assets/helix/markers/icons/", "lodestone", "png");
         // register event
         ServerLifecycleEvents.SERVER_STARTING.register(
                 server -> Pl3xMap.api().getEventRegistry().register(apiHandler())

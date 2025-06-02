@@ -1,10 +1,10 @@
 package eu.hexasis.helixmarkers.mixin;
 
 import eu.hexasis.helixmarkers.HelixMarkers;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Identifier;
+import eu.hexasis.helixmarkers.interfaces.NetherPortalInterface;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.dimension.NetherPortal;
 import org.spongepowered.asm.mixin.Final;
@@ -13,54 +13,48 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.Optional;
 
 @Mixin(NetherPortal.class)
-public class NetherPortalMixin {
+public class NetherPortalMixin implements NetherPortalInterface {
 
     @Final
     @Shadow
     private Direction.Axis axis;
 
-    @Shadow
-    private BlockPos lowerCorner;
-
     @Final
     @Shadow
-    private WorldAccess world;
-
-    @Shadow
-    private int foundPortalBlocks;
+    private BlockPos lowerCorner;
 
     @Shadow
     @Final
     private int width;
 
-    @Inject(method = "<init>", at = @At("RETURN"))
-    private void constructor(CallbackInfo ci) {
-        if (world instanceof ServerWorld sw) {
-            Identifier identifier = sw.getRegistryKey().getValue();
-            if (foundPortalBlocks == 0 && getSelf().isValid()) {
-                HelixMarkers.api().addSimpleMarker(identifier, "nether_portals", getCenter());
-            } else {
-                HelixMarkers.api().removeSimpleMarker(identifier, "nether_portals", getCenter());
-            }
-        }
-    }
-
     @Unique
-    private NetherPortal getSelf() {
-        return (NetherPortal) (Object) this;
-    }
-
-    @Unique
-    private BlockPos getCenter() {
+    @SuppressWarnings("unused")
+    public BlockPos helixMarkers$getCenter() {
         if (lowerCorner == null) return null;
         if (axis == Direction.Axis.X) {
-            return lowerCorner.add(width / 2, 0, 0);
+            return lowerCorner.add(width / -2, 0, 0);
         } else {
             return lowerCorner.add(0, 0, width / 2);
         }
+    }
+
+    @Override
+    public void helixMarkers$createMarker(World world) {
+        HelixMarkers.api().addSimpleMarker(world.getRegistryKey().getValue(), "nether_portals", helixMarkers$getCenter());
+    }
+
+    @Inject(method = "getNewPortal", at = @At("RETURN"))
+    private static void onNewPortal(WorldAccess world, BlockPos pos, Direction.Axis firstCheckedAxis, CallbackInfoReturnable<Optional<NetherPortal>> cir) {
+        cir.getReturnValue().ifPresent(netherPortal -> {
+            if (netherPortal instanceof NetherPortalInterface np) {
+                np.helixMarkers$createMarker((World) world);
+            }
+        });
     }
 
 }
