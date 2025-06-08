@@ -27,9 +27,11 @@ public class BlockMixin {
         if (world instanceof ServerWorld serverWorld && world.getBlockState(pos.down()).isOf(Blocks.LODESTONE)) {
             var blockEntity = serverWorld.getBlockEntity(pos);
             if (blockEntity instanceof BannerBlockEntity banner) {
+                @Language("HTML") var name = banner.getName().getLiteralString();
+                if (name == null) return;
                 HelixMarkers.api().addAreaPoint(
                     serverWorld.getRegistryKey().getValue(),
-                    banner.getName().getLiteralString(),
+                    name,
                     banner.getColorForState().getEntityColor(),
                     pos
                 );
