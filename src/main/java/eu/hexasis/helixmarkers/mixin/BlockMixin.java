@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.intellij.lang.annotations.Language;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -48,9 +49,11 @@ public class BlockMixin {
                 state.isOf(Blocks.LODESTONE) ? pos.up() : pos
             );
             if (blockEntity instanceof BannerBlockEntity banner) {
+                @Language("HTML") var name = banner.getName().getLiteralString();
+                if (name == null) return;
                 HelixMarkers.api().removeAreaPoint(
                         serverWorld.getRegistryKey().getValue(),
-                        banner.getName().getLiteralString(),
+                        name,
                         banner.getColorForState().getEntityColor(),
                         pos
                 );
