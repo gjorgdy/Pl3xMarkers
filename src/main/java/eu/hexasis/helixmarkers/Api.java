@@ -28,20 +28,16 @@ public class Api {
 
     @SuppressWarnings("unused")
     public void registerMarkerLayer(String layerKey, String layerLabel, BiConsumer<LayerAccessor, Identifier> loadConsumer) {
-        executor.execute(() -> {
-            // parse through to internal handler
-            HelixMarkers.apiHandler().registerMarkerLayer(
-                    world -> new SimpleMarkerLayer(layerKey, layerLabel, world, loadConsumer)
-            );
-        });
+        // parse through to internal handler
+        HelixMarkers.apiHandler().registerMarkerLayer(
+                world -> new SimpleMarkerLayer(layerKey, layerLabel, world, loadConsumer)
+        );
     }
 
     @SuppressWarnings("unused")
     public void registerMarkerLayer(Function<World, MarkerLayer> function) {
-        executor.execute(() -> {
-            // parse through to internal handler
-            HelixMarkers.apiHandler().registerMarkerLayer(function);
-        });
+        // parse through to internal handler
+        HelixMarkers.apiHandler().registerMarkerLayer(function);
     }
 
     @SuppressWarnings("unused")

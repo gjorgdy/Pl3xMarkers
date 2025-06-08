@@ -22,6 +22,7 @@ public class BlockMixin {
 
     @Inject(method = "onPlaced", at = @At("HEAD"))
     public void onPlace(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack, CallbackInfo ci) {
+        // area markers
         if (world instanceof ServerWorld serverWorld && world.getBlockState(pos.down()).isOf(Blocks.LODESTONE)) {
             var blockEntity = serverWorld.getBlockEntity(pos);
             if (blockEntity instanceof BannerBlockEntity banner) {
