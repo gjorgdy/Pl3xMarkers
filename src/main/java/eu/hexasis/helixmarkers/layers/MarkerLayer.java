@@ -21,15 +21,11 @@ public abstract class MarkerLayer extends WorldLayer {
      */
     abstract public void load();
 
-    final public String toMarkerKey(BlockPos pos) {
-        return toMarkerKey(pos.getX(), pos.getZ());
-    }
-
     final public String toMarkerKey(int x, int z) {
         return x + ":" + z;
     }
 
-    public void addMarker(MarkerBuilder markerBuilder) {
+    public void addMarker(MarkerBuilder<?> markerBuilder) {
         addMarker(markerBuilder.build());
     }
 

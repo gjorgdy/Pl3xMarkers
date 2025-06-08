@@ -8,12 +8,12 @@ import net.pl3x.map.core.markers.option.Popup;
 import net.pl3x.map.core.markers.option.Tooltip;
 import org.intellij.lang.annotations.Language;
 
-public class MarkerBuilder {
+public class MarkerBuilder<T extends Marker<T>> {
 
-    private final Marker<?> marker;
-    private final Options options;
+    protected final Marker<T> marker;
+    protected final Options options;
 
-    private MarkerBuilder(Marker<?> marker) {
+    protected MarkerBuilder(Marker<T> marker) {
         this.marker = marker;
         this.options = new Options();
     }
@@ -25,13 +25,7 @@ public class MarkerBuilder {
     }
 
     @SuppressWarnings("unused")
-    public static MarkerBuilder newIconMarker(String key, String icon, int x, int z) {
-        Icon iconMarker = new Icon(key, x, z, icon);
-        return new MarkerBuilder(iconMarker);
-    }
-
-    @SuppressWarnings("unused")
-    public MarkerBuilder centerIcon(int width, int height) {
+    public MarkerBuilder<T> centerIcon(int width, int height) {
         if (marker instanceof Icon icon) {
             int xOffset = width / 2;
             int yOffset = height / 2;
@@ -45,7 +39,7 @@ public class MarkerBuilder {
     }
 
     @SuppressWarnings("unused")
-    public MarkerBuilder addTooltip(@Language("HTML") String content) {
+    public MarkerBuilder<T> addTooltip(@Language("HTML") String content) {
         options.setTooltip(
             new Tooltip(content)
         );
@@ -53,7 +47,7 @@ public class MarkerBuilder {
     }
 
     @SuppressWarnings("unused")
-    public MarkerBuilder addPopup(@Language("HTML") String content) {
+    public MarkerBuilder<T> addPopup(@Language("HTML") String content) {
         options.setPopup(
                 new Popup(content)
                     .setShouldAutoClose(false)

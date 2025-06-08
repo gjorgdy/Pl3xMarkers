@@ -1,9 +1,8 @@
 package eu.hexasis.helixmarkers.layers;
 
 import eu.hexasis.helixmarkers.HelixMarkers;
-import eu.hexasis.helixmarkers.markers.MarkerBuilder;
+import eu.hexasis.helixmarkers.markers.IconBuilder;
 import net.minecraft.util.math.BlockPos;
-import net.pl3x.map.core.markers.marker.Icon;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.world.World;
 import org.intellij.lang.annotations.Language;
@@ -34,7 +33,7 @@ public class SimpleIconMarkerLayer extends MarkerLayer {
         String query = """
                     SELECT * FROM markers WHERE world = ? AND layer = ?
                 """;
-        try (PreparedStatement ps = HelixMarkers.LOCAL_STORAGE.prepareStatement(query)) {
+        try (PreparedStatement ps = HelixMarkers.DATABASE.prepareStatement(query)) {
             ps.setString(1, getWorld().getKey());
             ps.setString(2, key);
             ResultSet rs = ps.executeQuery();
@@ -60,7 +59,7 @@ public class SimpleIconMarkerLayer extends MarkerLayer {
                     INSERT INTO markers VALUES (?, ?, ?, ?)
                     ON CONFLICT DO NOTHING
                 """;
-        try (PreparedStatement ps = HelixMarkers.LOCAL_STORAGE.prepareStatement(query)) {
+        try (PreparedStatement ps = HelixMarkers.DATABASE.prepareStatement(query)) {
             ps.setString(1, getWorld().getKey());
             ps.setString(2, key);
             ps.setInt(3, pos.getX());
@@ -94,7 +93,7 @@ public class SimpleIconMarkerLayer extends MarkerLayer {
         String query = """
                     DELETE FROM markers WHERE world = ? AND layer = ? AND x = ? AND z = ?
                 """;
-        try (PreparedStatement ps = HelixMarkers.LOCAL_STORAGE.prepareStatement(query)) {
+        try (PreparedStatement ps = HelixMarkers.DATABASE.prepareStatement(query)) {
             ps.setString(1, getWorld().getKey());
             ps.setString(2, key);
             ps.setInt(3, x);
@@ -109,7 +108,7 @@ public class SimpleIconMarkerLayer extends MarkerLayer {
 
     protected Marker<?> createSimpleMarker(int x, int z) {
 
-        return MarkerBuilder.newIconMarker(
+        return IconBuilder.newIconMarker(
                 toMarkerKey(x, z),
                 iconId,
                 x, z
@@ -117,10 +116,6 @@ public class SimpleIconMarkerLayer extends MarkerLayer {
             .centerIcon(16, 16)
             .addTooltip(tooltip)
             .build();
-    }
-
-    final public boolean hasMarker(int x, int z) {
-        return hasMarker(x + ":" + z);
     }
 
 }

@@ -1,16 +1,15 @@
 package eu.hexasis.helixmarkers;
 
-import eu.hexasis.helixmarkers.layers.LayerAccessor;
-import eu.hexasis.helixmarkers.layers.MarkerLayer;
-import eu.hexasis.helixmarkers.layers.SimpleIconMarkerLayer;
-import eu.hexasis.helixmarkers.layers.SimpleMarkerLayer;
+import eu.hexasis.helixmarkers.layers.*;
 import eu.hexasis.helixmarkers.markers.MarkerBuilder;
+import eu.hexasis.helixmarkers.objects.Position;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.markers.layer.Layer;
 import net.pl3x.map.core.markers.layer.WorldLayer;
 import net.pl3x.map.core.world.World;
+import org.intellij.lang.annotations.Language;
 
 import java.util.concurrent.*;
 import java.util.function.BiConsumer;
@@ -54,11 +53,31 @@ public class Api {
     }
 
     @SuppressWarnings("unused")
-    public void addMarker(Identifier worldIdentifier, String layerKey, MarkerBuilder markerBuilder) {
+    public void addMarker(Identifier worldIdentifier, String layerKey, MarkerBuilder<?> markerBuilder) {
         executor.execute(() -> {
             Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(layerKey);
             if (layer instanceof WorldLayer wl) {
                 wl.addMarker(markerBuilder.build());
+            }
+        });
+    }
+
+    @SuppressWarnings("unused")
+    public void addAreaPoint(Identifier worldIdentifier, @Language("HTML") String label, int color, BlockPos pos) {
+        executor.execute(() -> {
+            Layer layer = getWorld(worldIdentifier).getLayerRegistry().get("areas");
+            if (layer instanceof AreaMarkerLayer aml) {
+                aml.addPoint(label, color, new Position(pos.getX(), pos.getZ()));
+            }
+        });
+    }
+
+    @SuppressWarnings("unused")
+    public void removeAreaPoint(Identifier worldIdentifier, @Language("HTML") String label, int color, BlockPos pos) {
+        executor.execute(() -> {
+            Layer layer = getWorld(worldIdentifier).getLayerRegistry().get("areas");
+            if (layer instanceof AreaMarkerLayer aml) {
+                aml.removePoint(label, color, new Position(pos.getX(), pos.getZ()));
             }
         });
     }
