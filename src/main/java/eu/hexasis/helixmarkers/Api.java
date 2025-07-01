@@ -42,10 +42,8 @@ public class Api {
 
     @SuppressWarnings("unused")
     public void registerIcon(String path, String filename, String filetype) {
-        executor.execute(() -> {
-            // parse through to internal handler
-            HelixMarkers.apiHandler().registerIcon(path, filename, filetype);
-        });
+        // parse through to internal handler
+        HelixMarkers.apiHandler().registerIcon(path, filename, filetype);
     }
 
     @SuppressWarnings("unused")

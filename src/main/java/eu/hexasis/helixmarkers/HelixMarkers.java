@@ -63,13 +63,14 @@ public class HelixMarkers implements ModInitializer, DedicatedServerModInitializ
                     """;
         DATABASE = HelixCore.api().getStorage("markers", markersQuery, areasQuery);
         AREA_REPOSITORY = new AreaRepository(DATABASE);
+        // register default icons
+        api().registerIcon("/assets/helix/markers/icons/", "beacon", "png");
+        api().registerIcon("/assets/helix/markers/icons/", "end_portal", "png");
+        api().registerIcon("/assets/helix/markers/icons/", "nether_portal", "png");
         // register default markers
         api().registerMarkerLayer(w -> new SimpleIconMarkerLayer("beacon", "beacons", "Beacons", "Beacon", w));
-        api().registerIcon("/assets/helix/markers/icons/", "beacon", "png");
         api().registerMarkerLayer(w -> new EndPortalMarkerLayer("end_portal", "end_portals", "End Portals", "End Portal", w));
-        api().registerIcon("/assets/helix/markers/icons/", "end_portal", "png");
         api().registerMarkerLayer(w -> new NetherPortalMarkerLayer("nether_portal", "nether_portals", "Nether Portals", "Nether Portal", w));
-        api().registerIcon("/assets/helix/markers/icons/", "nether_portal", "png");
         api().registerMarkerLayer(w -> new AreaMarkerLayer("areas", "Areas", w));
         // register events
         ServerLifecycleEvents.SERVER_STARTING.register(
