@@ -2,6 +2,7 @@ package eu.hexasis.helixmarkers;
 
 import eu.hexasis.helixcore.HelixCore;
 import eu.hexasis.helixmarkers.layers.AreaMarkerLayer;
+import eu.hexasis.helixmarkers.layers.EndPortalMarkerLayer;
 import eu.hexasis.helixmarkers.layers.NetherPortalMarkerLayer;
 import eu.hexasis.helixmarkers.layers.SimpleIconMarkerLayer;
 import eu.hexasis.helixmarkers.repositories.AreaRepository;
@@ -65,7 +66,7 @@ public class HelixMarkers implements ModInitializer, DedicatedServerModInitializ
         // register default markers
         api().registerMarkerLayer(w -> new SimpleIconMarkerLayer("beacon", "beacons", "Beacons", "Beacon", w));
         api().registerIcon("/assets/helix/markers/icons/", "beacon", "png");
-        api().registerMarkerLayer(w -> new SimpleIconMarkerLayer("end_portal", "end_portals", "End Portals", "End Portal", w));
+        api().registerMarkerLayer(w -> new EndPortalMarkerLayer("end_portal", "end_portals", "End Portals", "End Portal", w));
         api().registerIcon("/assets/helix/markers/icons/", "end_portal", "png");
         api().registerMarkerLayer(w -> new NetherPortalMarkerLayer("nether_portal", "nether_portals", "Nether Portals", "Nether Portal", w));
         api().registerIcon("/assets/helix/markers/icons/", "nether_portal", "png");
