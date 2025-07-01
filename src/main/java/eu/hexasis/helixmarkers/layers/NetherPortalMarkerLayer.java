@@ -1,5 +1,6 @@
 package eu.hexasis.helixmarkers.layers;
 
+import eu.hexasis.helixmarkers.helpers.HtmlHelper;
 import eu.hexasis.helixmarkers.markers.IconBuilder;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.world.World;
@@ -23,29 +24,13 @@ public class NetherPortalMarkerLayer extends SimpleIconMarkerLayer {
         int relativeZ = isOverworld ? z / 8 : z * 8;
         String buttonText = isOverworld ? "Go to Nether" : "Go to Overworld";
 
-        @Language("HTML") String html = """
-            <div style='display: flex; flex-direction: column; gap: 0.5rem'>
-                <b>Nether Portal</b>
-                <button onclick="(function() {
-                  const baseUrl = window.location.href.split('?')[0] || window.location.href;
-                  const params = new URLSearchParams(window.location.search);
-                  params.set('world', '%s');
-                  params.set('x', '%d');
-                  params.set('z', '%d');
-                  window.location.href = baseUrl + '?' + params.toString();
-                })()">
-                    %s
-                </button>
-            </div>
-        """;
-
         return IconBuilder.newIconMarker(
                         toMarkerKey(x, z),
                         iconId,
                         x, z
                 )
                 .centerIcon(16, 16)
-                .addPopup(String.format(html, destinationKey, relativeX, relativeZ, buttonText))
+                .addPopup(HtmlHelper.TravelPopUp(label, destinationKey, relativeX, relativeZ, buttonText))
                 .build();
     }
 
