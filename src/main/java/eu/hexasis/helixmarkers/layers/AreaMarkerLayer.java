@@ -2,12 +2,15 @@ package eu.hexasis.helixmarkers.layers;
 
 import eu.hexasis.helixmarkers.HelixMarkers;
 import eu.hexasis.helixmarkers.markers.AreaBuilder;
-import eu.hexasis.helixmarkers.objects.Area;
 import eu.hexasis.helixmarkers.objects.Position;
 import eu.hexasis.helixmarkers.repositories.AreaRepository;
+import eu.hexasis.helixmarkers.tables.AreaEntity;
 import net.pl3x.map.core.world.World;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AreaMarkerLayer extends MarkerLayer {
 
@@ -31,17 +34,22 @@ public class AreaMarkerLayer extends MarkerLayer {
             .forEach(this::loadArea);
     }
 
-    public void loadArea(Area area) {
-        if (super.hasMarker(area.Key())) {
-            super.removeMarker(area.Key());
+    public void loadArea(AreaEntity area) {
+        if (super.hasMarker(area.getKey())) {
+            super.removeMarker(area.getKey());
         }
-        if (!area.points().isEmpty()) {
+        var pointsCol = area.getPoints();
+        if (pointsCol != null && !pointsCol.isEmpty()) {
+            List<Position> points = pointsCol
+                .stream()
+                .map(p -> new Position(p.getX(), p.getZ()))
+                .collect(Collectors.toList());
             super.addMarker(
                 AreaBuilder
-                    .newArea(area.Key(), area.points())
-                    .fill(area.color())
-                    .stroke(area.color())
-                    .addPopup(area.label())
+                    .newArea(area.getKey(), points)
+                    .fill(area.getColor())
+                    .stroke(area.getColor())
+                    .addPopup(area.getLabel())
             );
         }
     }
@@ -55,7 +63,8 @@ public class AreaMarkerLayer extends MarkerLayer {
         boolean added = repo().addPoint(getWorld().getKey(), label, color, pos);
         if (added) {
             // reload the area
-            loadArea(repo().getArea(getWorld().getKey(), label, color));
+            AreaEntity area = repo().getArea(getWorld().getKey(), label, color);
+            if (area != null) loadArea(area);
         }
     }
 
@@ -68,7 +77,8 @@ public class AreaMarkerLayer extends MarkerLayer {
         boolean removed = repo().removePoint(getWorld().getKey(), label, color, pos);
         if (removed) {
             // reload the area
-            loadArea(repo().getArea(getWorld().getKey(), label, color));
+            AreaEntity area = repo().getArea(getWorld().getKey(), label, color);
+            if (area != null) loadArea(area);
         }
     }
 

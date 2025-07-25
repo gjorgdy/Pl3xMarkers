@@ -43,8 +43,11 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     // Pl3xmap Marker
     compileOnly "maven.modrinth:pl3xmap:1.21.5-527"
-    // Helix Core
-    compileOnly "eu.hexasis:HelixCore:1.0.3-1.21.5"
+    // SQLite
+    // https://mvnrepository.com/artifact/com.j256.ormlite/ormlite-jdbc
+    implementation 'com.j256.ormlite:ormlite-jdbc:6.1'
+    // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+    implementation 'org.xerial:sqlite-jdbc:3.50.3.0'
 }
 
 processResources {

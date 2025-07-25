@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class ApiHandler implements EventListener {
+public class Pl3xHandler implements EventListener {
 
     private final List<Function<World, MarkerLayer>> worldLayerFunctions = new ArrayList<>();
     private final List<IconAddress> iconAddresses = new ArrayList<>();
@@ -60,7 +60,7 @@ public class ApiHandler implements EventListener {
         if (iconRegistry.has(address.fileName())) return;
         // get file
         String path = address.path() + address.fileName() + "." + address.fileType();
-        InputStream inputStream = ApiHandler.class.getResourceAsStream(path);
+        InputStream inputStream = Pl3xHandler.class.getResourceAsStream(path);
         if (inputStream == null) throw new IOException("Resource not found: " + path);
         // read file
         BufferedImage image = ImageIO.read(inputStream);

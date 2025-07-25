@@ -1,29 +1,26 @@
 package eu.hexasis.helixmarkers;
 
-import eu.hexasis.helixcore.HelixCore;
 import eu.hexasis.helixmarkers.layers.AreaMarkerLayer;
 import eu.hexasis.helixmarkers.layers.EndPortalMarkerLayer;
 import eu.hexasis.helixmarkers.layers.NetherPortalMarkerLayer;
 import eu.hexasis.helixmarkers.layers.SimpleIconMarkerLayer;
 import eu.hexasis.helixmarkers.repositories.AreaRepository;
 import net.fabricmc.api.DedicatedServerModInitializer;
-import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.pl3x.map.core.Pl3xMap;
-import org.intellij.lang.annotations.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
+import java.sql.SQLException;
 
-public class HelixMarkers implements ModInitializer, DedicatedServerModInitializer {
+public class HelixMarkers implements DedicatedServerModInitializer {
 
-    public static Connection DATABASE = null;
+    private static Database DATABASE = null;
     public static AreaRepository AREA_REPOSITORY = null;
     public static Logger LOGGER = LoggerFactory.getLogger(HelixMarkers.class);
 
     private static Api API = null;
-    static ApiHandler API_HANDLER = null;
+    static Pl3xHandler PL3X_HANDLER = null;
 
     public static Api api() {
         if (API == null) {
@@ -32,37 +29,29 @@ public class HelixMarkers implements ModInitializer, DedicatedServerModInitializ
         return API;
     }
 
-    static ApiHandler apiHandler() {
-        if (API_HANDLER == null) {
-            API_HANDLER = new ApiHandler();
+    static Pl3xHandler apiHandler() {
+        if (PL3X_HANDLER == null) {
+            PL3X_HANDLER = new Pl3xHandler();
         }
-        return API_HANDLER;
+        return PL3X_HANDLER;
+    }
+
+    public static Database database() {
+        if (DATABASE == null) {
+            try {
+                DATABASE = new Database();
+            } catch (SQLException e) {
+                LOGGER.error("Failed to create/read database ", e);
+                throw new RuntimeException(e);
+            }
+        }
+        return DATABASE;
     }
 
     @Override
     public void onInitializeServer() {
-        // load SQLite Database
-        @Language("SQL") String markersQuery = """
-                    CREATE TABLE IF NOT EXISTS markers (
-                        world VARCHAR(32),
-                        layer VARCHAR(32),
-                        x int,
-                        z int,
-                        PRIMARY KEY (world, layer, x, z)
-                    );
-                    """;
-        @Language("SQL") String areasQuery = """
-                    CREATE TABLE IF NOT EXISTS areas (
-                        world VARCHAR(32),
-                        label VARCHAR(32),
-                        color int,
-                        x int,
-                        z int,
-                        PRIMARY KEY (world, x, z)
-                    );
-                    """;
-        DATABASE = HelixCore.api().getStorage("markers", markersQuery, areasQuery);
-        AREA_REPOSITORY = new AreaRepository(DATABASE);
+        database();
+        AREA_REPOSITORY = new AreaRepository();
         // register default icons
         api().registerIcon("/assets/helix/markers/icons/", "beacon", "png");
         api().registerIcon("/assets/helix/markers/icons/", "end_portal", "png");
@@ -77,12 +66,11 @@ public class HelixMarkers implements ModInitializer, DedicatedServerModInitializ
                 server -> Pl3xMap.api().getEventRegistry().register(apiHandler())
         );
         ServerLifecycleEvents.SERVER_STOPPED.register(
-            unused -> api().executor.shutdown()
+            unused -> {
+                database().close();
+                api().executor.shutdown();
+            }
         );
-    }
-
-    @Override
-    public void onInitialize() {
     }
 
 }

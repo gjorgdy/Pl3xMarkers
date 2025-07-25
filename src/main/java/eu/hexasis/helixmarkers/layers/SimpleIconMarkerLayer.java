@@ -2,15 +2,12 @@ package eu.hexasis.helixmarkers.layers;
 
 import eu.hexasis.helixmarkers.HelixMarkers;
 import eu.hexasis.helixmarkers.markers.IconBuilder;
+import eu.hexasis.helixmarkers.tables.SimpleMarkerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.world.World;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class SimpleIconMarkerLayer extends MarkerLayer {
 
@@ -30,21 +27,17 @@ public class SimpleIconMarkerLayer extends MarkerLayer {
 
     @Override
     public void load() {
-        String query = """
-                    SELECT * FROM markers WHERE world = ? AND layer = ?
-                """;
-        try (PreparedStatement ps = HelixMarkers.DATABASE.prepareStatement(query)) {
-            ps.setString(1, getWorld().getKey());
-            ps.setString(2, key);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                int x = rs.getInt(3);
-                int z = rs.getInt(4);
-                addMarker(
-                    createSimpleMarker(x, z)
-                );
-            }
-        } catch (SQLException e) {
+        try {
+            var db = HelixMarkers.database();
+            db.markers.queryBuilder()
+                    .where().eq("world", getWorld().getKey())
+                    .and().eq("layer", key)
+                    .query().forEach(marker ->
+                        addMarker(
+                            createSimpleMarker(marker.getX(), marker.getZ())
+                        )
+                    );
+        } catch (Exception e) {
             HelixMarkers.LOGGER.error(e.getMessage());
         }
     }
@@ -55,22 +48,39 @@ public class SimpleIconMarkerLayer extends MarkerLayer {
      * @param pos location of marker
      */
     public void addSimpleMarker(BlockPos pos) {
-        String query = """
-                    INSERT INTO markers VALUES (?, ?, ?, ?)
-                    ON CONFLICT DO NOTHING
-                """;
-        try (PreparedStatement ps = HelixMarkers.DATABASE.prepareStatement(query)) {
-            ps.setString(1, getWorld().getKey());
-            ps.setString(2, key);
-            ps.setInt(3, pos.getX());
-            ps.setInt(4, pos.getZ());
-            if (ps.executeUpdate() > 0) {
+        try {
+            var db = HelixMarkers.database();
+            var marker = new SimpleMarkerEntity(
+                this.getWorld().getKey(),
+                this.key,
+                pos.getX(),
+                pos.getZ()
+            );
+            if (markerExists(pos.getX(), pos.getZ())) return;
+            int i = db.markers.create(marker);
+            if (i > 0) {
                 super.addMarker(
                     createSimpleMarker(pos.getX(), pos.getZ())
                 );
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
+            HelixMarkers.LOGGER.error(e.toString());
+        }
+    }
+
+    private boolean markerExists(int x, int z) {
+        try {
+            var db = HelixMarkers.database();
+            var queryBuilder = db.markers.queryBuilder();
+            queryBuilder.where()
+                    .eq("world", getWorld().getKey()).and()
+                    .eq("layer", key).and()
+                    .eq("x", x).and()
+                    .eq("z", z);
+            return queryBuilder.countOf() > 0;
+        } catch (Exception e) {
             HelixMarkers.LOGGER.error(e.getMessage());
+            return false;
         }
     }
 
@@ -90,24 +100,21 @@ public class SimpleIconMarkerLayer extends MarkerLayer {
      * @param z z-coordinate of marker
      */
     public void removeMarker(int x, int z) {
-        String query = """
-                    DELETE FROM markers WHERE world = ? AND layer = ? AND x = ? AND z = ?
-                """;
-        try (PreparedStatement ps = HelixMarkers.DATABASE.prepareStatement(query)) {
-            ps.setString(1, getWorld().getKey());
-            ps.setString(2, key);
-            ps.setInt(3, x);
-            ps.setInt(4, z);
-            if (ps.executeUpdate() > 0) {
-                super.removeMarker(toMarkerKey(x, z));
-            }
-        } catch (SQLException e) {
+        try {
+            var db = HelixMarkers.database();
+            var deleteBuilder = db.markers.deleteBuilder();
+            deleteBuilder.where()
+                .eq("world", getWorld().getKey()).and()
+                .eq("layer", key).and()
+                .eq("x", x).and()
+                .eq("z", z);
+            deleteBuilder.delete();
+        } catch (Exception e) {
             HelixMarkers.LOGGER.error(e.getMessage());
         }
     }
 
     protected Marker<?> createSimpleMarker(int x, int z) {
-
         return IconBuilder.newIconMarker(
                 toMarkerKey(x, z),
                 iconId,
