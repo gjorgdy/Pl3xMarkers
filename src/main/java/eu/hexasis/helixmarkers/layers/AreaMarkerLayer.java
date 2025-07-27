@@ -2,14 +2,12 @@ package eu.hexasis.helixmarkers.layers;
 
 import eu.hexasis.helixmarkers.HelixMarkers;
 import eu.hexasis.helixmarkers.markers.AreaMarkerBuilder;
-import eu.hexasis.helixmarkers.objects.Position;
 import eu.hexasis.helixmarkers.entities.AreaEntity;
 import net.pl3x.map.core.world.World;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 public class AreaMarkerLayer extends MarkerLayer {
 
@@ -33,15 +31,11 @@ public class AreaMarkerLayer extends MarkerLayer {
         if (super.hasMarker(area.getKey())) {
             super.removeMarker(area.getKey());
         }
-        var pointsCol = area.getPoints();
-        if (pointsCol != null && !pointsCol.isEmpty()) {
-            List<Position> points = pointsCol
-                .stream()
-                .map(p -> new Position(p.getX(), p.getZ()))
-                .collect(Collectors.toList());
+        var points = area.getPoints();
+        if (points != null && !points.isEmpty()) {
             super.addMarker(
                 AreaMarkerBuilder
-                    .newAreaMarker(area.getKey(), points)
+                    .newAreaMarker(area.getKey(), new ArrayList<>(points))
                     .fill(area.getColor())
                     .stroke(area.getColor())
                     .addPopup(area.getLabel())
@@ -51,11 +45,9 @@ public class AreaMarkerLayer extends MarkerLayer {
 
     /**
      * Add and store a new marker
-     *
-     * @param pos position of point
      */
-    public void addPoint(@Language("HTML") String label, int color, Position pos) {
-        boolean added = HelixMarkers.areaRepository().addPoint(getWorld().getKey(), label, color, pos);
+    public void addPoint(@Language("HTML") String label, int color, int x, int z) {
+        boolean added = HelixMarkers.areaRepository().addPoint(getWorld().getKey(), label, color, x, z);
         if (added) {
             // reload the area
             AreaEntity area = HelixMarkers.areaRepository().getArea(getWorld().getKey(), label, color);
@@ -65,11 +57,9 @@ public class AreaMarkerLayer extends MarkerLayer {
 
     /**
      * Remove a marker
-     *
-     * @param pos position of point
      */
-    public void removePoint(@Language("HTML") String label, int color, Position pos) {
-        boolean removed = HelixMarkers.areaRepository().removePoint(getWorld().getKey(), label, color, pos);
+    public void removePoint(@Language("HTML") String label, int color, int x, int z) {
+        boolean removed = HelixMarkers.areaRepository().removePoint(getWorld().getKey(), label, color, x, z);
         if (removed) {
             // reload the area
             AreaEntity area = HelixMarkers.areaRepository().getArea(getWorld().getKey(), label, color);

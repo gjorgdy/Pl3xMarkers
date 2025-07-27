@@ -2,7 +2,6 @@ package eu.hexasis.helixmarkers.repositories;
 
 import eu.hexasis.helixmarkers.Database;
 import eu.hexasis.helixmarkers.HelixMarkers;
-import eu.hexasis.helixmarkers.objects.Position;
 import eu.hexasis.helixmarkers.entities.AreaEntity;
 import eu.hexasis.helixmarkers.entities.AreaPointEntity;
 import org.jetbrains.annotations.Nullable;
@@ -59,22 +58,22 @@ public class AreaRepository{
         return area;
     }
 
-    public boolean addPoint(String world, String label, int color, Position point) {
+    public boolean addPoint(String world, String label, int color, int x, int z) {
         AreaEntity area = getOrCreateArea(world, label, color);
         if (area == null) return false;
         var points = area.getPoints();
         if (points == null) return false;
-        return points.add(new AreaPointEntity(area, point.X(), point.Z()));
+        return points.add(new AreaPointEntity(area, x, z));
     }
 
-    public boolean removePoint(String world, String label, int color, Position point) {
+    public boolean removePoint(String world, String label, int color, int x, int z) {
         AreaEntity area = getOrCreateArea(world, label, color);
         if (area == null) return false;
         var points = area.getPoints();
         if (points == null) return false;
         return points.removeIf(
-        p -> p.getX() == point.X()
-                && p.getZ() == point.Z()
+        p -> p.getX() == x
+                && p.getZ() == z
         );
     }
 

@@ -2,9 +2,11 @@ package eu.hexasis.helixmarkers.entities;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import net.pl3x.map.core.markers.Point;
+import org.jetbrains.annotations.NotNull;
 
 @DatabaseTable(tableName = "area_points")
-public class AreaPointEntity {
+public class AreaPointEntity implements Comparable<AreaPointEntity> {
 
     @DatabaseField(columnName = "id", generatedId = true)
     private int id;
@@ -35,8 +37,22 @@ public class AreaPointEntity {
         return z;
     }
 
+    public double distance(@NotNull AreaPointEntity other) {
+        return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.z - other.z, 2));
+    }
+
+    @Override
+    public int compareTo(@NotNull AreaPointEntity other) {
+        return (this.x - other.x) + (this.z - other.z);
+    }
+
     @Override
     public String toString() {
         return area.getLabel() + ":" + x + ":" + z;
     }
+
+    public Point toPl3xPoint() {
+        return new Point(x, z);
+    }
+
 }

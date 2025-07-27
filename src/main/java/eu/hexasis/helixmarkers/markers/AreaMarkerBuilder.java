@@ -1,8 +1,7 @@
 package eu.hexasis.helixmarkers.markers;
 
+import eu.hexasis.helixmarkers.entities.AreaPointEntity;
 import eu.hexasis.helixmarkers.helpers.ConvexHull;
-import eu.hexasis.helixmarkers.objects.Position;
-import net.pl3x.map.core.markers.Point;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.marker.Polygon;
 import net.pl3x.map.core.markers.marker.Polyline;
@@ -18,10 +17,10 @@ public class AreaMarkerBuilder extends MarkerBuilder<@NotNull Polygon> {
         super(marker);
     }
 
-    public static AreaMarkerBuilder newAreaMarker(String key, List<Position> points) {
+    public static AreaMarkerBuilder newAreaMarker(String key, List<AreaPointEntity> points) {
         var line = new Polyline(key);
-        for (Position point : ConvexHull.calculate(points)) {
-            line.addPoint(new Point(point.X(), point.Z()));
+        for (AreaPointEntity point : ConvexHull.calculate(points)) {
+            line.addPoint(point.toPl3xPoint());
         }
         Polygon area = new Polygon(key, line);
         return new AreaMarkerBuilder(area);

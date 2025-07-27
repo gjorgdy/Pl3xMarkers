@@ -1,7 +1,6 @@
 package eu.hexasis.helixmarkers;
 
 import eu.hexasis.helixmarkers.layers.*;
-import eu.hexasis.helixmarkers.objects.Position;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.pl3x.map.core.Pl3xMap;
@@ -40,7 +39,7 @@ public class Api {
         executor.execute(() -> {
             Layer layer = getWorld(worldIdentifier).getLayerRegistry().get("areas");
             if (layer instanceof AreaMarkerLayer aml) {
-                aml.addPoint(label, color, new Position(pos.getX(), pos.getZ()));
+                aml.addPoint(label, color, pos.getX(), pos.getZ());
             }
         });
     }
@@ -50,7 +49,7 @@ public class Api {
         executor.execute(() -> {
             Layer layer = getWorld(worldIdentifier).getLayerRegistry().get("areas");
             if (layer instanceof AreaMarkerLayer aml) {
-                aml.removePoint(label, color, new Position(pos.getX(), pos.getZ()));
+                aml.removePoint(label, color, pos.getX(), pos.getZ());
             }
         });
     }
