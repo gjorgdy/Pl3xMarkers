@@ -3,7 +3,7 @@ package eu.hexasis.helixmarkers.layers;
 import eu.hexasis.helixmarkers.HelixMarkers;
 import eu.hexasis.helixmarkers.markers.AreaMarkerBuilder;
 import eu.hexasis.helixmarkers.objects.Position;
-import eu.hexasis.helixmarkers.tables.AreaEntity;
+import eu.hexasis.helixmarkers.entities.AreaEntity;
 import net.pl3x.map.core.world.World;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;

@@ -4,9 +4,9 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import eu.hexasis.helixmarkers.tables.AreaEntity;
-import eu.hexasis.helixmarkers.tables.AreaPointEntity;
-import eu.hexasis.helixmarkers.tables.IconMarkerEntity;
+import eu.hexasis.helixmarkers.entities.AreaEntity;
+import eu.hexasis.helixmarkers.entities.AreaPointEntity;
+import eu.hexasis.helixmarkers.entities.IconMarkerEntity;
 
 import java.io.File;
 import java.sql.SQLException;

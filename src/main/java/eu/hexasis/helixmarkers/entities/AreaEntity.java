@@ -1,4 +1,4 @@
-package eu.hexasis.helixmarkers.tables;
+package eu.hexasis.helixmarkers.entities;
 
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;

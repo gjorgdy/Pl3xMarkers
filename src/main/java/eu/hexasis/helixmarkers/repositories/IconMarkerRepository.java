@@ -1,9 +1,10 @@
-﻿package eu.hexasis.helixmarkers.repositories;
+package eu.hexasis.helixmarkers.repositories;
 
 import eu.hexasis.helixmarkers.Database;
 import eu.hexasis.helixmarkers.HelixMarkers;
-import eu.hexasis.helixmarkers.tables.IconMarkerEntity;
+import eu.hexasis.helixmarkers.entities.IconMarkerEntity;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,28 +28,14 @@ public class IconMarkerRepository {
         return new ArrayList<>();
     }
 
-    private boolean markerExists(String worldKey, String layerKey, int x, int z) {
-        try {
-            var queryBuilder = database.markers.queryBuilder();
-            queryBuilder.where()
-                .eq("world", worldKey).and()
-                .eq("layer", layerKey).and()
-                .eq("x", x).and()
-                .eq("z", z);
-            return queryBuilder.countOf() > 0;
-        } catch (Exception e) {
-            HelixMarkers.LOGGER.error(e.getMessage());
-            return false;
-        }
-    }
-
     public boolean addMarker(String worldKey, String layerKey, int x, int z) {
         try {
             var marker = new IconMarkerEntity(worldKey, layerKey, x, z);
-            if (markerExists(worldKey, layerKey, x, z)) return false;
             return database.markers.create(marker) > 0;
-        } catch (Exception e) {
-            HelixMarkers.LOGGER.error(e.toString());
+        } catch (SQLException e) {
+            if (e.getErrorCode() != 0) {
+                HelixMarkers.LOGGER.error("[{}] {}", e.getErrorCode(), e.getCause().getMessage());
+            }
             return false;
         }
     }

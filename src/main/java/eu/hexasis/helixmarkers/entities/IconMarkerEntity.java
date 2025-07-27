@@ -1,9 +1,9 @@
-package eu.hexasis.helixmarkers.tables;
+package eu.hexasis.helixmarkers.entities;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable(tableName = "markers")
+@DatabaseTable(tableName = "icon_markers")
 public class IconMarkerEntity {
 
     @DatabaseField(columnName = "world", uniqueCombo = true)
@@ -30,11 +30,6 @@ public class IconMarkerEntity {
 
     public String getWorld() {
         return world;
-    }
-
-    @SuppressWarnings("unused")
-    public String getLayer() {
-        return layer;
     }
 
     public int getX() {

@@ -3,8 +3,8 @@ package eu.hexasis.helixmarkers.repositories;
 import eu.hexasis.helixmarkers.Database;
 import eu.hexasis.helixmarkers.HelixMarkers;
 import eu.hexasis.helixmarkers.objects.Position;
-import eu.hexasis.helixmarkers.tables.AreaEntity;
-import eu.hexasis.helixmarkers.tables.AreaPointEntity;
+import eu.hexasis.helixmarkers.entities.AreaEntity;
+import eu.hexasis.helixmarkers.entities.AreaPointEntity;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.SQLException;

@@ -1,4 +1,4 @@
-package eu.hexasis.helixmarkers.tables;
+package eu.hexasis.helixmarkers.entities;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -18,16 +18,13 @@ public class AreaPointEntity {
     @DatabaseField(columnName = "z", uniqueCombo = true)
     private int z;
 
+    @SuppressWarnings("unused") // used by ormlite
     public AreaPointEntity() {}
 
     public AreaPointEntity(AreaEntity area, int x, int z) {
         this.area = area;
         this.x = x;
         this.z = z;
-    }
-
-    public AreaEntity getArea() {
-        return area;
     }
 
     public int getX() {
