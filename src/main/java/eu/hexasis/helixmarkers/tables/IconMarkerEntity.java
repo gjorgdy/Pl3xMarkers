@@ -4,7 +4,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "markers")
-public class SimpleMarkerEntity {
+public class IconMarkerEntity {
 
     @DatabaseField(columnName = "world", uniqueCombo = true)
     private String world;
@@ -18,9 +18,10 @@ public class SimpleMarkerEntity {
     @DatabaseField(columnName = "z", uniqueCombo = true)
     private int z;
 
-    public SimpleMarkerEntity() {}
+    @SuppressWarnings("unused")
+    public IconMarkerEntity() {}
 
-    public SimpleMarkerEntity(String world, String layer, int x, int z) {
+    public IconMarkerEntity(String world, String layer, int x, int z) {
         this.world = world;
         this.layer = layer;
         this.x = x;
@@ -31,6 +32,7 @@ public class SimpleMarkerEntity {
         return world;
     }
 
+    @SuppressWarnings("unused")
     public String getLayer() {
         return layer;
     }

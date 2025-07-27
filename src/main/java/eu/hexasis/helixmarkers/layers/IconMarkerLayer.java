@@ -2,7 +2,6 @@ package eu.hexasis.helixmarkers.layers;
 
 import eu.hexasis.helixmarkers.HelixMarkers;
 import eu.hexasis.helixmarkers.markers.IconBuilder;
-import eu.hexasis.helixmarkers.tables.SimpleMarkerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.world.World;
@@ -27,19 +26,11 @@ public class IconMarkerLayer extends MarkerLayer {
 
     @Override
     public void load() {
-        try {
-            var db = HelixMarkers.database();
-            db.markers.queryBuilder()
-                    .where().eq("world", getWorld().getKey())
-                    .and().eq("layer", key)
-                    .query().forEach(marker ->
-                        addMarker(
-                            createIconMarker(marker.getX(), marker.getZ())
-                        )
-                    );
-        } catch (Exception e) {
-            HelixMarkers.LOGGER.error(e.getMessage());
-        }
+        HelixMarkers.iconMarkerRepository()
+            .getMarkers(getWorld().getKey(), key)
+            .forEach(marker ->
+                addIconMarker(marker.getX(), marker.getZ())
+            );
     }
 
     /**
@@ -48,39 +39,10 @@ public class IconMarkerLayer extends MarkerLayer {
      * @param pos location of marker
      */
     public void addSimpleMarker(BlockPos pos) {
-        try {
-            var db = HelixMarkers.database();
-            var marker = new SimpleMarkerEntity(
-                this.getWorld().getKey(),
-                this.key,
-                pos.getX(),
-                pos.getZ()
-            );
-            if (markerExists(pos.getX(), pos.getZ())) return;
-            int i = db.markers.create(marker);
-            if (i > 0) {
-                super.addMarker(
-                    createIconMarker(pos.getX(), pos.getZ())
-                );
-            }
-        } catch (Exception e) {
-            HelixMarkers.LOGGER.error(e.toString());
-        }
-    }
-
-    private boolean markerExists(int x, int z) {
-        try {
-            var db = HelixMarkers.database();
-            var queryBuilder = db.markers.queryBuilder();
-            queryBuilder.where()
-                    .eq("world", getWorld().getKey()).and()
-                    .eq("layer", key).and()
-                    .eq("x", x).and()
-                    .eq("z", z);
-            return queryBuilder.countOf() > 0;
-        } catch (Exception e) {
-            HelixMarkers.LOGGER.error(e.getMessage());
-            return false;
+        boolean added = HelixMarkers.iconMarkerRepository()
+            .addMarker(getWorld().getKey(), key, pos.getX(), pos.getZ());
+        if (added) {
+            addIconMarker(pos.getX(), pos.getZ());
         }
     }
 
@@ -90,28 +52,13 @@ public class IconMarkerLayer extends MarkerLayer {
      * @param pos location of marker
      */
     public void removeMarker(BlockPos pos) {
-        removeMarker(pos.getX(), pos.getZ());
+        HelixMarkers.iconMarkerRepository()
+            .removeMarker(getWorld().getKey(), key, pos.getX(), pos.getZ());
+        super.removeMarker(toMarkerKey(pos.getX(), pos.getZ()));
     }
 
-    /**
-     * Remove a marker
-     *
-     * @param x x-coordinate of marker
-     * @param z z-coordinate of marker
-     */
-    public void removeMarker(int x, int z) {
-        try {
-            var db = HelixMarkers.database();
-            var deleteBuilder = db.markers.deleteBuilder();
-            deleteBuilder.where()
-                .eq("world", getWorld().getKey()).and()
-                .eq("layer", key).and()
-                .eq("x", x).and()
-                .eq("z", z);
-            deleteBuilder.delete();
-        } catch (Exception e) {
-            HelixMarkers.LOGGER.error(e.getMessage());
-        }
+    private void addIconMarker(int x, int z) {
+        addMarker(createIconMarker(x, z));
     }
 
     protected Marker<?> createIconMarker(int x, int z) {
