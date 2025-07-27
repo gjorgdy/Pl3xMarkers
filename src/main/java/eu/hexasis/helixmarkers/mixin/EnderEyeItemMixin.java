@@ -18,7 +18,7 @@ public class EnderEyeItemMixin {
     @Inject(method = "useOnBlock", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;syncGlobalEvent(ILnet/minecraft/util/math/BlockPos;I)V"))
     public void onUseOnBlock(ItemUsageContext context, CallbackInfoReturnable<ActionResult> cir, @Local(ordinal = 1) BlockPos blockPos2) {
         Identifier identifier = context.getWorld().getRegistryKey().getValue();
-        HelixMarkers.api().addSimpleMarker(identifier, "end_portals", blockPos2.add(1, 0, 1));
+        HelixMarkers.api().addIconMarker(identifier, "end_portals", blockPos2.add(1, 0, 1));
     }
 
 }

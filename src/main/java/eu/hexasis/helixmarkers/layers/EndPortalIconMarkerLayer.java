@@ -7,14 +7,14 @@ import net.pl3x.map.core.world.World;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
-public class EndPortalMarkerLayer extends SimpleIconMarkerLayer {
+public class EndPortalIconMarkerLayer extends IconMarkerLayer {
 
-    public EndPortalMarkerLayer(String icon, String key, String label, @Language("HTML") String tooltip, @NotNull World world) {
+    public EndPortalIconMarkerLayer(String icon, String key, String label, @Language("HTML") String tooltip, @NotNull World world) {
         super(icon, key, label, tooltip, world);
     }
 
     @Override
-    protected Marker<?> createSimpleMarker(int x, int z) {
+    protected Marker<?> createIconMarker(int x, int z) {
         return IconBuilder.newIconMarker(
                         toMarkerKey(x, z),
                         iconId,

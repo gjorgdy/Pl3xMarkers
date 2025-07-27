@@ -9,7 +9,7 @@ import net.pl3x.map.core.world.World;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
-public class SimpleIconMarkerLayer extends MarkerLayer {
+public class IconMarkerLayer extends MarkerLayer {
 
     public final String iconId;
     public final String key;
@@ -17,7 +17,7 @@ public class SimpleIconMarkerLayer extends MarkerLayer {
     @Language("HTML")
     public final String tooltip;
 
-    public SimpleIconMarkerLayer(String icon, String key, String label, @Language("HTML") String tooltip, @NotNull World world) {
+    public IconMarkerLayer(String icon, String key, String label, @Language("HTML") String tooltip, @NotNull World world) {
         super(key, label, world);
         this.iconId = icon;
         this.key = key;
@@ -34,7 +34,7 @@ public class SimpleIconMarkerLayer extends MarkerLayer {
                     .and().eq("layer", key)
                     .query().forEach(marker ->
                         addMarker(
-                            createSimpleMarker(marker.getX(), marker.getZ())
+                            createIconMarker(marker.getX(), marker.getZ())
                         )
                     );
         } catch (Exception e) {
@@ -60,7 +60,7 @@ public class SimpleIconMarkerLayer extends MarkerLayer {
             int i = db.markers.create(marker);
             if (i > 0) {
                 super.addMarker(
-                    createSimpleMarker(pos.getX(), pos.getZ())
+                    createIconMarker(pos.getX(), pos.getZ())
                 );
             }
         } catch (Exception e) {
@@ -114,7 +114,7 @@ public class SimpleIconMarkerLayer extends MarkerLayer {
         }
     }
 
-    protected Marker<?> createSimpleMarker(int x, int z) {
+    protected Marker<?> createIconMarker(int x, int z) {
         return IconBuilder.newIconMarker(
                 toMarkerKey(x, z),
                 iconId,

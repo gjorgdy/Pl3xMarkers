@@ -1,9 +1,9 @@
 package eu.hexasis.helixmarkers;
 
 import eu.hexasis.helixmarkers.layers.AreaMarkerLayer;
-import eu.hexasis.helixmarkers.layers.EndPortalMarkerLayer;
-import eu.hexasis.helixmarkers.layers.NetherPortalMarkerLayer;
-import eu.hexasis.helixmarkers.layers.SimpleIconMarkerLayer;
+import eu.hexasis.helixmarkers.layers.EndPortalIconMarkerLayer;
+import eu.hexasis.helixmarkers.layers.NetherPortalIconMarkerLayer;
+import eu.hexasis.helixmarkers.layers.IconMarkerLayer;
 import eu.hexasis.helixmarkers.repositories.AreaRepository;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -57,9 +57,9 @@ public class HelixMarkers implements DedicatedServerModInitializer {
         api().registerIcon("/assets/helix/markers/icons/", "end_portal", "png");
         api().registerIcon("/assets/helix/markers/icons/", "nether_portal", "png");
         // register default markers
-        api().registerMarkerLayer(w -> new SimpleIconMarkerLayer("beacon", "beacons", "Beacons", "Beacon", w));
-        api().registerMarkerLayer(w -> new EndPortalMarkerLayer("end_portal", "end_portals", "End Portals", "End Portal", w));
-        api().registerMarkerLayer(w -> new NetherPortalMarkerLayer("nether_portal", "nether_portals", "Nether Portals", "Nether Portal", w));
+        api().registerMarkerLayer(w -> new IconMarkerLayer("beacon", "beacons", "Beacons", "Beacon", w));
+        api().registerMarkerLayer(w -> new EndPortalIconMarkerLayer("end_portal", "end_portals", "End Portals", "End Portal", w));
+        api().registerMarkerLayer(w -> new NetherPortalIconMarkerLayer("nether_portal", "nether_portals", "Nether Portals", "Nether Portal", w));
         api().registerMarkerLayer(w -> new AreaMarkerLayer("areas", "Areas", w));
         // register events
         ServerLifecycleEvents.SERVER_STARTING.register(

@@ -43,7 +43,7 @@ public class BlockMixin {
     public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfoReturnable<BlockState> cir) {
         // beacon markers
         if (state.isOf(Blocks.BEACON)) {
-            HelixMarkers.api().removeSimpleMarker(world.getRegistryKey().getValue(), "beacons", pos);
+            HelixMarkers.api().removeIconMarker(world.getRegistryKey().getValue(), "beacons", pos);
         }
         // area markers
         if (world instanceof ServerWorld serverWorld) {

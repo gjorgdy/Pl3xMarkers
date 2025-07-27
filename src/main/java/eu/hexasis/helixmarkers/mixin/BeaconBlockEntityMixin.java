@@ -26,9 +26,9 @@ public class BeaconBlockEntityMixin implements BeaconBlockEntityInterface {
                 && cir.getReturnValue() != beaconBlockEntityInterface.helixMarkers$getLevel()
         ) {
             if (cir.getReturnValue() > 0) {
-                HelixMarkers.api().addSimpleMarker(world.getRegistryKey().getValue(), "beacons", blockPos);
+                HelixMarkers.api().addIconMarker(world.getRegistryKey().getValue(), "beacons", blockPos);
             } else {
-                HelixMarkers.api().removeSimpleMarker(world.getRegistryKey().getValue(), "beacons", blockPos);
+                HelixMarkers.api().removeIconMarker(world.getRegistryKey().getValue(), "beacons", blockPos);
             }
         }
     }
