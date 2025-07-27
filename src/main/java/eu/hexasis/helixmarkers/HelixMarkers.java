@@ -38,7 +38,7 @@ public class HelixMarkers implements DedicatedServerModInitializer {
         return PL3X_HANDLER;
     }
 
-    public static Database database() {
+    private static Database database() {
         if (DATABASE == null) {
             try {
                 DATABASE = new Database();
@@ -52,7 +52,7 @@ public class HelixMarkers implements DedicatedServerModInitializer {
 
     public static AreaRepository areaRepository() {
         if (AREA_REPOSITORY == null) {
-            AREA_REPOSITORY = new AreaRepository();
+            AREA_REPOSITORY = new AreaRepository(database());
         }
         return AREA_REPOSITORY;
     }

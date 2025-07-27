@@ -44,10 +44,9 @@ public class IconMarkerRepository {
 
     public boolean addMarker(String worldKey, String layerKey, int x, int z) {
         try {
-            var db = HelixMarkers.database();
             var marker = new IconMarkerEntity(worldKey, layerKey, x, z);
             if (markerExists(worldKey, layerKey, x, z)) return false;
-            return db.markers.create(marker) > 0;
+            return database.markers.create(marker) > 0;
         } catch (Exception e) {
             HelixMarkers.LOGGER.error(e.toString());
             return false;

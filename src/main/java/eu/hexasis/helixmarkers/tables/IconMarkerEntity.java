@@ -18,7 +18,7 @@ public class IconMarkerEntity {
     @DatabaseField(columnName = "z", uniqueCombo = true)
     private int z;
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unused") // used by ormlite
     public IconMarkerEntity() {}
 
     public IconMarkerEntity(String world, String layer, int x, int z) {

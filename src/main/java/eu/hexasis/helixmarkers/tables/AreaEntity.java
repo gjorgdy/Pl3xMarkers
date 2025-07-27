@@ -4,10 +4,7 @@ import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
-import eu.hexasis.helixmarkers.HelixMarkers;
 import org.jetbrains.annotations.Nullable;
-
-import java.sql.SQLException;
 
 @DatabaseTable(tableName = "areas")
 public class AreaEntity {
@@ -27,16 +24,13 @@ public class AreaEntity {
     @ForeignCollectionField(columnName = "points", eager = true)
     private ForeignCollection<AreaPointEntity> points;
 
+    @SuppressWarnings("unused") // used by ormlite
     public AreaEntity() {}
 
     public AreaEntity(String world, String label, int color) {
         this.world = world;
         this.label = label;
         this.color = color;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getWorld() {
@@ -58,15 +52,5 @@ public class AreaEntity {
     @Nullable
     public ForeignCollection<AreaPointEntity> getPoints() {
         return points;
-    }
-
-    public boolean refresh() {
-        try {
-            HelixMarkers.database().areas.update(this);
-            return true;
-        } catch (SQLException e) {
-            HelixMarkers.LOGGER.error(e.getMessage());
-            return false;
-        }
     }
 }

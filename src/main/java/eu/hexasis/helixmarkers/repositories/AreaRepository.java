@@ -1,5 +1,6 @@
 package eu.hexasis.helixmarkers.repositories;
 
+import eu.hexasis.helixmarkers.Database;
 import eu.hexasis.helixmarkers.HelixMarkers;
 import eu.hexasis.helixmarkers.objects.Position;
 import eu.hexasis.helixmarkers.tables.AreaEntity;
@@ -12,10 +13,15 @@ import java.util.List;
 
 public class AreaRepository{
 
+    private final Database database;
+
+    public AreaRepository(Database database) {
+        this.database = database;
+    }
+
     public List<AreaEntity> getAreas(String world) {
         try {
-            var db = HelixMarkers.database();
-            return db.areas.queryBuilder()
+            return database.areas.queryBuilder()
                     .where().eq("world", world)
                     .query();
         } catch (SQLException e) {
@@ -27,8 +33,7 @@ public class AreaRepository{
     @Nullable
     public AreaEntity getArea(String world, String label, int color) {
         try {
-            var db = HelixMarkers.database();
-            return db.areas.queryBuilder()
+            return database.areas.queryBuilder()
                     .where()
                     .eq("world", world).and()
                     .eq("label", label).and()
@@ -45,8 +50,7 @@ public class AreaRepository{
         if (area == null) {
             area = new AreaEntity(world, label, color);
             try {
-                var db = HelixMarkers.database();
-                db.areas.create(area);
+                database.areas.create(area);
             } catch (SQLException e) {
                 HelixMarkers.LOGGER.error(e.getMessage());
                 return null;
