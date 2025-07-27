@@ -3,7 +3,6 @@ package eu.hexasis.helixmarkers.layers;
 import eu.hexasis.helixmarkers.HelixMarkers;
 import eu.hexasis.helixmarkers.markers.AreaBuilder;
 import eu.hexasis.helixmarkers.objects.Position;
-import eu.hexasis.helixmarkers.repositories.AreaRepository;
 import eu.hexasis.helixmarkers.tables.AreaEntity;
 import net.pl3x.map.core.world.World;
 import org.intellij.lang.annotations.Language;
@@ -23,13 +22,9 @@ public class AreaMarkerLayer extends MarkerLayer {
         this.worldLabel = label;
     }
 
-    private AreaRepository repo() {
-        return HelixMarkers.AREA_REPOSITORY;
-    }
-
     @Override
     public void load() {
-        HelixMarkers.AREA_REPOSITORY
+        HelixMarkers.areaRepository()
             .getAreas(getWorld().getKey())
             .forEach(this::loadArea);
     }
@@ -60,10 +55,10 @@ public class AreaMarkerLayer extends MarkerLayer {
      * @param pos position of point
      */
     public void addPoint(@Language("HTML") String label, int color, Position pos) {
-        boolean added = repo().addPoint(getWorld().getKey(), label, color, pos);
+        boolean added = HelixMarkers.areaRepository().addPoint(getWorld().getKey(), label, color, pos);
         if (added) {
             // reload the area
-            AreaEntity area = repo().getArea(getWorld().getKey(), label, color);
+            AreaEntity area = HelixMarkers.areaRepository().getArea(getWorld().getKey(), label, color);
             if (area != null) loadArea(area);
         }
     }
@@ -74,10 +69,10 @@ public class AreaMarkerLayer extends MarkerLayer {
      * @param pos position of point
      */
     public void removePoint(@Language("HTML") String label, int color, Position pos) {
-        boolean removed = repo().removePoint(getWorld().getKey(), label, color, pos);
+        boolean removed = HelixMarkers.areaRepository().removePoint(getWorld().getKey(), label, color, pos);
         if (removed) {
             // reload the area
-            AreaEntity area = repo().getArea(getWorld().getKey(), label, color);
+            AreaEntity area = HelixMarkers.areaRepository().getArea(getWorld().getKey(), label, color);
             if (area != null) loadArea(area);
         }
     }

@@ -16,7 +16,7 @@ import java.sql.SQLException;
 public class HelixMarkers implements DedicatedServerModInitializer {
 
     private static Database DATABASE = null;
-    public static AreaRepository AREA_REPOSITORY = null;
+    private static AreaRepository AREA_REPOSITORY = null;
     public static Logger LOGGER = LoggerFactory.getLogger(HelixMarkers.class);
 
     private static Api API = null;
@@ -48,10 +48,15 @@ public class HelixMarkers implements DedicatedServerModInitializer {
         return DATABASE;
     }
 
+    public static AreaRepository areaRepository() {
+        if (AREA_REPOSITORY == null) {
+            AREA_REPOSITORY = new AreaRepository();
+        }
+        return AREA_REPOSITORY;
+    }
+
     @Override
     public void onInitializeServer() {
-        database();
-        AREA_REPOSITORY = new AreaRepository();
         // register default icons
         api().registerIcon("/assets/helix/markers/icons/", "beacon", "png");
         api().registerIcon("/assets/helix/markers/icons/", "end_portal", "png");
