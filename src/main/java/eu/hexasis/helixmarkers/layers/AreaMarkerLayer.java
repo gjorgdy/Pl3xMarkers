@@ -1,7 +1,7 @@
 package eu.hexasis.helixmarkers.layers;
 
 import eu.hexasis.helixmarkers.HelixMarkers;
-import eu.hexasis.helixmarkers.markers.AreaBuilder;
+import eu.hexasis.helixmarkers.markers.AreaMarkerBuilder;
 import eu.hexasis.helixmarkers.objects.Position;
 import eu.hexasis.helixmarkers.tables.AreaEntity;
 import net.pl3x.map.core.world.World;
@@ -40,8 +40,8 @@ public class AreaMarkerLayer extends MarkerLayer {
                 .map(p -> new Position(p.getX(), p.getZ()))
                 .collect(Collectors.toList());
             super.addMarker(
-                AreaBuilder
-                    .newArea(area.getKey(), points)
+                AreaMarkerBuilder
+                    .newAreaMarker(area.getKey(), points)
                     .fill(area.getColor())
                     .stroke(area.getColor())
                     .addPopup(area.getLabel())

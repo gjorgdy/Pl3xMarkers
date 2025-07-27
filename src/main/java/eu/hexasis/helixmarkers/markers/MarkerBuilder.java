@@ -1,7 +1,5 @@
 package eu.hexasis.helixmarkers.markers;
 
-import net.pl3x.map.core.markers.Vector;
-import net.pl3x.map.core.markers.marker.Icon;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.option.Options;
 import net.pl3x.map.core.markers.option.Popup;
@@ -22,20 +20,6 @@ public class MarkerBuilder<T extends Marker<T>> {
     public Marker<?> build() {
         marker.setOptions(options);
         return marker;
-    }
-
-    @SuppressWarnings("unused")
-    public MarkerBuilder<T> centerIcon(int width, int height) {
-        if (marker instanceof Icon icon) {
-            int xOffset = width / 2;
-            int yOffset = height / 2;
-            icon.setAnchor(
-                new Vector(xOffset, yOffset)
-            );
-        } else {
-            throw new RuntimeException("Marker is not of the correct type Marker<Icon>");
-        }
-        return this;
     }
 
     @SuppressWarnings("unused")

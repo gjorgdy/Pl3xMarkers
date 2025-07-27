@@ -1,7 +1,7 @@
 package eu.hexasis.helixmarkers.layers;
 
 import eu.hexasis.helixmarkers.HelixMarkers;
-import eu.hexasis.helixmarkers.markers.IconBuilder;
+import eu.hexasis.helixmarkers.markers.IconMarkerBuilder;
 import net.minecraft.util.math.BlockPos;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.world.World;
@@ -62,7 +62,7 @@ public class IconMarkerLayer extends MarkerLayer {
     }
 
     protected Marker<?> createIconMarker(int x, int z) {
-        return IconBuilder.newIconMarker(
+        return IconMarkerBuilder.newIconMarker(
                 toMarkerKey(x, z),
                 iconId,
                 x, z

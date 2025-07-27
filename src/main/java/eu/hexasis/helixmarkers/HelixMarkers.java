@@ -31,7 +31,7 @@ public class HelixMarkers implements DedicatedServerModInitializer {
         return API;
     }
 
-    static Pl3xHandler apiHandler() {
+    static Pl3xHandler pl3xHandler() {
         if (PL3X_HANDLER == null) {
             PL3X_HANDLER = new Pl3xHandler();
         }
@@ -67,17 +67,17 @@ public class HelixMarkers implements DedicatedServerModInitializer {
     @Override
     public void onInitializeServer() {
         // register default icons
-        api().registerIcon("/assets/helix/markers/icons/", "beacon", "png");
-        api().registerIcon("/assets/helix/markers/icons/", "end_portal", "png");
-        api().registerIcon("/assets/helix/markers/icons/", "nether_portal", "png");
+        String beaconIconImage = api().registerIconImage("/assets/helix/markers/icons/", "beacon", "png");
+        String endPortalIconImage = api().registerIconImage("/assets/helix/markers/icons/", "end_portal", "png");
+        String netherPortalIconImage = api().registerIconImage("/assets/helix/markers/icons/", "nether_portal", "png");
         // register default markers
-        api().registerMarkerLayer(w -> new IconMarkerLayer("beacon", "beacons", "Beacons", "Beacon", w));
-        api().registerMarkerLayer(w -> new EndPortalIconMarkerLayer("end_portal", "end_portals", "End Portals", "End Portal", w));
-        api().registerMarkerLayer(w -> new NetherPortalIconMarkerLayer("nether_portal", "nether_portals", "Nether Portals", "Nether Portal", w));
+        api().registerMarkerLayer(w -> new IconMarkerLayer(beaconIconImage, "beacons", "Beacons", "Beacon", w));
+        api().registerMarkerLayer(w -> new EndPortalIconMarkerLayer(endPortalIconImage, "end_portals", "End Portals", "End Portal", w));
+        api().registerMarkerLayer(w -> new NetherPortalIconMarkerLayer(netherPortalIconImage, "nether_portals", "Nether Portals", "Nether Portal", w));
         api().registerMarkerLayer(w -> new AreaMarkerLayer("areas", "Areas", w));
         // register events
         ServerLifecycleEvents.SERVER_STARTING.register(
-                server -> Pl3xMap.api().getEventRegistry().register(apiHandler())
+            server -> Pl3xMap.api().getEventRegistry().register(pl3xHandler())
         );
         ServerLifecycleEvents.SERVER_STOPPED.register(
             unused -> {

@@ -1,8 +1,7 @@
 package eu.hexasis.helixmarkers.objects;
 
-public record IconAddress(
+public record IconImageAddress(
     String path,
     String fileName,
     String fileType
-) {
-}
+) {}

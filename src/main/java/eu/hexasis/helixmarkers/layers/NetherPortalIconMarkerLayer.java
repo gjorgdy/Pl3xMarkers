@@ -1,7 +1,7 @@
 package eu.hexasis.helixmarkers.layers;
 
 import eu.hexasis.helixmarkers.helpers.HtmlHelper;
-import eu.hexasis.helixmarkers.markers.IconBuilder;
+import eu.hexasis.helixmarkers.markers.IconMarkerBuilder;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.world.World;
 import org.intellij.lang.annotations.Language;
@@ -24,7 +24,7 @@ public class NetherPortalIconMarkerLayer extends IconMarkerLayer {
         int relativeZ = isOverworld ? z / 8 : z * 8;
         String buttonText = isOverworld ? "Go to Nether" : "Go to Overworld";
         // build the marker
-        return IconBuilder.newIconMarker(
+        return IconMarkerBuilder.newIconMarker(
                         toMarkerKey(x, z),
                         iconId,
                         x, z

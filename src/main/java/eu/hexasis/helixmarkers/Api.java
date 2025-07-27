@@ -25,13 +25,14 @@ public class Api {
     @SuppressWarnings("unused")
     public void registerMarkerLayer(Function<World, MarkerLayer> function) {
         // parse through to internal handler
-        HelixMarkers.apiHandler().registerMarkerLayer(function);
+        HelixMarkers.pl3xHandler().registerMarkerLayer(function);
     }
 
     @SuppressWarnings("unused")
-    public void registerIcon(String path, String filename, String filetype) {
+    public String registerIconImage(String path, String filename, String filetype) {
         // parse through to internal handler
-        HelixMarkers.apiHandler().registerIcon(path, filename, filetype);
+        HelixMarkers.pl3xHandler().registerIconImage(path, filename, filetype);
+        return filename;
     }
 
     @SuppressWarnings("unused")
