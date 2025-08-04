@@ -11,6 +11,7 @@
     "EntityMixin",
     "NetherPortalMixin",
     "PortalForcerMixin",
+    "RailBlockMixin",
     "ServerWorldMixin"
   ],
   "client": [],

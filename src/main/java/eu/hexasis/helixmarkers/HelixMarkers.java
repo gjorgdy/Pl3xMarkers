@@ -5,6 +5,7 @@ import eu.hexasis.helixmarkers.layers.EndPortalIconMarkerLayer;
 import eu.hexasis.helixmarkers.layers.NetherPortalIconMarkerLayer;
 import eu.hexasis.helixmarkers.layers.IconMarkerLayer;
 import eu.hexasis.helixmarkers.repositories.AreaRepository;
+import eu.hexasis.helixmarkers.repositories.DynamicLineRepository;
 import eu.hexasis.helixmarkers.repositories.IconMarkerRepository;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -19,6 +20,7 @@ public class HelixMarkers implements DedicatedServerModInitializer {
     private static Database DATABASE = null;
     private static AreaRepository AREA_REPOSITORY = null;
     private static IconMarkerRepository MARKER_REPOSITORY = null;
+    private static DynamicLineRepository DYNAMIC_LINE_REPOSITORY = null;
     public static Logger LOGGER = LoggerFactory.getLogger(HelixMarkers.class);
 
     private static Api API = null;
@@ -62,6 +64,13 @@ public class HelixMarkers implements DedicatedServerModInitializer {
             MARKER_REPOSITORY = new IconMarkerRepository(database());
         }
         return MARKER_REPOSITORY;
+    }
+
+    public static DynamicLineRepository dynamicLineRepository() {
+        if (DYNAMIC_LINE_REPOSITORY == null) {
+            DYNAMIC_LINE_REPOSITORY = new DynamicLineRepository(database());
+        }
+        return DYNAMIC_LINE_REPOSITORY;
     }
 
     @Override

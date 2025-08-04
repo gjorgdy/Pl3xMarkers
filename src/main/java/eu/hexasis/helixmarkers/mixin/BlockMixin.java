@@ -8,6 +8,7 @@ import net.minecraft.block.entity.BannerBlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -35,6 +36,18 @@ public class BlockMixin {
                     banner.getColorForState().getEntityColor(),
                     pos
                 );
+            }
+            if (state.isIn(BlockTags.RAILS)) {
+                // loop to find next the lodestone rail
+                BlockPos _pos = pos.north();
+                for (int i = 1; i < 64; i++) {
+                    if (!world.getBlockState(_pos).isIn(BlockTags.RAILS)) break;
+                    if (world.getBlockState(_pos.down()).isOf(Blocks.LODESTONE)) {
+                        System.out.println("found lodestone at " + _pos);
+                        break;
+                    }
+                    _pos = _pos.north();
+                }
             }
         }
     }

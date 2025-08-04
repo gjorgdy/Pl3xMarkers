@@ -29,4 +29,12 @@ public abstract class MarkerLayer extends WorldLayer {
         addMarker(markerBuilder.build());
     }
 
+    public String getWorldKey() {
+        return getWorld().getKey();
+    }
+
+    public String getLayerKey() {
+        return getKey();
+    }
+
 }

@@ -6,6 +6,7 @@ import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import eu.hexasis.helixmarkers.entities.AreaEntity;
 import eu.hexasis.helixmarkers.entities.AreaPointEntity;
+import eu.hexasis.helixmarkers.entities.DynamicLinePointEntity;
 import eu.hexasis.helixmarkers.entities.IconMarkerEntity;
 
 import java.io.File;
@@ -18,6 +19,7 @@ public class Database {
     public Dao<IconMarkerEntity, String> markers;
     public Dao<AreaEntity, String> areas;
     public Dao<AreaPointEntity, String> areaPoints;
+    public Dao<DynamicLinePointEntity, String> dynamicLinePoints;
 
     private final JdbcPooledConnectionSource connection;
 
@@ -37,6 +39,8 @@ public class Database {
         TableUtils.createTableIfNotExists(connection, AreaEntity.class);
         areaPoints = DaoManager.createDao(connection, AreaPointEntity.class);
         TableUtils.createTableIfNotExists(connection, AreaPointEntity.class);
+        dynamicLinePoints = DaoManager.createDao(connection, DynamicLinePointEntity.class);
+        TableUtils.createTableIfNotExists(connection, DynamicLinePointEntity.class);
     }
 
     public void close() {
