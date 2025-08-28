@@ -23,7 +23,7 @@ public class ServerWorldMixin {
         // check if a nether portal block was broken
         if (currentBlockState.isOf(Blocks.NETHER_PORTAL) && !state.isOf(Blocks.NETHER_PORTAL)) {
             // try to remove marker
-            HelixMarkers.api().removeIconMarker(world.getRegistryKey().getValue(), "nether_portals", pos);
+            HelixMarkers.api().removeNetherPortalIconMarker(world.getRegistryKey().getValue(), pos);
         }
     }
 

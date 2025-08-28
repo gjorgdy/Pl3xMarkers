@@ -39,7 +39,7 @@ public class EndPortalBlockMixin {
         // place marker if one does not exist yet
         if (world.getRegistryKey() == World.OVERWORLD) {
             Identifier identifier = world.getRegistryKey().getValue();
-            HelixMarkers.api().addIconMarker(identifier, "end_portals", pos);
+            HelixMarkers.api().addEndPortalIconMarker(identifier, pos);
         }
     }
 

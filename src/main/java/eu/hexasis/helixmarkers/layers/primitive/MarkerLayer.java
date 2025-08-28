@@ -1,8 +1,7 @@
-package eu.hexasis.helixmarkers.layers;
+package eu.hexasis.helixmarkers.layers.primitive;
 
 import eu.hexasis.helixmarkers.markers.MarkerBuilder;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 import net.pl3x.map.core.markers.layer.WorldLayer;
 import net.pl3x.map.core.world.World;
 import org.jetbrains.annotations.NotNull;

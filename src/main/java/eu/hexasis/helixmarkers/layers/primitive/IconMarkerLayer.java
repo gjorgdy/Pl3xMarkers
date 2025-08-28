@@ -1,4 +1,4 @@
-package eu.hexasis.helixmarkers.layers;
+package eu.hexasis.helixmarkers.layers.primitive;
 
 import eu.hexasis.helixmarkers.HelixMarkers;
 import eu.hexasis.helixmarkers.markers.IconMarkerBuilder;

@@ -1,6 +1,8 @@
 package eu.hexasis.helixmarkers;
 
-import eu.hexasis.helixmarkers.layers.*;
+import eu.hexasis.helixmarkers.layers.primitive.AreaMarkerLayer;
+import eu.hexasis.helixmarkers.layers.primitive.IconMarkerLayer;
+import eu.hexasis.helixmarkers.layers.primitive.MarkerLayer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.pl3x.map.core.Pl3xMap;
@@ -28,16 +30,15 @@ public class Api {
     }
 
     @SuppressWarnings("unused")
-    public String registerIconImage(String path, String filename, String filetype) {
+    public void registerIconImage(String path, String filename, String filetype) {
         // parse through to internal handler
         HelixMarkers.pl3xHandler().registerIconImage(path, filename, filetype);
-        return filename;
     }
 
     @SuppressWarnings("unused")
     public void addAreaPoint(Identifier worldIdentifier, @Language("HTML") String label, int color, BlockPos pos) {
         executor.execute(() -> {
-            Layer layer = getWorld(worldIdentifier).getLayerRegistry().get("areas");
+            Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(Layers.Keys.AREAS);
             if (layer instanceof AreaMarkerLayer aml) {
                 aml.addPoint(label, color, pos.getX(), pos.getZ());
             }
@@ -47,14 +48,25 @@ public class Api {
     @SuppressWarnings("unused")
     public void removeAreaPoint(Identifier worldIdentifier, @Language("HTML") String label, int color, BlockPos pos) {
         executor.execute(() -> {
-            Layer layer = getWorld(worldIdentifier).getLayerRegistry().get("areas");
+            Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(Layers.Keys.AREAS);
             if (layer instanceof AreaMarkerLayer aml) {
                 aml.removePoint(label, color, pos.getX(), pos.getZ());
             }
         });
     }
 
-    @SuppressWarnings("unused")
+    public void addNetherPortalIconMarker(Identifier worldIdentifier, BlockPos pos) {
+        addIconMarker(worldIdentifier, Layers.Keys.NETHER_PORTALS, pos);
+    }
+
+    public void addEndPortalIconMarker(Identifier worldIdentifier, BlockPos pos) {
+        addIconMarker(worldIdentifier, Layers.Keys.END_PORTALS, pos);
+    }
+
+    public void addBeaconIconMarker(Identifier worldIdentifier, BlockPos pos) {
+        addIconMarker(worldIdentifier, Layers.Keys.BEACONS, pos);
+    }
+
     public void addIconMarker(Identifier worldIdentifier, String layerKey, BlockPos pos) {
         executor.execute(() -> {
             Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(layerKey);
@@ -64,7 +76,19 @@ public class Api {
         });
     }
 
+    public void removeNetherPortalIconMarker(Identifier worldIdentifier, BlockPos pos) {
+        removeIconMarker(worldIdentifier, Layers.Keys.NETHER_PORTALS, pos);
+    }
+
     @SuppressWarnings("unused")
+    public void removeEndPortalIconMarker(Identifier worldIdentifier, BlockPos pos) {
+        removeIconMarker(worldIdentifier, Layers.Keys.END_PORTALS, pos);
+    }
+
+    public void removeBeaconIconMarker(Identifier worldIdentifier, BlockPos pos) {
+        removeIconMarker(worldIdentifier, Layers.Keys.BEACONS, pos);
+    }
+
     public void removeIconMarker(Identifier worldIdentifier, String layerKey, BlockPos pos) {
         executor.execute(() -> {
             Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(layerKey);

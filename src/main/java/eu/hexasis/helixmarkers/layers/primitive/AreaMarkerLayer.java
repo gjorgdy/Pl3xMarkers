@@ -1,4 +1,4 @@
-package eu.hexasis.helixmarkers.layers;
+package eu.hexasis.helixmarkers.layers.primitive;
 
 import eu.hexasis.helixmarkers.HelixMarkers;
 import eu.hexasis.helixmarkers.markers.AreaMarkerBuilder;
@@ -11,13 +11,8 @@ import java.util.ArrayList;
 
 public class AreaMarkerLayer extends MarkerLayer {
 
-    public final String worldKey;
-    public final String worldLabel;
-
     public AreaMarkerLayer(String key, String label, @NotNull World world) {
         super(key, label, world);
-        this.worldKey = key;
-        this.worldLabel = label;
     }
 
     @Override

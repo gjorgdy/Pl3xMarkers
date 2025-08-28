@@ -1,16 +1,18 @@
 package eu.hexasis.helixmarkers.layers;
 
+import eu.hexasis.helixmarkers.Icons;
+import eu.hexasis.helixmarkers.Layers;
 import eu.hexasis.helixmarkers.helpers.HtmlHelper;
+import eu.hexasis.helixmarkers.layers.primitive.IconMarkerLayer;
 import eu.hexasis.helixmarkers.markers.IconMarkerBuilder;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.world.World;
-import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
 public class NetherPortalIconMarkerLayer extends IconMarkerLayer {
 
-    public NetherPortalIconMarkerLayer(String icon, String key, String label, @Language("HTML") String tooltip, @NotNull World world) {
-        super(icon, key, label, tooltip, world);
+    public NetherPortalIconMarkerLayer(@NotNull World world) {
+        super(Icons.Keys.NETHER_PORTAL, Layers.Keys.NETHER_PORTALS, Layers.Labels.NETHER_PORTALS, Layers.Tooltips.NETHER_PORTALS, world);
     }
 
     @Override

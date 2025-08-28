@@ -1,6 +1,6 @@
 package eu.hexasis.helixmarkers;
 
-import eu.hexasis.helixmarkers.layers.MarkerLayer;
+import eu.hexasis.helixmarkers.layers.primitive.MarkerLayer;
 import eu.hexasis.helixmarkers.objects.IconImageAddress;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.event.EventHandler;

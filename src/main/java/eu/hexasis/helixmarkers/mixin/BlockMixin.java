@@ -24,18 +24,16 @@ public class BlockMixin {
     @Inject(method = "onPlaced", at = @At("HEAD"))
     public void onPlace(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack, CallbackInfo ci) {
         // area markers
-        if (world instanceof ServerWorld serverWorld && world.getBlockState(pos.down()).isOf(Blocks.LODESTONE)) {
-            var blockEntity = serverWorld.getBlockEntity(pos);
-            if (blockEntity instanceof BannerBlockEntity banner) {
-                @Language("HTML") var name = banner.getName().getLiteralString();
-                if (name == null) return;
-                HelixMarkers.api().addAreaPoint(
-                    serverWorld.getRegistryKey().getValue(),
-                    name,
-                    banner.getColorForState().getEntityColor(),
-                    pos
-                );
-            }
+        var blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof BannerBlockEntity banner && world.getBlockState(pos.down()).isOf(Blocks.LODESTONE)) {
+            @Language("HTML") var name = banner.getName().getLiteralString();
+            if (name == null) return;
+            HelixMarkers.api().addAreaPoint(
+                world.getRegistryKey().getValue(),
+                name,
+                banner.getColorForState().getEntityColor(),
+                pos
+            );
         }
     }
 
@@ -43,7 +41,7 @@ public class BlockMixin {
     public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfoReturnable<BlockState> cir) {
         // beacon markers
         if (state.isOf(Blocks.BEACON)) {
-            HelixMarkers.api().removeIconMarker(world.getRegistryKey().getValue(), "beacons", pos);
+            HelixMarkers.api().removeBeaconIconMarker(world.getRegistryKey().getValue(), pos);
         }
         // area markers
         if (world instanceof ServerWorld serverWorld) {

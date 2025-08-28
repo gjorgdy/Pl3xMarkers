@@ -35,7 +35,7 @@ public class NetherPortalMixin implements NetherPortalInterface {
     @Override
     public void helixMarkers$createMarker(World world) {
         var center = PortalHelper.getNetherPortalCenter(lowerCorner, axis, width);
-        HelixMarkers.api().addIconMarker(world.getRegistryKey().getValue(), "nether_portals", center);
+        HelixMarkers.api().addNetherPortalIconMarker(world.getRegistryKey().getValue(), center);
     }
 
     @Inject(method = "getNewPortal", at = @At("RETURN"))
