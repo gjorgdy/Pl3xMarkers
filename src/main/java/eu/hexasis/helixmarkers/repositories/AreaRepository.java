@@ -45,12 +45,10 @@ public class AreaRepository{
     }
 
     public AreaEntity getOrCreateArea(String world, String label, int color) {
-        System.out.println("getting area: " + label);
         AreaEntity area = getArea(world, label, color);
         if (area == null) {
             area = new AreaEntity(world, label, color);
             try {
-                System.out.println("creating area: " + area.getKey());
                 database.areas.create(area);
             } catch (SQLException e) {
                 HelixMarkers.LOGGER.error(e.getMessage());
