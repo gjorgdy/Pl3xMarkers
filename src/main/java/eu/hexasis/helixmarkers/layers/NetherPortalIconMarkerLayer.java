@@ -30,7 +30,7 @@ public class NetherPortalIconMarkerLayer extends IconMarkerLayer {
                         x, z
                 )
                 .centerIcon(16, 16)
-                .addPopup(HtmlHelper.TravelPopUp(label, destinationKey, relativeX, relativeZ, buttonText))
+                .addPopup(HtmlHelper.TravelPopUp(tooltip, destinationKey, relativeX, relativeZ, buttonText))
                 .build();
     }
 

@@ -21,7 +21,7 @@ public class EndPortalIconMarkerLayer extends IconMarkerLayer {
                         x, z
                 )
                 .centerIcon(16, 16)
-                .addPopup(HtmlHelper.TravelPopUp(label, "minecraft-the_end", 100, 0, "Go to The End"))
+                .addPopup(HtmlHelper.TravelPopUp(tooltip, "minecraft-the_end", 100, 0, "Go to The End"))
                 .build();
     }
 
