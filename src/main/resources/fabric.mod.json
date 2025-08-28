@@ -1,24 +1,24 @@
 {
   "schemaVersion": 1,
-  "id": "helixmarkers",
+  "id": "pl3xmarkers",
   "version": "${version}",
-  "name": "Helix Markers",
+  "name": "Pl3xMarkers",
   "description": "",
   "authors": [],
   "contact": {
     "repo": "https://github.com/Gjorgdy/Pl3x Markers"
   },
   "license": "All-Rights-Reserved",
-  "icon": "assets/markers/logo.png",
+  "icon": "assets/pl3xmarkers/logo.png",
   "environment": "server",
   "entrypoints": {
     "client": [],
     "server": [
-      "eu.hexasis.helixmarkers.HelixMarkers"
+      "nl.gjorgdy.pl3xmarkers.Pl3xMarkers"
     ]
   },
   "mixins": [
-    "helixmarkers.mixins.json"
+    "pl3xmarkers.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
