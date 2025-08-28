@@ -2,7 +2,7 @@ package eu.hexasis.helixmarkers.layers;
 
 import eu.hexasis.helixmarkers.HelixMarkers;
 import eu.hexasis.helixmarkers.entities.AreaEntity;
-import eu.hexasis.helixmarkers.entities.DynamicLinePointEntity;
+import eu.hexasis.helixmarkers.entities.SimpleLineEntity;
 import eu.hexasis.helixmarkers.markers.LineMarkerBuilder;
 import it.unimi.dsi.fastutil.Pair;
 import net.pl3x.map.core.world.World;
@@ -12,58 +12,35 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DynamicLineMarkerLayer extends MarkerLayer {
+public class LineMarkerLayer extends MarkerLayer {
 
     public final String worldKey;
     public final String worldLabel;
 
-    List<DynamicLinePointEntity> points = new ArrayList<>();
-    List<Pair<DynamicLinePointEntity, DynamicLinePointEntity>> lines = new ArrayList<>();
+    List<SimpleLineEntity> lines = new ArrayList<>();
 
-    public DynamicLineMarkerLayer(String key, String label, @NotNull World world) {
+    public LineMarkerLayer(String key, String label, @NotNull World world) {
         super(key, label, world);
         this.worldKey = key;
         this.worldLabel = label;
     }
 
-    private void loadPoints() {
-        points.clear();
-        points = HelixMarkers.dynamicLineRepository()
-                .getPoints(getWorldKey(), getLayerKey());
-        points.sort(DynamicLinePointEntity::compareTo);
-    }
-
     @Override
     public void load() {
-        loadPoints();
+        lines = HelixMarkers.LineRepository()
+                .getPoints(getWorldKey(), getLayerKey());
         // construct lines
-        for (int i = 0; i < points.size() - 1; i++) {
+        for (int i = 0; i < lines.size() - 1; i++) {
             constructLines(i);
         }
     }
 
-    public void constructLines(int index) {
-        var start = points.get(index);
-        for (int i = index + 1; i < points.size() - 1; i++) {
-            var point = points.get(i);
-            if (Math.abs(start.getX() - point.getX()) > 64) return;
-            if (Math.abs(start.getZ() - point.getZ()) > 64) return;
-            if (start.goesEast() && point.goesWest() && start.getZ() == point.getZ()) {
-                addLine(start, point);
-                continue;
-            }
-            if (start.goesSouth() && point.goesNorth() && start.getX() == point.getX()) {
-                addLine(start, point);
-                continue;
-            }
-        }
-    }
-
-    public void addLine(DynamicLinePointEntity start, DynamicLinePointEntity end) {
+    public void addLine(int aX, int aZ, int bX, int bZ) {
+        HelixMarkers.LineRepository().addOrUpdatePoint(getWorldKey(), getLayerKey(), aX, aZ);
         System.out.println("Connecting " + start + " to " + end);
         lines.add(Pair.of(start, end));
         var line = LineMarkerBuilder
-            .newLineMarker(start.getId() + ":" + end.getId(), List.of(start, end))
+            .newLineMarker(String.valueOf(id))
             .stroke(0xFFFFFF);
         addMarker(line);
     }

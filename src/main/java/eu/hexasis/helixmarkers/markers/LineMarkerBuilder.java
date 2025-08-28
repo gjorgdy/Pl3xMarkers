@@ -1,12 +1,10 @@
 package eu.hexasis.helixmarkers.markers;
 
-import eu.hexasis.helixmarkers.entities.DynamicLinePointEntity;
+import eu.hexasis.helixmarkers.entities.SimpleLineEntity;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.marker.Polyline;
 import net.pl3x.map.core.markers.option.Stroke;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class LineMarkerBuilder extends MarkerBuilder<@NotNull Polyline> {
 
@@ -14,11 +12,9 @@ public class LineMarkerBuilder extends MarkerBuilder<@NotNull Polyline> {
         super(marker);
     }
 
-    public static LineMarkerBuilder newLineMarker(String key, List<DynamicLinePointEntity> points) {
+    public static LineMarkerBuilder newLineMarker(String key, SimpleLineEntity simpleLineEntity) {
         var line = new Polyline(key);
-        for (DynamicLinePointEntity point : points) {
-            line.addPoint(point.toPl3xPoint());
-        }
+        line.addPoint(simpleLineEntity.toPl3xPoints());
         return new LineMarkerBuilder(line);
     }
 
