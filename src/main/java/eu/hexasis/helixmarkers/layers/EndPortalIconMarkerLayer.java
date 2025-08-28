@@ -16,6 +16,11 @@ public class EndPortalIconMarkerLayer extends IconMarkerLayer {
     }
 
     @Override
+    public boolean isInWorld(@NotNull World world) {
+        return isOverworld(world);
+    }
+
+    @Override
     protected Marker<?> createIconMarker(int x, int z) {
         return IconMarkerBuilder.newIconMarker(
                         toMarkerKey(x, z),

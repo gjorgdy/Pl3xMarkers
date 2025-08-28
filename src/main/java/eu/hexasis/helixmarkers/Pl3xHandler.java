@@ -39,6 +39,7 @@ public class Pl3xHandler implements EventListener {
     public void onWorldLoad(WorldLoadedEvent event) {
         worldLayerFunctions.forEach(function -> {
             MarkerLayer swl = function.apply(event.getWorld());
+            if (!swl.isInWorld(event.getWorld())) return;
             event.getWorld().getLayerRegistry().register(swl);
             swl.load();
         });

@@ -16,6 +16,11 @@ public class NetherPortalIconMarkerLayer extends IconMarkerLayer {
     }
 
     @Override
+    public boolean isInWorld(@NotNull World world) {
+        return isOverworld(world) || isNether(world);
+    }
+
+    @Override
     protected Marker<?> createIconMarker(int x, int z) {
         // check if the portal is in the overworld or the nether
         String worldKey = getWorld().getKey();

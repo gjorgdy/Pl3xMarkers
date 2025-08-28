@@ -20,6 +20,25 @@ public abstract class MarkerLayer extends WorldLayer {
      */
     abstract public void load();
 
+    /**
+     * Check if this layer should be shown in the given world
+     * @param world the world to check against
+     * @return true if the layer should be shown in the given world, false otherwise
+     */
+    abstract public boolean isInWorld(@NotNull World world);
+
+    protected boolean isOverworld(World world) {
+        return world.getKey().equals("minecraft:overworld");
+    }
+
+    protected boolean isNether(World world) {
+        return world.getKey().equals("minecraft:the_nether");
+    }
+
+    protected boolean isEnd(World world) {
+        return world.getKey().equals("minecraft:the_end");
+    }
+
     final public String toMarkerKey(int x, int z) {
         return x + ":" + z;
     }

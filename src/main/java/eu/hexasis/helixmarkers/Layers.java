@@ -1,5 +1,6 @@
 package eu.hexasis.helixmarkers;
 
+import eu.hexasis.helixmarkers.layers.EndGatewayIconMarkerLayer;
 import eu.hexasis.helixmarkers.layers.primitive.AreaMarkerLayer;
 import eu.hexasis.helixmarkers.layers.EndPortalIconMarkerLayer;
 import eu.hexasis.helixmarkers.layers.primitive.IconMarkerLayer;
@@ -37,7 +38,7 @@ public class Layers {
 
     public static void register(Api api) {
         api.registerMarkerLayer(w -> new IconMarkerLayer(Icons.Keys.BEACON, Keys.BEACONS, Labels.BEACONS, Tooltips.BEACONS, w));
-        api.registerMarkerLayer(w -> new IconMarkerLayer(Icons.Keys.END_GATEWAY, Keys.END_GATEWAYS, Labels.END_GATEWAYS, Tooltips.END_GATEWAYS, w));
+        api.registerMarkerLayer(EndGatewayIconMarkerLayer::new);
         api.registerMarkerLayer(EndPortalIconMarkerLayer::new);
         api.registerMarkerLayer(NetherPortalIconMarkerLayer::new);
         api.registerMarkerLayer(w -> new AreaMarkerLayer(Keys.AREAS, Labels.AREAS, w));

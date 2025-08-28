@@ -22,6 +22,11 @@ public class AreaMarkerLayer extends MarkerLayer {
             .forEach(this::loadArea);
     }
 
+    @Override
+    public boolean isInWorld(@NotNull World world) {
+        return true;
+    }
+
     public void loadArea(AreaEntity area) {
         if (super.hasMarker(area.getKey())) {
             super.removeMarker(area.getKey());
