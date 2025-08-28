@@ -1,6 +1,7 @@
 package eu.hexasis.helixmarkers.mixin;
 
 import eu.hexasis.helixmarkers.HelixMarkers;
+import eu.hexasis.helixmarkers.helpers.PortalHelper;
 import eu.hexasis.helixmarkers.interfaces.NetherPortalInterface;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -10,7 +11,6 @@ import net.minecraft.world.dimension.NetherPortal;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -32,20 +32,10 @@ public class NetherPortalMixin implements NetherPortalInterface {
     @Final
     private int width;
 
-    @Unique
-    @SuppressWarnings("unused")
-    public BlockPos helixMarkers$getCenter() {
-        if (lowerCorner == null) return null;
-        if (axis == Direction.Axis.X) {
-            return lowerCorner.add(width / -2, 0, 0);
-        } else {
-            return lowerCorner.add(0, 0, width / 2);
-        }
-    }
-
     @Override
     public void helixMarkers$createMarker(World world) {
-        HelixMarkers.api().addIconMarker(world.getRegistryKey().getValue(), "nether_portals", helixMarkers$getCenter());
+        var center = PortalHelper.getNetherPortalCenter(lowerCorner, axis, width);
+        HelixMarkers.api().addIconMarker(world.getRegistryKey().getValue(), "nether_portals", center);
     }
 
     @Inject(method = "getNewPortal", at = @At("RETURN"))

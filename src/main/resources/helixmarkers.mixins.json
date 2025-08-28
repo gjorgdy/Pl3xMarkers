@@ -10,7 +10,6 @@
     "EndPortalBlockMixin",
     "EntityMixin",
     "NetherPortalMixin",
-    "PortalForcerMixin",
     "ServerWorldMixin"
   ],
   "client": [],

@@ -20,7 +20,7 @@ public class ServerWorldMixin {
     @Inject(method = "setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/BlockState;II)Z", at = @At("HEAD"))
     public void onBlockChanged(BlockPos pos, BlockState state, int flags, int maxUpdateDepth, CallbackInfoReturnable<Boolean> cir) {
         var currentBlockState = world.getBlockState(pos);
-        // check if nether portal block was broken
+        // check if a nether portal block was broken
         if (currentBlockState.isOf(Blocks.NETHER_PORTAL) && !state.isOf(Blocks.NETHER_PORTAL)) {
             // try to remove marker
             HelixMarkers.api().removeIconMarker(world.getRegistryKey().getValue(), "nether_portals", pos);
