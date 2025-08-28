@@ -59,6 +59,10 @@ public class Api {
         addIconMarker(worldIdentifier, Layers.Keys.NETHER_PORTALS, pos);
     }
 
+    public void addEndGatewayIconMarker(Identifier worldIdentifier, BlockPos pos) {
+        addIconMarker(worldIdentifier, Layers.Keys.END_GATEWAYS, pos);
+    }
+
     public void addEndPortalIconMarker(Identifier worldIdentifier, BlockPos pos) {
         addIconMarker(worldIdentifier, Layers.Keys.END_PORTALS, pos);
     }
@@ -78,6 +82,11 @@ public class Api {
 
     public void removeNetherPortalIconMarker(Identifier worldIdentifier, BlockPos pos) {
         removeIconMarker(worldIdentifier, Layers.Keys.NETHER_PORTALS, pos);
+    }
+
+    @SuppressWarnings("unused")
+    public void removeEndGatewayIconMarker(Identifier worldIdentifier, BlockPos pos) {
+        removeIconMarker(worldIdentifier, Layers.Keys.END_GATEWAYS, pos);
     }
 
     @SuppressWarnings("unused")

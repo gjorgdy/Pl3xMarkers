@@ -1,5 +1,6 @@
 package eu.hexasis.helixmarkers.mixin;
 
+import eu.hexasis.helixmarkers.HelixMarkers;
 import eu.hexasis.helixmarkers.interfaces.NetherPortalInterface;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -20,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PortalManager.class)
-public class EntityMixin {
+public class PortalManagerMixin {
 
     @Shadow private BlockPos pos;
 
@@ -40,6 +41,9 @@ public class EntityMixin {
             Direction.Axis axis = portalBlock.get(Properties.HORIZONTAL_AXIS);
             var portal = (NetherPortalInterface) NetherPortal.getOnAxis(world, pos, axis);
             portal.helixMarkers$createMarker(world);
+        }
+        if (portalBlock.isOf(Blocks.END_GATEWAY)) {
+            HelixMarkers.api().addEndGatewayIconMarker(world.getRegistryKey().getValue(), pos);
         }
     }
 
