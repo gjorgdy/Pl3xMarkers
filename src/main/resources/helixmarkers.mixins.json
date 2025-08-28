@@ -7,7 +7,6 @@
     "BeaconBlockEntityMixin",
     "BlockMixin",
     "EnderEyeItemMixin",
-    "EndPortalBlockMixin",
     "PortalManagerMixin",
     "NetherPortalMixin",
     "ServerWorldMixin"

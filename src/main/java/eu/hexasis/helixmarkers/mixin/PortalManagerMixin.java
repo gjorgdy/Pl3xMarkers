@@ -1,6 +1,7 @@
 package eu.hexasis.helixmarkers.mixin;
 
 import eu.hexasis.helixmarkers.HelixMarkers;
+import eu.hexasis.helixmarkers.helpers.PortalHelper;
 import eu.hexasis.helixmarkers.interfaces.NetherPortalInterface;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -44,6 +45,9 @@ public class PortalManagerMixin {
         }
         if (portalBlock.isOf(Blocks.END_GATEWAY)) {
             HelixMarkers.api().addEndGatewayIconMarker(world.getRegistryKey().getValue(), pos);
+        }
+        if (portalBlock.isOf(Blocks.END_PORTAL)) {
+            HelixMarkers.api().addEndPortalIconMarker(world.getRegistryKey().getValue(), PortalHelper.getEndPortalCenter(world, pos));
         }
     }
 
