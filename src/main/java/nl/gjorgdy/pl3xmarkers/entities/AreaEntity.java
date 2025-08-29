@@ -1,28 +1,19 @@
 package nl.gjorgdy.pl3xmarkers.entities;
 
-import com.j256.ormlite.dao.ForeignCollection;
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.field.ForeignCollectionField;
-import com.j256.ormlite.table.DatabaseTable;
 import org.jetbrains.annotations.Nullable;
 
-@DatabaseTable(tableName = "areas")
+import java.util.Collection;
+import java.util.List;
+
 public class AreaEntity {
 
-    @DatabaseField(columnName = "id", generatedId = true)
     private int id;
 
-    @DatabaseField(columnName = "world", uniqueCombo = true)
     private String world;
 
-    @DatabaseField(columnName = "label", uniqueCombo = true)
     private String label;
 
-    @DatabaseField(columnName = "color", uniqueCombo = true)
     private int color;
-
-    @ForeignCollectionField(columnName = "points", eager = true)
-    private ForeignCollection<AreaPointEntity> points;
 
     @SuppressWarnings("unused") // used by ormlite
     public AreaEntity() {}
@@ -50,7 +41,7 @@ public class AreaEntity {
     }
 
     @Nullable
-    public ForeignCollection<AreaPointEntity> getPoints() {
-        return points;
+    public Collection<AreaPointEntity> getPoints() {
+        return List.of();
     }
 }

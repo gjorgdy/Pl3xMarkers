@@ -1,6 +1,5 @@
 plugins {
     id 'fabric-loom' version '1.10-SNAPSHOT'
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'maven-publish'
 }
 
@@ -42,12 +41,10 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    // Pl3xmap Marker
+    // https://modrinth.com/plugin/pl3xmap
     modImplementation "maven.modrinth:pl3xmap:1.21.5-527"
-    // https://mvnrepository.com/artifact/com.j256.ormlite/ormlite-jdbc
-    include(implementation 'com.j256.ormlite:ormlite-jdbc:6.1')
-    // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
-    include(implementation 'org.xerial:sqlite-jdbc:3.50.3.0')
+    // https://modrinth.com/plugin/minecraft-sqlite-jdbc
+    modImplementation("maven.modrinth:minecraft-sqlite-jdbc:3.49.1.0")
 }
 
 processResources {
@@ -75,14 +72,6 @@ tasks.withType(JavaCompile).configureEach {
     }
 }
 
-tasks.shadowJar {
-    setProperty("zip64", true)
-    manifest {
-        // Optionally, set the main class for the shadowed JAR.
-        attributes["Main-Class"] = "nl.gjorgdy.pl3xmarkers.Pl3xMarkers"
-    }
-}
-
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
     if (JavaVersion.current() < javaVersion) {
@@ -95,7 +84,6 @@ java {
 }
 
 jar {
-    dependsOn shadowJar
     from("LICENSE") {
         rename { "${it}_${project.archivesBaseName}"}
     }

@@ -19,62 +19,67 @@ public class AreaRepository{
     }
 
     public List<AreaEntity> getAreas(String world) {
-        try {
-            return database.areas.queryBuilder()
-                    .where().eq("world", world)
-                    .query();
-        } catch (SQLException e) {
-            Pl3xMarkers.LOGGER.error(e.getMessage());
-            return new ArrayList<>();
-        }
+//        try {
+//            return database.areas.queryBuilder()
+//                    .where().eq("world", world)
+//                    .query();
+//        } catch (SQLException e) {
+//            Pl3xMarkers.LOGGER.error(e.getMessage());
+//            return new ArrayList<>();
+//        }
+        return new ArrayList<>();
     }
 
     @Nullable
     public AreaEntity getArea(String world, String label, int color) {
-        try {
-            return database.areas.queryBuilder()
-                    .where()
-                    .eq("world", world).and()
-                    .eq("label", label).and()
-                    .eq("color", color)
-                    .queryForFirst();
-        } catch (SQLException e) {
-            Pl3xMarkers.LOGGER.error(e.getMessage());
-            return null;
-        }
+//        try {
+//            return database.areas.queryBuilder()
+//                    .where()
+//                    .eq("world", world).and()
+//                    .eq("label", label).and()
+//                    .eq("color", color)
+//                    .queryForFirst();
+//        } catch (SQLException e) {
+//            Pl3xMarkers.LOGGER.error(e.getMessage());
+//            return null;
+//        }
+        return null;
     }
 
     public AreaEntity getOrCreateArea(String world, String label, int color) {
-        AreaEntity area = getArea(world, label, color);
-        if (area == null) {
-            area = new AreaEntity(world, label, color);
-            try {
-                database.areas.create(area);
-            } catch (SQLException e) {
-                Pl3xMarkers.LOGGER.error(e.getMessage());
-                return null;
-            }
-        }
-        return area;
+//        AreaEntity area = getArea(world, label, color);
+//        if (area == null) {
+//            area = new AreaEntity(world, label, color);
+//            try {
+//                database.areas.create(area);
+//            } catch (SQLException e) {
+//                Pl3xMarkers.LOGGER.error(e.getMessage());
+//                return null;
+//            }
+//        }
+//        return area;
+        return null;
     }
 
     public boolean addPoint(String world, String label, int color, int x, int z) {
-        AreaEntity area = getOrCreateArea(world, label, color);
-        if (area == null) return false;
-        var points = area.getPoints();
-        if (points == null) return false;
-        return points.add(new AreaPointEntity(area, x, z));
+//        AreaEntity area = getOrCreateArea(world, label, color);
+//        if (area == null) return false;
+//        var points = area.getPoints();
+//        if (points == null) return false;
+//        return points.add(new AreaPointEntity(area, x, z));
+        return false;
     }
 
     public boolean removePoint(String world, String label, int color, int x, int z) {
-        AreaEntity area = getOrCreateArea(world, label, color);
-        if (area == null) return false;
-        var points = area.getPoints();
-        if (points == null) return false;
-        return points.removeIf(
-        p -> p.getX() == x
-                && p.getZ() == z
-        );
+//        AreaEntity area = getOrCreateArea(world, label, color);
+//        if (area == null) return false;
+//        var points = area.getPoints();
+//        if (points == null) return false;
+//        return points.removeIf(
+//        p -> p.getX() == x
+//                && p.getZ() == z
+//        );
+        return false;
     }
 
 }

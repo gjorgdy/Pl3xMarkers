@@ -1,23 +1,16 @@
 package nl.gjorgdy.pl3xmarkers.entities;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 import net.pl3x.map.core.markers.Point;
 import org.jetbrains.annotations.NotNull;
 
-@DatabaseTable(tableName = "area_points")
 public class AreaPointEntity implements Comparable<AreaPointEntity> {
 
-    @DatabaseField(columnName = "id", generatedId = true)
     private int id;
 
-    @DatabaseField(columnName = "area_id", uniqueCombo = true, foreign = true, foreignAutoRefresh = true)
     private AreaEntity area;
 
-    @DatabaseField(columnName = "x", uniqueCombo = true)
     private int x;
 
-    @DatabaseField(columnName = "z", uniqueCombo = true)
     private int z;
 
     @SuppressWarnings("unused") // used by ormlite
