@@ -2,6 +2,7 @@ package nl.gjorgdy.pl3xmarkers.layers;
 
 import nl.gjorgdy.pl3xmarkers.Icons;
 import nl.gjorgdy.pl3xmarkers.Layers;
+import nl.gjorgdy.pl3xmarkers.entities.IconMarkerEntity;
 import nl.gjorgdy.pl3xmarkers.helpers.HtmlHelper;
 import nl.gjorgdy.pl3xmarkers.layers.primitive.IconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.markers.IconMarkerBuilder;
@@ -21,11 +22,11 @@ public class EndPortalIconMarkerLayer extends IconMarkerLayer {
     }
 
     @Override
-    protected Marker<?> createIconMarker(int x, int z) {
+    protected Marker<?> createIconMarker(IconMarkerEntity marker) {
         return IconMarkerBuilder.newIconMarker(
-                        toMarkerKey(x, z),
-                        iconId,
-                        x, z
+                    toMarkerKey(marker.getX(), marker.getZ()),
+                    iconId,
+                    marker.getX(), marker.getZ()
                 )
                 .centerIcon(16, 16)
                 .addPopup(HtmlHelper.TravelPopUp(tooltip, "minecraft-the_end", 100, 0, "Go to The End"))

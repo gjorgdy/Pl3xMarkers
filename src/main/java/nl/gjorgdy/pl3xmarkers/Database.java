@@ -6,6 +6,7 @@ import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import nl.gjorgdy.pl3xmarkers.entities.AreaEntity;
 import nl.gjorgdy.pl3xmarkers.entities.AreaPointEntity;
+import nl.gjorgdy.pl3xmarkers.entities.IconMarkerAdditionEntity;
 import nl.gjorgdy.pl3xmarkers.entities.IconMarkerEntity;
 
 import java.io.File;
@@ -15,7 +16,8 @@ import static com.mojang.text2speech.Narrator.LOGGER;
 
 public class Database {
 
-    public Dao<IconMarkerEntity, String> markers;
+    public Dao<IconMarkerEntity, String> iconMarkers;
+    public Dao<IconMarkerAdditionEntity, Integer> iconMarkerAdditions;
     public Dao<AreaEntity, String> areas;
     public Dao<AreaPointEntity, String> areaPoints;
 
@@ -31,7 +33,9 @@ public class Database {
         // read or create database file
         connection = new JdbcPooledConnectionSource("jdbc:sqlite:" + configPath + "/" + databaseFile + ".db");
         // create tables if they don't exist
-        markers = DaoManager.createDao(connection, IconMarkerEntity.class);
+        iconMarkerAdditions = DaoManager.createDao(connection, IconMarkerAdditionEntity.class);
+        TableUtils.createTableIfNotExists(connection, IconMarkerAdditionEntity.class);
+        iconMarkers = DaoManager.createDao(connection, IconMarkerEntity.class);
         TableUtils.createTableIfNotExists(connection, IconMarkerEntity.class);
         areas = DaoManager.createDao(connection, AreaEntity.class);
         TableUtils.createTableIfNotExists(connection, AreaEntity.class);

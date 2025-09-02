@@ -1,6 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.layers.primitive;
 
 import nl.gjorgdy.pl3xmarkers.Pl3xMarkers;
+import nl.gjorgdy.pl3xmarkers.entities.IconMarkerEntity;
 import nl.gjorgdy.pl3xmarkers.markers.IconMarkerBuilder;
 import net.minecraft.util.math.BlockPos;
 import net.pl3x.map.core.markers.marker.Marker;
@@ -29,7 +30,7 @@ public class IconMarkerLayer extends MarkerLayer {
         Pl3xMarkers.iconMarkerRepository()
             .getMarkers(getWorld().getKey(), key)
             .forEach(marker ->
-                addIconMarker(marker.getX(), marker.getZ())
+                addMarker(createIconMarker(marker))
             );
     }
 
@@ -44,10 +45,10 @@ public class IconMarkerLayer extends MarkerLayer {
      * @param pos location of marker
      */
     public void addSimpleMarker(BlockPos pos) {
-        boolean added = Pl3xMarkers.iconMarkerRepository()
+        var marker = Pl3xMarkers.iconMarkerRepository()
             .addMarker(getWorld().getKey(), key, pos.getX(), pos.getZ());
-        if (added) {
-            addIconMarker(pos.getX(), pos.getZ());
+        if (marker != null) {
+            addMarker(createIconMarker(marker));
         }
     }
 
@@ -62,19 +63,19 @@ public class IconMarkerLayer extends MarkerLayer {
         super.removeMarker(toMarkerKey(pos.getX(), pos.getZ()));
     }
 
-    private void addIconMarker(int x, int z) {
-        addMarker(createIconMarker(x, z));
-    }
-
-    protected Marker<?> createIconMarker(int x, int z) {
+    protected Marker<?> createIconMarker(IconMarkerEntity marker) {
         return IconMarkerBuilder.newIconMarker(
-                toMarkerKey(x, z),
+                toMarkerKey(marker.getX(), marker.getZ()),
                 iconId,
-                x, z
+                marker.getX(), marker.getZ()
             )
             .centerIcon(16, 16)
-            .addTooltip(tooltip)
+            .addTooltip(getTooltip(marker))
             .build();
+    }
+
+    protected String getTooltip(IconMarkerEntity marker) {
+        return tooltip;
     }
 
 }

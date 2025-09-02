@@ -1,6 +1,7 @@
 package nl.gjorgdy.pl3xmarkers;
 
 import nl.gjorgdy.pl3xmarkers.repositories.AreaRepository;
+import nl.gjorgdy.pl3xmarkers.repositories.IconMarkerAdditionsRepository;
 import nl.gjorgdy.pl3xmarkers.repositories.IconMarkerRepository;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
@@ -15,6 +16,7 @@ public class Pl3xMarkers implements DedicatedServerModInitializer {
     private static Database DATABASE = null;
     private static AreaRepository AREA_REPOSITORY = null;
     private static IconMarkerRepository MARKER_REPOSITORY = null;
+    private static IconMarkerAdditionsRepository FANCY_ICON_MARKER_REPOSITORY = null;
     public static Logger LOGGER = LoggerFactory.getLogger(Pl3xMarkers.class);
 
     private static Api API = null;
@@ -58,6 +60,13 @@ public class Pl3xMarkers implements DedicatedServerModInitializer {
             MARKER_REPOSITORY = new IconMarkerRepository(database());
         }
         return MARKER_REPOSITORY;
+    }
+
+    public static IconMarkerAdditionsRepository iconMarkerAdditionsRepository() {
+        if (FANCY_ICON_MARKER_REPOSITORY == null) {
+            FANCY_ICON_MARKER_REPOSITORY = new IconMarkerAdditionsRepository(database());
+        }
+        return FANCY_ICON_MARKER_REPOSITORY;
     }
 
     @Override
