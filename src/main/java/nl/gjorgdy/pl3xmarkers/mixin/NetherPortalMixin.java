@@ -33,6 +33,11 @@ public class NetherPortalMixin implements NetherPortalInterface {
     private int width;
 
     @Override
+    public BlockPos pl3xMarkers$getPortalCenter() {
+        return PortalHelper.getNetherPortalCenter(lowerCorner, axis, width);
+    }
+
+    @Override
     public void pl3xMarkers$createMarker(World world) {
         var center = PortalHelper.getNetherPortalCenter(lowerCorner, axis, width);
         Pl3xMarkers.api().addNetherPortalIconMarker(world.getRegistryKey().getValue(), center);

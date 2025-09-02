@@ -1,6 +1,7 @@
 package nl.gjorgdy.pl3xmarkers;
 
 import nl.gjorgdy.pl3xmarkers.layers.primitive.AreaMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.layers.primitive.FancyIconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.layers.primitive.IconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.layers.primitive.MarkerLayer;
 import net.minecraft.util.Identifier;
@@ -57,6 +58,15 @@ public class Api {
 
     public void addNetherPortalIconMarker(Identifier worldIdentifier, BlockPos pos) {
         addIconMarker(worldIdentifier, Layers.Keys.NETHER_PORTALS, pos);
+    }
+
+    public void renameNetherPortalIconMarker(Identifier worldIdentifier, BlockPos pos, String label) {
+        executor.execute(() -> {
+            Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(Layers.Keys.NETHER_PORTALS);
+            if (layer instanceof FancyIconMarkerLayer fancyIconMarkerLayer) {
+                fancyIconMarkerLayer.setName(pos, label);
+            }
+        });
     }
 
     public void addEndGatewayIconMarker(Identifier worldIdentifier, BlockPos pos) {

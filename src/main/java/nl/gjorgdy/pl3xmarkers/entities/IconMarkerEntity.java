@@ -46,7 +46,7 @@ public class IconMarkerEntity {
     @Nullable
     public IconMarkerAdditionEntity getAdditionsOrEmpty() {
         var additions = getAdditions();
-        return additions == null ? new IconMarkerAdditionEntity() : additions;
+        return additions == null ? new IconMarkerAdditionEntity(this) : additions;
     }
 
     public String getWorld() {

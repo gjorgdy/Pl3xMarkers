@@ -7,8 +7,9 @@
     "BeaconBlockEntityMixin",
     "BlockMixin",
     "EnderEyeItemMixin",
-    "PortalManagerMixin",
+    "NameTagItemMixin",
     "NetherPortalMixin",
+    "PortalManagerMixin",
     "ServerWorldMixin"
   ],
   "client": [],
