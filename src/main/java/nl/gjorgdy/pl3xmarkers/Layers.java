@@ -1,6 +1,7 @@
 package nl.gjorgdy.pl3xmarkers;
 
 import nl.gjorgdy.pl3xmarkers.layers.EndGatewayIconMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.layers.OPACAreaMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.layers.primitive.AreaMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.layers.EndPortalIconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.layers.primitive.IconMarkerLayer;
@@ -10,6 +11,7 @@ import org.intellij.lang.annotations.Language;
 public class Layers {
 
     public static class Keys {
+        public static String OPAC = "openpartiesandclaims";
         public static String BEACONS = "beacons";
         public static String END_GATEWAYS = "end_gateways";
         public static String END_PORTALS = "end_portals";
@@ -18,6 +20,7 @@ public class Layers {
     }
 
     public static class Labels {
+        public static String OPAC = "Open Parties and Claims";
         public static String BEACONS = "Beacons";
         public static String END_GATEWAYS = "End Gateways";
         public static String END_PORTALS = "End Portals";
@@ -26,6 +29,8 @@ public class Layers {
     }
 
     public static class Tooltips {
+        @Language("HTML")
+        public static String OPAC = "Open Parties and Claims";
         @Language("HTML")
         public static String BEACONS = "Beacon";
         @Language("HTML")
@@ -37,6 +42,7 @@ public class Layers {
     }
 
     public static void register(Api api) {
+        api.registerMarkerLayer(OPACAreaMarkerLayer::new);
         api.registerMarkerLayer(w -> new IconMarkerLayer(Icons.Keys.BEACON, Keys.BEACONS, Labels.BEACONS, Tooltips.BEACONS, w));
         api.registerMarkerLayer(EndGatewayIconMarkerLayer::new);
         api.registerMarkerLayer(EndPortalIconMarkerLayer::new);

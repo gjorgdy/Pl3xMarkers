@@ -29,6 +29,16 @@ repositories {
         name = "Nova Committee - Snapshot"
         url = "https://maven.nova-committee.cn/snapshots/"
     }
+    exclusiveContent {
+        forRepository {
+            maven {
+                url "https://cursemaven.com"
+            }
+        }
+        filter {
+            includeGroup "curse.maven"
+        }
+    }
     maven {
         name = "Local Helix Maven"
         url = uri('../helix-maven')
@@ -42,8 +52,10 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    // Pl3xmap Marker
-    modImplementation "maven.modrinth:pl3xmap:1.21.5-527"
+    // Pl3xmap
+    modCompileOnly "maven.modrinth:pl3xmap:1.21.8-534"
+    // Open Parties and Claims
+    modCompileOnly "curse.maven:open-parties-and-claims-636608:6859742"
     // https://mvnrepository.com/artifact/com.j256.ormlite/ormlite-jdbc
     include(implementation 'com.j256.ormlite:ormlite-jdbc:6.1')
     // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc

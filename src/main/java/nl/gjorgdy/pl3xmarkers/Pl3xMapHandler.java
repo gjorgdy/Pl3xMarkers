@@ -1,5 +1,8 @@
 package nl.gjorgdy.pl3xmarkers;
 
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.server.world.ServerWorld;
+import nl.gjorgdy.pl3xmarkers.compat.openpartiesandclaims.OpenPartiesAndClaims;
 import nl.gjorgdy.pl3xmarkers.layers.primitive.MarkerLayer;
 import nl.gjorgdy.pl3xmarkers.objects.IconImageAddress;
 import net.pl3x.map.core.Pl3xMap;

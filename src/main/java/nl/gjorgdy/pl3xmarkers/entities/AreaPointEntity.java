@@ -23,6 +23,12 @@ public class AreaPointEntity implements Comparable<AreaPointEntity> {
     @SuppressWarnings("unused") // used by ormlite
     public AreaPointEntity() {}
 
+    public AreaPointEntity(int x, int z) {
+        this.area = null;
+        this.x = x;
+        this.z = z;
+    }
+
     public AreaPointEntity(AreaEntity area, int x, int z) {
         this.area = area;
         this.x = x;

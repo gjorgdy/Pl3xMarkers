@@ -1,5 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.layers.primitive;
 
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ServerWorld;
 import nl.gjorgdy.pl3xmarkers.markers.MarkerBuilder;
 import net.minecraft.util.Identifier;
 import net.pl3x.map.core.markers.layer.WorldLayer;
@@ -19,6 +21,13 @@ public abstract class MarkerLayer extends WorldLayer {
      * Load previously created markers
      */
     abstract public void load();
+
+    final protected MinecraftServer getServer() {
+        if (getWorld().getLevel() instanceof ServerWorld serverWorld) {
+            return serverWorld.getServer();
+        }
+        throw new IllegalStateException("World is not a server world");
+    }
 
     /**
      * Check if this layer should be shown in the given world

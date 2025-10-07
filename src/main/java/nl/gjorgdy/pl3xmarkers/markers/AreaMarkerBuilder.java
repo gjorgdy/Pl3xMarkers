@@ -18,8 +18,12 @@ public class AreaMarkerBuilder extends MarkerBuilder<@NotNull Polygon> {
     }
 
     public static AreaMarkerBuilder newAreaMarker(String key, List<AreaPointEntity> points) {
+        return newAreaMarker(key, points, true);
+    }
+
+    public static AreaMarkerBuilder newAreaMarker(String key, List<AreaPointEntity> points, boolean convexHull) {
         var line = new Polyline(key);
-        for (AreaPointEntity point : ConvexHull.calculate(points)) {
+        for (AreaPointEntity point : convexHull ? ConvexHull.calculate(points) : points) {
             line.addPoint(point.toPl3xPoint());
         }
         Polygon area = new Polygon(key, line);
