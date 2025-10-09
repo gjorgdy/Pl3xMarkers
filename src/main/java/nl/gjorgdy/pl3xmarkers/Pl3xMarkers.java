@@ -1,17 +1,13 @@
 package nl.gjorgdy.pl3xmarkers;
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.server.MinecraftServer;
 import nl.gjorgdy.pl3xmarkers.repositories.AreaRepository;
 import nl.gjorgdy.pl3xmarkers.repositories.IconMarkerRepository;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.pl3x.map.core.Pl3xMap;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import xaero.pac.OpenPartiesAndClaimsFabric;
-import xaero.pac.common.server.api.OpenPACServerAPI;
 
 import java.sql.SQLException;
 
@@ -24,6 +20,10 @@ public class Pl3xMarkers implements DedicatedServerModInitializer {
 
     private static Api API = null;
     static Pl3xMapHandler PL3X_MAP_HANDLER = null;
+
+    public static boolean isOpacLoaded() {
+        return FabricLoader.getInstance().isModLoaded("openpartiesandclaims");
+    }
 
     public static Api api() {
         if (API == null) {
@@ -73,9 +73,7 @@ public class Pl3xMarkers implements DedicatedServerModInitializer {
         Layers.register(api());
         // register events
         ServerLifecycleEvents.SERVER_STARTING.register(
-            server -> {
-                Pl3xMap.api().getEventRegistry().register(pl3xHandler());
-            }
+            server -> Pl3xMap.api().getEventRegistry().register(pl3xHandler())
         );
         ServerLifecycleEvents.SERVER_STOPPED.register(
             unused -> {

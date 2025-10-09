@@ -1,9 +1,8 @@
 package nl.gjorgdy.pl3xmarkers.layers;
 
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.server.world.ServerWorld;
 import net.pl3x.map.core.world.World;
 import nl.gjorgdy.pl3xmarkers.Layers;
+import nl.gjorgdy.pl3xmarkers.Pl3xMarkers;
 import nl.gjorgdy.pl3xmarkers.compat.openpartiesandclaims.OpacChunk;
 import nl.gjorgdy.pl3xmarkers.compat.openpartiesandclaims.OpenPartiesAndClaims;
 import nl.gjorgdy.pl3xmarkers.entities.AreaPointEntity;
@@ -24,14 +23,9 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
 
     @Override
     public void load() {
-        if (getWorld().getLevel() instanceof ServerWorld serverWorld) {
-            if (FabricLoader.getInstance().isModLoaded("openpartiesandclaims")) {
-                var chunks = new OpenPartiesAndClaims().load(getServer(), serverWorld.getRegistryKey().getValue());
-                chunks.forEach(chunk -> {
-                    addMarker(createAreaMarker(chunk));
-                });
-            }
-        }
+        if (!Pl3xMarkers.isOpacLoaded()) return;
+        var chunks = new OpenPartiesAndClaims().load(getServer(), worldIdentifier);
+        chunks.forEach(chunk -> addMarker(createAreaMarker(chunk)));
     }
 
     protected MarkerBuilder<?> createAreaMarker(OpacChunk chunk) {
@@ -55,7 +49,7 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
 
     @Override
     public boolean isInWorld(@NotNull World world) {
-        return FabricLoader.getInstance().isModLoaded("openpartiesandclaims");
+        return Pl3xMarkers.isOpacLoaded();
     }
 
 }
