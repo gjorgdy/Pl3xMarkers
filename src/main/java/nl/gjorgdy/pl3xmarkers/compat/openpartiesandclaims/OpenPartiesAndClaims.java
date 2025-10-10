@@ -3,7 +3,6 @@ package nl.gjorgdy.pl3xmarkers.compat.openpartiesandclaims;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import nl.gjorgdy.pl3xmarkers.Pl3xMarkers;
-import xaero.pac.OpenPartiesAndClaimsFabric;
 import xaero.pac.common.server.api.OpenPACServerAPI;
 
 import java.util.Collection;
@@ -25,9 +24,11 @@ public class OpenPartiesAndClaims {
                         Pl3xMarkers.LOGGER.info("No chunks found");
                         return;
                     }
-                    dimensionManager.getStream().forEach(claim -> {
-                        claim.getStream().forEach(chunk -> chunks.add(new OpacChunk(chunk, p.getPlayerId())));
-                    });
+                    dimensionManager.getStream().forEach(claim ->
+                        claim.getStream().forEach(chunk -> chunks.add(
+                            new OpacChunk(chunk, p.getPlayerUsername(), p.getClaimsName(), p.getClaimsColor())
+                        ))
+                    );
                 });
         return chunks;
     }
