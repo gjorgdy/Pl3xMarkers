@@ -4,7 +4,7 @@ plugins {
     id 'maven-publish'
 }
 
-version = project.mod_version
+version = "${project.mod_version}+${project.minecraft_version}"
 group = project.maven_group
 
 base {
@@ -25,8 +25,11 @@ repositories {
         url = "https://maven.nova-committee.cn/snapshots/"
     }
     maven {
-        name = "Local Helix Maven"
         url = uri('../local-maven')
+        metadataSources {
+            artifact()
+            ignoreGradleMetadataRedirection()
+        }
     }
 }
 
@@ -46,12 +49,12 @@ dependencies {
 }
 
 processResources {
-    inputs.property "version", project.version
+    inputs.property "version", version
     inputs.property "minecraft_version", project.minecraft_version
     inputs.property "loader_version", project.loader_version
 
     filesMatching("fabric.mod.json") {
-        expand "version": project.version,
+        expand "version": version,
                 "minecraft_version": project.minecraft_version,
                 "loader_version": project.loader_version
     }
@@ -111,8 +114,8 @@ static String readChangelog() {
 modrinth {
     token = getModrinthToken()
     projectId = project.mod_id
-    versionName = "${archives_base_name} ${project.version}"
-    versionNumber = "${project.version}"
+    versionName = "${archives_base_name} ${version}"
+    versionNumber = "${version}"
     changelog = readChangelog()
     versionType = project.mod_release_type
     uploadFile = remapJar
