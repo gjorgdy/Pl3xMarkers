@@ -42,10 +42,8 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     // Pl3xmap Marker
     modCompileOnly "maven.modrinth:pl3xmap:${project.pl3xmap_version}"
-    // https://mvnrepository.com/artifact/com.j256.ormlite/ormlite-jdbc
-    include(implementation "com.j256.ormlite:ormlite-jdbc:${project.ormlite_version}")
-    // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
-    include(implementation "org.xerial:sqlite-jdbc:${project.sqlite_jdbc_version}")
+
+    implementation project(':core')
 }
 
 processResources {
@@ -96,33 +94,3 @@ publishing {
         }
     }
 }
-
-//static String getModrinthToken() {
-//    return new File('.env')
-//            .readLines()
-//            .findAll { it?.trim() && !it.trim().startsWith('#') }
-//            .collect { it.split('=') }
-//            .find { it[0] == 'MODRINTH_TOKEN' }[1]
-//}
-//
-//static String readChangelog() {
-//    return new File('changelog.md')
-//            .readLines()
-//            .join('\n')
-//}
-//
-//modrinth {
-//    token = getModrinthToken()
-//    projectId = project.mod_id
-//    versionName = "${archives_base_name} ${version}"
-//    versionNumber = "${version}"
-//    changelog = readChangelog()
-//    versionType = project.mod_release_type
-//    uploadFile = remapJar
-//    gameVersions = [project.minecraft_version]
-//    loaders = ["fabric"]
-//    dependencies {
-//        required.project "fabric-api"
-//        required.version "pl3xmap", project.pl3xmap_version
-//    }
-//}
