@@ -41,7 +41,7 @@ dependencies {
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     // Pl3xmap Marker
-    modCompileOnly "net.pl3x.map:pl3xmap:${project.pl3xmap_version}"
+    modCompileOnly "maven.modrinth:pl3xmap:${project.pl3xmap_version}"
     // https://mvnrepository.com/artifact/com.j256.ormlite/ormlite-jdbc
     include(implementation "com.j256.ormlite:ormlite-jdbc:${project.ormlite_version}")
     // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc

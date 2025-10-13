@@ -1,4 +1,4 @@
-﻿Updated to 1.21.10
+﻿Updated to 1.21.10 release
 ---
 
-This version is based on Pl3xMap 1.21.10-snapshot, which can be found on [Github](https://github.com/granny/Pl3xMap/actions/runs/18438139151).
+Changed the dependency of Pl3xMap to the official 1.21.10 release.
