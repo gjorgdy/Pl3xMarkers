@@ -1,5 +1,6 @@
 package nl.gjorgdy.pl3xmarkers;
 
+import net.pl3x.map.core.Pl3xMap;
 import nl.gjorgdy.pl3xmarkers.repositories.AreaRepository;
 import nl.gjorgdy.pl3xmarkers.repositories.IconMarkerRepository;
 import org.sqlite.util.LoggerFactory;
@@ -54,6 +55,22 @@ public class Pl3xMarkersCore {
             MARKER_REPOSITORY = new IconMarkerRepository(database());
         }
         return MARKER_REPOSITORY;
+    }
+
+    public static void onInitialize() {
+        // register default icons
+        Icons.register(Pl3xMarkersCore.api());
+        // register default markers
+        Layers.register(Pl3xMarkersCore.api());
+    }
+
+    public static void onStarted() {
+        Pl3xMap.api().getEventRegistry().register(Pl3xMarkersCore.pl3xHandler());
+    }
+
+    public static void onDisable() {
+        Pl3xMarkersCore.database().close();
+        Pl3xMarkersCore.api().executor.shutdown();
     }
 
 }

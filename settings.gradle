@@ -11,4 +11,4 @@ pluginManagement {
 rootProject.name = 'Pl3xMarkers'
 include 'core'
 include 'fabric'
-// include 'paper'
+include 'paper'

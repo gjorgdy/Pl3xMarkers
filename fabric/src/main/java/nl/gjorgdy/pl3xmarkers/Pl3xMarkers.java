@@ -12,19 +12,13 @@ public class Pl3xMarkers implements DedicatedServerModInitializer {
 
     @Override
     public void onInitializeServer() {
-        // register default icons
-        Icons.register(Pl3xMarkersCore.api());
-        // register default markers
-        Layers.register(Pl3xMarkersCore.api());
+        Pl3xMarkersCore.onInitialize();
         // register events
         ServerLifecycleEvents.SERVER_STARTING.register(
-            server -> Pl3xMap.api().getEventRegistry().register(Pl3xMarkersCore.pl3xHandler())
+            unused -> Pl3xMarkersCore.onStarted()
         );
         ServerLifecycleEvents.SERVER_STOPPED.register(
-            unused -> {
-                Pl3xMarkersCore.database().close();
-                Pl3xMarkersCore.api().executor.shutdown();
-            }
+            unused -> Pl3xMarkersCore.onDisable()
         );
     }
 
