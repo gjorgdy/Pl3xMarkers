@@ -3,6 +3,7 @@ package nl.gjorgdy.pl3xMarkers;
 import nl.gjorgdy.pl3xMarkers.listeners.BeaconListener;
 import nl.gjorgdy.pl3xMarkers.listeners.EndPortalListener;
 import nl.gjorgdy.pl3xMarkers.listeners.NetherPortalListener;
+import nl.gjorgdy.pl3xMarkers.listeners.NodeListener;
 import nl.gjorgdy.pl3xmarkers.Pl3xMarkersCore;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,7 +15,8 @@ public final class Pl3xMarkers extends JavaPlugin {
         registerEvents(
                 new BeaconListener(),
                 new EndPortalListener(),
-                new NetherPortalListener()
+                new NetherPortalListener(),
+                new NodeListener()
         );
         // Plugin startup logic
         Pl3xMarkersCore.onInitialize(true);

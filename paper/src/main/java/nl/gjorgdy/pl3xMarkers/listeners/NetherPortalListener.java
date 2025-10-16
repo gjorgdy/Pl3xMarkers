@@ -13,7 +13,6 @@ public class NetherPortalListener implements Listener {
 
     @EventHandler
     public void onPortalTeleport(PlayerPortalEvent event) {
-        System.out.println("PlayerPortalEvent: " + event.getFrom().getBlock().getType().asBlockType());
         if (event.getFrom().getBlock().getType().asBlockType() == BlockType.NETHER_PORTAL) {
             onNetherPortalTeleport(event.getFrom());
         }
@@ -24,7 +23,6 @@ public class NetherPortalListener implements Listener {
         var blockType = event.getBlock().getType().asBlockType();
         var location = event.getBlock().getLocation();
         if (blockType == BlockType.OBSIDIAN) {
-            // check if there is a nether portal nearby
             var nearby = location.clone();
             for (int x = -1; x <= 1; x++) {
                 for (int y = -1; y <= 1; y++) {
