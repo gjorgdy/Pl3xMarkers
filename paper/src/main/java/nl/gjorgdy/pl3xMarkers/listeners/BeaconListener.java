@@ -1,4 +1,4 @@
-package nl.gjorgdy.pl3xMarkers;
+package nl.gjorgdy.pl3xMarkers.listeners;
 
 import io.papermc.paper.event.block.BeaconActivatedEvent;
 import io.papermc.paper.event.block.BeaconDeactivatedEvent;
