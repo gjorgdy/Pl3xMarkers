@@ -18,6 +18,7 @@ public class BeaconListener implements Listener {
 
     @EventHandler
     public void onBeaconDeactivate(BeaconDeactivatedEvent event) {
+        if (event.getBeacon() != null && event.getBeacon().getTier() > 0) return;
         var block = event.getBlock();
         var world = block.getWorld();
         var blockPos = block.getLocation().getBlock();
