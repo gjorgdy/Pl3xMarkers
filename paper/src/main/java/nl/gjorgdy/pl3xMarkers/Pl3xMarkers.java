@@ -8,13 +8,13 @@ public final class Pl3xMarkers extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
-        Pl3xMarkersCore.onInitialize();
-        Pl3xMarkersCore.onStarted();
         registerEvents(
-            new NetherPortalListener(),
-            new BeaconListener()
+                new NetherPortalListener(),
+                new BeaconListener()
         );
+        // Plugin startup logic
+        Pl3xMarkersCore.onInitialize(true);
+        Pl3xMarkersCore.onStarted();
     }
 
     @Override

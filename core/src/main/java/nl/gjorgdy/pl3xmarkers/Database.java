@@ -20,7 +20,7 @@ public class Database {
     private final JdbcPooledConnectionSource connection;
 
     public Database() throws SQLException {
-        String configPath = "config/pl3xmarkers";
+        String configPath = Pl3xMarkersCore.isBukkit() ? "plugins/Pl3xMarkers" : "config/pl3xmarkers";
         String databaseFile = "markers";
         // create folder if it doesn't exist
         if (new File(configPath).mkdir()) {

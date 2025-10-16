@@ -27,15 +27,18 @@ public abstract class MarkerLayer extends WorldLayer {
     abstract public boolean isInWorld(@NotNull World world);
 
     protected boolean isOverworld(World world) {
-        return world.getKey().equals("minecraft:overworld");
+        return world.getKey().equals("minecraft:overworld") // fabric
+                || world.getKey().equals("world"); // bukkit
     }
 
     protected boolean isNether(World world) {
-        return world.getKey().equals("minecraft:the_nether");
+        return world.getKey().equals("minecraft:the_nether") // fabric
+                || world.getKey().equals("world_nether"); // bukkit;
     }
 
     protected boolean isEnd(World world) {
-        return world.getKey().equals("minecraft:the_end");
+        return world.getKey().equals("minecraft:the_end") // fabric
+                || world.getKey().equals("world_the_end"); // bukkit;
     }
 
     final public String toMarkerKey(int x, int z) {

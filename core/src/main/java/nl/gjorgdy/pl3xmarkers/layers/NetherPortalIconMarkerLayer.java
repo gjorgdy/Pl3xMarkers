@@ -24,12 +24,10 @@ public class NetherPortalIconMarkerLayer extends IconMarkerLayer {
     protected Marker<?> createIconMarker(int x, int z) {
         // check if the portal is in the overworld or the nether
         String worldKey = getWorld().getKey();
-        boolean isOverworld = worldKey.equals("minecraft:overworld");
+        boolean isOverworld = isOverworld(worldKey);
         // define the destination and button text
-        String destinationKey = isOverworld ? "minecraft-the_nether" : "minecraft-overworld";
         int relativeX = isOverworld ? x / 8 : x * 8;
         int relativeZ = isOverworld ? z / 8 : z * 8;
-        String buttonText = isOverworld ? "Go to Nether" : "Go to Overworld";
         // build the marker
         return IconMarkerBuilder.newIconMarker(
                         toMarkerKey(x, z),
@@ -37,8 +35,26 @@ public class NetherPortalIconMarkerLayer extends IconMarkerLayer {
                         x, z
                 )
                 .centerIcon(16, 16)
-                .addPopup(HtmlHelper.TravelPopUp(tooltip, destinationKey, relativeX, relativeZ, buttonText))
+                .addPopup(HtmlHelper.TravelPopUp(tooltip, destinationKey(worldKey), relativeX, relativeZ, buttonText(worldKey)))
                 .build();
+    }
+
+    private String buttonText(String worldKey) {
+        return isOverworld(worldKey) ? "Go to Nether" : "Go to Overworld";
+    }
+
+    private String destinationKey(String worldKey) {
+        return switch (worldKey) {
+            case "minecraft:the_nether" -> "minecraft-overworld"; // fabric
+            case "minecraft:overworld" -> "minecraft-the_nether"; // fabric
+            case "world" -> "world_nether"; // paper
+            case "world_nether" -> "world"; // paper
+            default -> throw new IllegalStateException("Unexpected value: " + worldKey);
+        };
+    }
+
+    private boolean isOverworld(String worldKey) {
+        return worldKey.equals("minecraft:overworld") || worldKey.equals("world");
     }
 
 }

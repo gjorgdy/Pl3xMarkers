@@ -3,19 +3,22 @@ package nl.gjorgdy.pl3xmarkers;
 import net.pl3x.map.core.Pl3xMap;
 import nl.gjorgdy.pl3xmarkers.repositories.AreaRepository;
 import nl.gjorgdy.pl3xmarkers.repositories.IconMarkerRepository;
-import org.sqlite.util.LoggerFactory;
 
 import java.sql.SQLException;
 
 public class Pl3xMarkersCore {
 
+    private static boolean IS_BUKKIT = false;
     private static Database DATABASE = null;
     private static AreaRepository AREA_REPOSITORY = null;
     private static IconMarkerRepository MARKER_REPOSITORY = null;
-//    public static System.Logger LOGGER = LoggerFactory.getLogger(Pl3xMarkersCore.class);
 
     private static Api API = null;
     static Pl3xMapHandler PL3X_MAP_HANDLER = null;
+
+    public static boolean isBukkit() {
+        return IS_BUKKIT;
+    }
 
     public static Api api() {
         if (API == null) {
@@ -57,7 +60,8 @@ public class Pl3xMarkersCore {
         return MARKER_REPOSITORY;
     }
 
-    public static void onInitialize() {
+    public static void onInitialize(boolean isBukkit) {
+        IS_BUKKIT = isBukkit;
         // register default icons
         Icons.register(Pl3xMarkersCore.api());
         // register default markers
