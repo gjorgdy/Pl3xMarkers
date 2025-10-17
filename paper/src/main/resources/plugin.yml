@@ -1,6 +1,6 @@
 name: Pl3xMarkers
 version: '0.3.1'
-main: nl.gjorgdy.pl3xMarkers.Pl3xMarkers
+main: nl.gjorgdy.pl3xMarkers.paper.Pl3xMarkers
 api-version: '1.21'
 authors: [ Gjorgdy ]
 website: https://hexasis.eu/

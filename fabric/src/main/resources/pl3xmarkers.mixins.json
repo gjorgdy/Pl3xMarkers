@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "nl.gjorgdy.pl3xmarkers.mixin",
+  "package": "nl.gjorgdy.pl3xmarkers.fabric.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "BeaconBlockEntityMixin",

@@ -4,11 +4,11 @@ plugins {
     id 'maven-publish'
 }
 
-version = "${project.mod_version}+${project.minecraft_version}"
+project.version = "${project.mod_version}+${project.minecraft_version}"
 group = project.maven_group
 
 base {
-    archivesName = project.archives_base_name
+    archivesName = "${rootProject.name}-${project.name}"
 }
 
 repositories {
@@ -58,6 +58,14 @@ processResources {
     }
 }
 
+compileJava {
+    dependsOn(':core:shadowJar')
+}
+
+remapSourcesJar {
+    dependsOn(':core:shadowJar')
+}
+
 def targetJavaVersion = 21
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
@@ -72,6 +80,10 @@ java {
         toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
     }
     withSourcesJar()
+}
+
+remapJar {
+    archiveClassifier.set('')
 }
 
 jar {
