@@ -1,6 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.core.layers.primitive;
 
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
 import nl.gjorgdy.pl3xmarkers.core.markers.AreaMarkerBuilder;
 import nl.gjorgdy.pl3xmarkers.core.entities.AreaEntity;
 import net.pl3x.map.core.world.World;
@@ -38,7 +39,7 @@ public class AreaMarkerLayer extends MarkerLayer {
                     .newAreaMarker(area.getKey(), new ArrayList<>(points))
                     .fill(area.getColor())
                     .stroke(area.getColor())
-                    .addPopup(area.getLabel())
+                    .addPopup(HtmlHelper.sanitize(area.getLabel()))
             );
         }
     }

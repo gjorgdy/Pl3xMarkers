@@ -1,8 +1,11 @@
 package nl.gjorgdy.pl3xmarkers.core.helpers;
 
 import org.intellij.lang.annotations.Language;
+import org.owasp.html.PolicyFactory;
 
 public class HtmlHelper {
+
+	private static final PolicyFactory POLICY = SanitizerHelper.createColorHeadersLinksPolicy();
 
     private HtmlHelper() {}
 
@@ -26,5 +29,10 @@ public class HtmlHelper {
 
         return String.format(html, title, destinationKey, relativeX, relativeZ, buttonText);
     }
+
+	@Language("HTML")
+	public static String sanitize(@Language("HTML") String html) {
+		return POLICY.sanitize(html);
+	}
 
 }

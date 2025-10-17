@@ -47,6 +47,8 @@ dependencies {
     implementation "com.j256.ormlite:ormlite-jdbc:${project.ormlite_version}"
     // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
     implementation "org.xerial:sqlite-jdbc:${project.sqlite_jdbc_version}"
+    // https://mvnrepository.com/artifact/com.googlecode.owasp-java-html-sanitizer/owasp-java-html-sanitizer
+    implementation "com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:${project.owasp_java_html_sanitizer_version}"
     // https://mvnrepository.com/artifact/com.intellij/annotations
     compileOnly 'com.intellij:annotations:12.0'
 
