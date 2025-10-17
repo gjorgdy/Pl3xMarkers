@@ -21,23 +21,27 @@ import java.util.function.Function;
 
 public class Pl3xMapHandler implements EventListener {
 
-    private final List<Function<World, MarkerLayer>> worldLayerFunctions = new ArrayList<>();
-    private final List<IconImageAddress> iconAddresses = new ArrayList<>();
-
     public void registerMarkerLayer(Function<World, MarkerLayer> function) {
-        worldLayerFunctions.add(function);
+        Pl3xMap.api().getWorldRegistry().forEach(world -> {
+            MarkerLayer swl = function.apply(world);
+            if (!swl.isInWorld(world)) return;
+            world.getLayerRegistry().register(swl);
+            swl.load();
+        });
     }
 
     public void registerIconImage(String path, String filename, String filetype) {
-        iconAddresses.add(
-            new IconImageAddress(path, filename, filetype)
-        );
+        try {
+            registerIconImage(new IconImageAddress(path, filename, filetype));
+        } catch (IOException e) {
+            System.out.println("Failed to register icon: " + path);
+        }
     }
 
     @EventHandler
     @SuppressWarnings("unused") // event is used by pl3xmap
     public void onWorldLoad(WorldLoadedEvent event) {
-        worldLayerFunctions.forEach(function -> {
+        Layers.ALL.forEach(function -> {
             MarkerLayer swl = function.apply(event.getWorld());
             if (!swl.isInWorld(event.getWorld())) return;
             event.getWorld().getLayerRegistry().register(swl);
@@ -48,7 +52,7 @@ public class Pl3xMapHandler implements EventListener {
     @EventHandler
     @SuppressWarnings("unused") // event is used by pl3xmap
     public void onEnable(Pl3xMapEnabledEvent event) {
-        iconAddresses.forEach(address -> {
+        Icons.ALL.forEach(address -> {
             try {
                 registerIconImage(address);
             } catch (IOException e) {

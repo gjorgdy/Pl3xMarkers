@@ -62,10 +62,6 @@ public class Pl3xMarkersCore {
 
     public static void onInitialize(boolean isBukkit) {
         IS_BUKKIT = isBukkit;
-        // register default icons
-        Icons.register(Pl3xMarkersCore.api());
-        // register default markers
-        Layers.register(Pl3xMarkersCore.api());
     }
 
     public static void onStarted() {

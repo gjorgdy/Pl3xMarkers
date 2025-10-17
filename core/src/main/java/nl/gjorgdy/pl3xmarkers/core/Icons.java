@@ -1,5 +1,9 @@
 package nl.gjorgdy.pl3xmarkers.core;
 
+import nl.gjorgdy.pl3xmarkers.core.objects.IconImageAddress;
+
+import java.util.Set;
+
 public class Icons {
 
     public static class Keys {
@@ -9,11 +13,11 @@ public class Icons {
         public static final String NETHER_PORTAL = "nether_portal";
     }
 
-    public static void register(Api api) {
-        api.registerIconImage("/assets/pl3xmarkers/icons/", Keys.BEACON, "png");
-        api.registerIconImage("/assets/pl3xmarkers/icons/", Keys.END_GATEWAY, "png");
-        api.registerIconImage("/assets/pl3xmarkers/icons/", Keys.END_PORTAL, "png");
-        api.registerIconImage("/assets/pl3xmarkers/icons/", Keys.NETHER_PORTAL, "png");
-    }
+    public static Set<IconImageAddress> ALL = Set.of(
+        new IconImageAddress("/assets/pl3xmarkers/icons/", Keys.BEACON, "png"),
+        new IconImageAddress("/assets/pl3xmarkers/icons/", Keys.END_GATEWAY, "png"),
+        new IconImageAddress("/assets/pl3xmarkers/icons/", Keys.END_PORTAL, "png"),
+        new IconImageAddress("/assets/pl3xmarkers/icons/", Keys.NETHER_PORTAL, "png")
+    );
 
 }
