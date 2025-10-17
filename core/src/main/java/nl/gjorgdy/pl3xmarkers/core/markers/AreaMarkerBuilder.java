@@ -26,7 +26,7 @@ public class AreaMarkerBuilder extends MarkerBuilder<Polygon> {
     }
 
     public AreaMarkerBuilder fill(int color) {
-        return fill(color, 64);
+        return fill(color, 96);
     }
 
     public AreaMarkerBuilder fill(int color, int alpha) {
@@ -43,7 +43,8 @@ public class AreaMarkerBuilder extends MarkerBuilder<Polygon> {
 
     public AreaMarkerBuilder stroke(int color, int weight) {
         options.setStroke(
-            new Stroke(weight, color)
+            new Stroke(weight, setAlpha(color, 255))
+				.setEnabled(true)
         );
         return this;
     }
