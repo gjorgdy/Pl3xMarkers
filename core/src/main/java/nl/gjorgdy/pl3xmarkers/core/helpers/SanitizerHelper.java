@@ -12,8 +12,7 @@ public class SanitizerHelper {
 		CssSchema colorSchema = CssSchema.withProperties(Set.of("color"));
 
 		return new HtmlPolicyBuilder()
-		   .allowElements("h1", "h2", "h3", "h4", "h5", "h6")
-		   .allowElements("a", "b", "i", "strong", "u")
+		   .allowElements("h1", "h2", "h3", "h4", "h5", "h6", "a", "b", "i", "strong", "u", "span")
 		   .allowAttributes("href").onElements("a")
 		   .allowUrlProtocols("https")
 		   .allowStyling(colorSchema)
