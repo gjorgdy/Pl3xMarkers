@@ -52,21 +52,15 @@ static String getModrinthToken() {
             .find { it[0] == 'MODRINTH_TOKEN' }[1]
 }
 
-static String readChangelog() {
-    def changelogFile = new File('changelog.md')
-    if (!changelogFile.exists()) return ''
-    return changelogFile
-            .readLines()
-            .join('\n')
-}
-
+tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 modrinth {
     autoAddDependsOn = false
     token = getModrinthToken()
     projectId = project.mod_id
     versionName = "${archives_base_name} ${version}"
     versionNumber = "${version}"
-    changelog = readChangelog()
+    changelog = rootProject.file("changelog.md").text
+    syncBodyFrom = rootProject.file("README.md").text
     versionType = project.mod_release_type
     uploadFile = jar
     gameVersions = [project.minecraft_version]
