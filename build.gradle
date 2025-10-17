@@ -1,119 +1,75 @@
 plugins {
     id "java"
     id "com.modrinth.minotaur" version "2.+"
-    id 'maven-publish'
 }
 
 project.version = "${project.mod_version}+${project.minecraft_version}"
 group = project.maven_group
 
-base {
-    archivesName = "Pl3xMarkers"
-}
+tasks {
+    jar {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-processResources {
-    inputs.property "version", version
-    inputs.property "minecraft_version", project.minecraft_version
-    inputs.property "loader_version", project.loader_version
+        from("LICENSE") {
+            rename { "${it}_${project.archivesBaseName}" }
+        }
 
-    filesMatching("fabric.mod.json") {
-        expand "version": version,
-                "minecraft_version": project.minecraft_version,
-                "loader_version": project.loader_version
-    }
-}
+        archiveClassifier = ''
 
-def targetJavaVersion = 21
-tasks.withType(JavaCompile).configureEach {
-    it.options.encoding = "UTF-8"
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-        it.options.release.set(targetJavaVersion)
-    }
-}
+        dependsOn(':core:shadowJar', 'paper:build', 'fabric:remapJar')
 
-java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
-    withSourcesJar()
-}
+        def manifestFiles = subprojects.collect {
+            var file = it.layout.buildDirectory.file("libs/${project.name}-${it.name}-${project.version}.jar")
+            return zipTree(file) ?: null
+        }
 
-jar {
-    from("LICENSE") {
-        rename { "${it}_${project.archivesBaseName}"}
-    }
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        from(manifestFiles) {
+            exclude("META-INF/MANIFEST.MF")
+        }
 
-    archiveClassifier = ''
-
-    dependsOn(':core:shadowJar', 'paper:build', 'fabric:remapJar')
-
-    def manifestFiles = subprojects.collect {
-        var file = it.layout.buildDirectory.file("libs/${project.name}-${it.name}-${project.version}.jar")
-        return zipTree(file) ?: null
-    }
-
-    from(manifestFiles) {
-        exclude("META-INF/MANIFEST.MF")
-    }
-
-    doFirst {
-        manifestFiles.forEach {
-            it.matching { include("META-INF/MANIFEST.MF") }.files.forEach {
-                manifest.from(it)
+        doFirst {
+            manifestFiles.forEach {
+                it.matching { include("META-INF/MANIFEST.MF") }.files.forEach {
+                    manifest.from(it)
+                }
             }
         }
-    }
 
-    manifest {
-        attributes(
-                'Main-Class': 'nl.gjorgdy.pl3xmarkers'
-        )
-    }
-}
-
-// configure the maven publication
-publishing {
-    publications {
-        create(MavenPublication) {
-            artifactId = project.archives_base_name
-            from components.java
-        }
-    }
-    repositories {
-        maven {
-            url = uri('../local-maven')
+        manifest {
+            attributes(
+                    'Main-Class': 'nl.gjorgdy.pl3xmarkers'
+            )
         }
     }
 }
 
-//static String getModrinthToken() {
-//    return new File('.env')
-//            .readLines()
-//            .findAll { it?.trim() && !it.trim().startsWith('#') }
-//            .collect { it.split('=') }
-//            .find { it[0] == 'MODRINTH_TOKEN' }[1]
-//}
-//
-//static String readChangelog() {
-//    return new File('changelog.md')
-//            .readLines()
-//            .join('\n')
-//}
-//
-//modrinth {
-//    token = getModrinthToken()
-//    projectId = project.mod_id
-//    versionName = "${archives_base_name} ${version}"
-//    versionNumber = "${version}"
-//    changelog = readChangelog()
-//    versionType = project.mod_release_type
-//    uploadFile = jar
-//    gameVersions = [project.minecraft_version]
-//    loaders = ["fabric", "paper", "purpur", "folia", "spigot"]
-//    dependencies {
-//        required.project "fabric-api"
-//        required.version "pl3xmap", project.pl3xmap_version
-//    }
-//}
+static String getModrinthToken() {
+    return new File('.env')
+            .readLines()
+            .findAll { it?.trim() && !it.trim().startsWith('#') }
+            .collect { it.split('=') }
+            .find { it[0] == 'MODRINTH_TOKEN' }[1]
+}
+
+static String readChangelog() {
+    return new File('changelog.md')
+            .readLines()
+            .join('\n')
+}
+
+modrinth {
+    autoAddDependsOn = false
+    token = getModrinthToken()
+    projectId = project.mod_id
+    versionName = "${archives_base_name} ${version}"
+    versionNumber = "${version}"
+    changelog = readChangelog()
+    versionType = project.mod_release_type
+    uploadFile = jar
+    gameVersions = [project.minecraft_version]
+    loaders = ["fabric", "quilt", "bukkit", "paper", "purpur", "folia", "spigot"]
+    dependencies {
+        required.project "fabric-api"
+        required.version "pl3xmap", project.pl3xmap_version
+    }
+}

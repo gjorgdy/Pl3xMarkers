@@ -1,4 +1,4 @@
-﻿Updated to 1.21.10 release
+﻿Spigot implementation
 ---
 
-Changed the dependency of Pl3xMap to the official 1.21.10 release.
+Added support for spigot servers using the same technique as Pl3xMap.
