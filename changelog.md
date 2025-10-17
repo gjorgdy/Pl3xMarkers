@@ -1,4 +1,5 @@
-﻿Spigot implementation
+﻿Custom World names support
 ---
 
-Added support for spigot servers using the same technique as Pl3xMap.
+Updated the logic for layers and portals to support custom world names.
+This means that if your world is named "MyWorld", the mod will now correctly identify "MyWorld", "MyWorld_nether", and "MyWorld_the_end".

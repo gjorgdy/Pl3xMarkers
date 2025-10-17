@@ -4,6 +4,7 @@ import nl.gjorgdy.pl3xmarkers.core.Icons;
 import nl.gjorgdy.pl3xmarkers.core.Layers;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
+import nl.gjorgdy.pl3xmarkers.core.helpers.WorldHelpers;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.markers.IconMarkerBuilder;
 import net.pl3x.map.core.markers.marker.Marker;
@@ -29,8 +30,20 @@ public class EndPortalIconMarkerLayer extends IconMarkerLayer {
                         x, z
                 )
                 .centerIcon(16, 16)
-                .addPopup(HtmlHelper.TravelPopUp(tooltip, Pl3xMarkersCore.isBukkit() ? "world_the_end" : "minecraft-the_end", 100, 0, "Go to The End"))
+                .addPopup(HtmlHelper.TravelPopUp(tooltip, destinationKey(getWorld().getKey()), 100, 0, "Go to The End"))
                 .build();
+    }
+
+    private String destinationKey(String worldKey) {
+        return switch (worldKey) {
+            case "minecraft:overworld" -> "minecraft-the_end"; // fabric
+            case "world" -> "world_the_end"; // paper
+            default -> dynamicDestinationKey(worldKey);
+        };
+    }
+
+    private String dynamicDestinationKey(String worldKey) {
+        return (worldKey + "_the_end").replace(":", "-");
     }
 
 }

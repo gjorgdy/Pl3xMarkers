@@ -44,15 +44,18 @@ tasks {
 }
 
 static String getModrinthToken() {
-    return new File('.env')
-            .readLines()
+    def envFile = new File('.env')
+    if (!envFile.exists()) return ''
+    return envFile.readLines()
             .findAll { it?.trim() && !it.trim().startsWith('#') }
             .collect { it.split('=') }
             .find { it[0] == 'MODRINTH_TOKEN' }[1]
 }
 
 static String readChangelog() {
-    return new File('changelog.md')
+    def changelogFile = new File('changelog.md')
+    if (!changelogFile.exists()) return ''
+    return changelogFile
             .readLines()
             .join('\n')
 }

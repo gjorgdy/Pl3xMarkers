@@ -1,5 +1,5 @@
 name: Pl3xMarkers
-version: '0.3.1'
+version: '${version}'
 main: nl.gjorgdy.pl3xMarkers.paper.Pl3xMarkers
 api-version: '1.21'
 authors: [ Gjorgdy ]

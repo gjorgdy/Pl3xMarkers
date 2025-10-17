@@ -1,5 +1,6 @@
 package nl.gjorgdy.pl3xmarkers.core.layers.primitive;
 
+import nl.gjorgdy.pl3xmarkers.core.helpers.WorldHelpers;
 import nl.gjorgdy.pl3xmarkers.core.markers.MarkerBuilder;
 import net.pl3x.map.core.markers.layer.WorldLayer;
 import net.pl3x.map.core.world.World;
@@ -27,18 +28,15 @@ public abstract class MarkerLayer extends WorldLayer {
     abstract public boolean isInWorld(@NotNull World world);
 
     protected boolean isOverworld(World world) {
-        return world.getKey().equals("minecraft:overworld") // fabric
-                || world.getKey().equals("world"); // bukkit
+        return WorldHelpers.isOverworld(world.getKey());
     }
 
     protected boolean isNether(World world) {
-        return world.getKey().equals("minecraft:the_nether") // fabric
-                || world.getKey().equals("world_nether"); // bukkit;
+        return WorldHelpers.isNether(world.getKey());
     }
 
     protected boolean isEnd(World world) {
-        return world.getKey().equals("minecraft:the_end") // fabric
-                || world.getKey().equals("world_the_end"); // bukkit;
+        return WorldHelpers.isEnd(world.getKey());
     }
 
     final public String toMarkerKey(int x, int z) {
