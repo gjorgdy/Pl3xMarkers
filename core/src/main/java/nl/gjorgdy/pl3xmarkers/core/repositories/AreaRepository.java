@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AreaRepository{
+public class AreaRepository {
 
     private final Database database;
 
@@ -23,8 +23,7 @@ public class AreaRepository{
                     .where().eq("world", world)
                     .query();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-//            Pl3xMarkersCore.LOGGER.error(e.getMessage());
+            System.err.println(e.getMessage());
             return new ArrayList<>();
         }
     }
@@ -35,12 +34,11 @@ public class AreaRepository{
             return database.areas.queryBuilder()
                     .where()
                     .eq("world", world).and()
-                    .eq("label", label).and()
+                    .eq("label", label.replace("'", "")).and()
                     .eq("color", color)
                     .queryForFirst();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
-//            Pl3xMarkersCore.LOGGER.error(e.getMessage());
+            System.err.println(e.getMessage());
             return null;
         }
     }
@@ -48,35 +46,44 @@ public class AreaRepository{
     public AreaEntity getOrCreateArea(String world, String label, int color) {
         AreaEntity area = getArea(world, label, color);
         if (area == null) {
-            area = new AreaEntity(world, label, color);
+            area = new AreaEntity(world, label.replace("'", ""), color);
             try {
                 database.areas.create(area);
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
-//            Pl3xMarkersCore.LOGGER.error(e.getMessage());
+                System.err.println(e.getMessage());
                 return null;
             }
         }
-        return area;
+        return getArea(world, label, color);
     }
 
     public boolean addPoint(String world, String label, int color, int x, int z) {
         AreaEntity area = getOrCreateArea(world, label, color);
         if (area == null) return false;
-        var points = area.getPoints();
-        if (points == null) return false;
-        return points.add(new AreaPointEntity(area, x, z));
+		try {
+			return database.areaPoints.create(new AreaPointEntity(area, x, z)) > 0;
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+			return false;
+		}
     }
 
     public boolean removePoint(String world, String label, int color, int x, int z) {
-        AreaEntity area = getOrCreateArea(world, label, color);
+        AreaEntity area = getArea(world, label, color);
         if (area == null) return false;
-        var points = area.getPoints();
-        if (points == null) return false;
-        return points.removeIf(
-        p -> p.getX() == x
-                && p.getZ() == z
-        );
+		try {
+			var deleteBuilder = database.areaPoints.deleteBuilder();
+			deleteBuilder
+				.where()
+				.eq("area_id", area.getId()).and()
+				.eq("x", x).and()
+				.eq("z", z);
+			deleteBuilder.delete();
+			return true;
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+			return false;
+		}
     }
 
 }

@@ -33,6 +33,10 @@ public class AreaEntity {
         this.color = color;
     }
 
+	public int getId() {
+		return id;
+	}
+
     public String getWorld() {
         return world;
     }
