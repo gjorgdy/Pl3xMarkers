@@ -1,7 +1,6 @@
 package nl.gjorgdy.pl3xmarkers.core.markers;
 
 import nl.gjorgdy.pl3xmarkers.core.entities.AreaPointEntity;
-import nl.gjorgdy.pl3xmarkers.core.helpers.ConvexHull;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.marker.Polygon;
 import net.pl3x.map.core.markers.marker.Polyline;
@@ -18,9 +17,7 @@ public class AreaMarkerBuilder extends MarkerBuilder<Polygon> {
 
     public static AreaMarkerBuilder newAreaMarker(String key, List<AreaPointEntity> points) {
         var line = new Polyline(key);
-        for (AreaPointEntity point : ConvexHull.calculate(points)) {
-            line.addPoint(point.toPl3xPoint());
-        }
+		points.stream().map(AreaPointEntity::toPl3xPoint).forEach(line::addPoint);
         Polygon area = new Polygon(key, line);
         return new AreaMarkerBuilder(area);
     }

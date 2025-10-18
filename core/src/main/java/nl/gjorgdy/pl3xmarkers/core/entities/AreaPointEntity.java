@@ -41,6 +41,14 @@ public class AreaPointEntity implements Comparable<AreaPointEntity> {
         return Math.sqrt(Math.pow(this.x - other.x, 2) + Math.pow(this.z - other.z, 2));
     }
 
+	public AreaPointEntity add(int dx, int dz) {
+		return new AreaPointEntity(this.area, this.x + dx, this.z + dz);
+	}
+
+	public AreaPointEntity set(int x, int z) {
+		return new AreaPointEntity(this.area, x, z);
+	}
+
     @Override
     public int compareTo(@NotNull AreaPointEntity other) {
         return (this.x - other.x) + (this.z - other.z);

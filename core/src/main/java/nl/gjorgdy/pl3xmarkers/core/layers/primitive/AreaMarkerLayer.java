@@ -1,6 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.core.layers.primitive;
 
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.helpers.ConvexHull;
 import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
 import nl.gjorgdy.pl3xmarkers.core.markers.AreaMarkerBuilder;
 import nl.gjorgdy.pl3xmarkers.core.entities.AreaEntity;
@@ -32,16 +33,20 @@ public class AreaMarkerLayer extends MarkerLayer {
         if (super.hasMarker(area.getKey())) {
             super.removeMarker(area.getKey());
         }
-        var points = area.getPoints();
-        if (points != null && !points.isEmpty()) {
-            super.addMarker(
-                AreaMarkerBuilder
-                    .newAreaMarker(area.getKey(), new ArrayList<>(points))
-                    .fill(area.getColor())
-                    .stroke(area.getColor())
-                    .addPopup(HtmlHelper.sanitize(area.getLabel()))
-            );
-        }
+		var points = area.getPoints();
+		if (points == null || points.isEmpty()) {
+			return;
+		}
+        var sortedPoints = ConvexHull.calculate(new ArrayList<>(area.getPoints()));
+		if (!sortedPoints.isEmpty()) {
+			super.addMarker(
+				AreaMarkerBuilder
+					.newAreaMarker(area.getKey(), sortedPoints)
+					.fill(area.getColor())
+					.stroke(area.getColor())
+					.addPopup(HtmlHelper.sanitize(area.getLabel()))
+			);
+		}
     }
 
     /**

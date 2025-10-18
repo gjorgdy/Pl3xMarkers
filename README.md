@@ -25,7 +25,7 @@
 3. Place a lodestone with one of the banners on top on every corner.
 4. Admire your area on the web map.
 
-- Corners/points can be max 128 blocks apart.
+- An area can have a max distance of 512 blocks between its furthest points.
 - The names on the banners need to be an exact match.
 - The placement order does not matter, the points will be connected automatically.
 - You can add or remove points as you wish, the area will adept.
@@ -43,10 +43,12 @@
 ## FAQ
 ### Q: The layers are not showing up on my web map, what do I do?
 A: You most likely use custom names for your worlds. Make sure they use the correct suffix structure: ``{worldname}``, ``{worldname}_nether``, ``{worldname}_the_end``
-### Q: How to make my areas show up?
-A: The algorithm used for the areas ignores points that are too far inwards. Make sure your points are placed on the corners of your area and not too close to each other.
+### Q: Why are some points not showing up?
+A: Areas are made out of the outermost points. If you have points inside the area they will not be used. Or the points are too far apart from the center.
 ### Q: Can I customize area labels?
 A: Yes! Area names support basic HTML tags such as `<b>`, `<i>`, `<u>`, `<br>`, and `<span style="color: #RRGGBB;"> mooi ding </span>`.
+### Q: Why is my area a small triangle?
+A: You either have too few points (minimum 3) or your points are too far apart.
 
 ## Demo
 
