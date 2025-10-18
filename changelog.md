@@ -1,6 +1,5 @@
-﻿Bug fixes
+﻿Some area changes
 ---
 
-Fixed the error on unloading chunks with beacons.
-Changed registration logic for layers and icons to prevent race conditions.
-Added Pl3xMap as dependency to prevent other issues.
+- Fixed strokes not rendering around areas.
+- Added HTML sanitization to prevent stuff like iframes in area labels...

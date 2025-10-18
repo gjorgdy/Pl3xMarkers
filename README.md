@@ -45,6 +45,8 @@
 A: You most likely use custom names for your worlds. Make sure they use the correct suffix structure: ``{worldname}``, ``{worldname}_nether``, ``{worldname}_the_end``
 ### Q: How to make my areas show up?
 A: The algorithm used for the areas ignores points that are too far inwards. Make sure your points are placed on the corners of your area and not too close to each other.
+### Q: Can I customize area labels?
+A: Yes! Area names support basic HTML tags such as `<b>`, `<i>`, `<u>`, `<br>`, and `<span style="color: #RRGGBB;"> mooi ding </span>`.
 
 ## Demo
 
