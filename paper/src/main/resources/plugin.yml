@@ -1,0 +1,8 @@
+name: Pl3xMarkers
+version: '${version}'
+main: nl.gjorgdy.pl3xMarkers.paper.Pl3xMarkers
+api-version: '1.21'
+authors: [ Gjorgdy ]
+website: https://hexasis.eu/
+loadbefore: [ Pl3xMap ]
+depend: [ Pl3xMap ]

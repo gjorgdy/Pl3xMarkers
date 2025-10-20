@@ -1,0 +1,91 @@
+plugins {
+    id 'fabric-loom' version "${loom_version}"
+}
+
+project.version = "${project.mod_version}+${project.minecraft_version}"
+group = project.maven_group
+
+base {
+    archivesName = "${rootProject.name}-${project.name}"
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url = "https://api.modrinth.com/maven"
+    }
+    maven {
+        name = "Nova Committee - Release"
+        url = "https://maven.nova-committee.cn/releases/"
+    }
+    maven {
+        name = "Nova Committee - Snapshot"
+        url = "https://maven.nova-committee.cn/snapshots/"
+    }
+    maven {
+        url = uri('../local-maven')
+        metadataSources {
+            artifact()
+            ignoreGradleMetadataRedirection()
+        }
+    }
+}
+
+dependencies {
+    // To change the versions see the gradle.properties file
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    // Pl3xmap Marker
+    modCompileOnly "maven.modrinth:pl3xmap:${project.pl3xmap_version}"
+
+    implementation project(':core')
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "minecraft_version", project.minecraft_version
+    inputs.property "loader_version", project.loader_version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version,
+                "minecraft_version": project.minecraft_version,
+                "loader_version": project.loader_version
+    }
+}
+
+compileJava {
+    dependsOn(':core:shadowJar')
+}
+
+remapSourcesJar {
+    dependsOn(':core:shadowJar')
+}
+
+def targetJavaVersion = 21
+tasks.withType(JavaCompile).configureEach {
+    it.options.encoding = "UTF-8"
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        it.options.release.set(targetJavaVersion)
+    }
+}
+
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+    withSourcesJar()
+}
+
+remapJar {
+    archiveClassifier.set('')
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archivesBaseName}"}
+    }
+}

@@ -1,0 +1,62 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
+    }
+}
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+base {
+    archivesName = "${rootProject.name}-${project.name}"
+    version = rootProject.version
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url = "https://api.modrinth.com/maven"
+    }
+    maven {
+        name = "Nova Committee - Release"
+        url = "https://maven.nova-committee.cn/releases/"
+    }
+    maven {
+        name = "Nova Committee - Snapshot"
+        url = "https://maven.nova-committee.cn/snapshots/"
+    }
+    maven {
+        url = uri('../local-maven')
+        metadataSources {
+            artifact()
+            ignoreGradleMetadataRedirection()
+        }
+    }
+}
+
+dependencies {
+    // Pl3xmap Marker
+    compileOnly "maven.modrinth:pl3xmap:${project.pl3xmap_version}"
+    // https://mvnrepository.com/artifact/com.j256.ormlite/ormlite-jdbc
+    implementation "com.j256.ormlite:ormlite-jdbc:${project.ormlite_version}"
+    // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
+    implementation "org.xerial:sqlite-jdbc:${project.sqlite_jdbc_version}"
+    // https://mvnrepository.com/artifact/com.googlecode.owasp-java-html-sanitizer/owasp-java-html-sanitizer
+    implementation "com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:${project.owasp_java_html_sanitizer_version}"
+    // https://mvnrepository.com/artifact/com.intellij/annotations
+    compileOnly 'com.intellij:annotations:12.0'
+
+    compileOnly 'com.google.code.gson:gson:2.10.1'
+}
+
+jar.enabled = false
+
+shadowJar {
+    archiveClassifier.set('')
+}
