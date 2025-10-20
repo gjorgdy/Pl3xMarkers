@@ -1,4 +1,4 @@
-package nl.gjorgdy.pl3xmarkers.compat.openpartiesandclaims;
+package nl.gjorgdy.pl3xmarkers.fabric.compat;
 
 import net.minecraft.util.math.ChunkPos;
 

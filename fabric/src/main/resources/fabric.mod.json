@@ -14,7 +14,7 @@
   "entrypoints": {
     "client": [],
     "server": [
-      "nl.gjorgdy.pl3xmarkers.fabric.Pl3xMarkers"
+      "nl.gjorgdy.pl3xmarkers.fabric.Pl3xMarkersFabric"
     ]
   },
   "mixins": [

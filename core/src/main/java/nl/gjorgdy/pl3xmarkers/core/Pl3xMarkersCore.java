@@ -1,10 +1,5 @@
 package nl.gjorgdy.pl3xmarkers.core;
 
-import net.fabricmc.loader.api.FabricLoader;
-import nl.gjorgdy.pl3xmarkers.repositories.AreaRepository;
-import nl.gjorgdy.pl3xmarkers.repositories.IconMarkerRepository;
-import net.fabricmc.api.DedicatedServerModInitializer;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.pl3x.map.core.Pl3xMap;
 import nl.gjorgdy.pl3xmarkers.core.repositories.AreaRepository;
 import nl.gjorgdy.pl3xmarkers.core.repositories.IconMarkerRepository;
@@ -23,10 +18,6 @@ public class Pl3xMarkersCore {
 
     public static boolean isBukkit() {
         return IS_BUKKIT;
-    }
-
-    public static boolean isOpacLoaded() {
-        return FabricLoader.getInstance().isModLoaded("openpartiesandclaims");
     }
 
     public static Api api() {

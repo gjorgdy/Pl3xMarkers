@@ -15,8 +15,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Function;
 
 public class Pl3xMapHandler implements EventListener {
@@ -41,9 +39,13 @@ public class Pl3xMapHandler implements EventListener {
     @EventHandler
     @SuppressWarnings("unused") // event is used by pl3xmap
     public void onWorldLoad(WorldLoadedEvent event) {
-        Layers.ALL.forEach(function -> {
+        Layers.getLayerFactories().forEach(function -> {
             MarkerLayer swl = function.apply(event.getWorld());
-            if (!swl.isInWorld(event.getWorld())) return;
+			System.out.println("Registering layer " + swl.getClass().getName() + " for world " + event.getWorld().getKey());
+            if (!swl.isInWorld(event.getWorld())) {
+				System.out.println("not in world, skipping");
+				return;
+			}
             event.getWorld().getLayerRegistry().register(swl);
             swl.load();
         });

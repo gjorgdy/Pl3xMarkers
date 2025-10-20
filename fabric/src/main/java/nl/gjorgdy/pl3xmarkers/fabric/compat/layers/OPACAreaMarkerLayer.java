@@ -1,15 +1,17 @@
-package nl.gjorgdy.pl3xmarkers.layers;
+package nl.gjorgdy.pl3xmarkers.fabric.compat.layers;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ServerWorld;
 import net.pl3x.map.core.world.World;
-import nl.gjorgdy.pl3xmarkers.Layers;
-import nl.gjorgdy.pl3xmarkers.Pl3xMarkers;
-import nl.gjorgdy.pl3xmarkers.compat.openpartiesandclaims.OpacChunk;
-import nl.gjorgdy.pl3xmarkers.compat.openpartiesandclaims.OpenPartiesAndClaims;
-import nl.gjorgdy.pl3xmarkers.entities.AreaPointEntity;
-import nl.gjorgdy.pl3xmarkers.layers.primitive.MarkerLayer;
-import nl.gjorgdy.pl3xmarkers.markers.AreaMarkerBuilder;
-import nl.gjorgdy.pl3xmarkers.markers.MarkerBuilder;
+import nl.gjorgdy.pl3xmarkers.core.Layers;
+import nl.gjorgdy.pl3xmarkers.core.entities.AreaPointEntity;
+import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.markers.AreaMarkerBuilder;
+import nl.gjorgdy.pl3xmarkers.core.markers.MarkerBuilder;
+import nl.gjorgdy.pl3xmarkers.fabric.Pl3xMarkersFabric;
+import nl.gjorgdy.pl3xmarkers.fabric.compat.OpacChunk;
+import nl.gjorgdy.pl3xmarkers.fabric.compat.OpacHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -24,8 +26,8 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
     @Override
     public void load() {
         ServerLifecycleEvents.ServerStarted fun = (server) -> {
-            if (!Pl3xMarkers.isOpacLoaded()) return;
-            var chunks = new OpenPartiesAndClaims().load(server, worldIdentifier);
+            if (!Pl3xMarkersFabric.isOpacLoaded()) return;
+            var chunks = OpacHandler.load(server, worldIdentifier);
             chunks.forEach(chunk -> addMarker(createAreaMarker(chunk)));
         };
         // wait till server is ready
@@ -47,17 +49,23 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
                 new AreaPointEntity((chunk.pos().x + 1) * 16, chunk.pos().z * 16),
                 new AreaPointEntity((chunk.pos().x + 1) * 16, (chunk.pos().z + 1) * 16),
                 new AreaPointEntity(chunk.pos().x * 16, (chunk.pos().z + 1) * 16)
-            )),
-            false
+            ))
         )
         .fill(chunk.color())
         .stroke(chunk.color())
-        .addPopup(chunk.name().isEmpty() ? chunk.playerName() : chunk.name() + " (" + chunk.playerName() + ")");
+        .addPopup(chunk.name().isEmpty() ? chunk.playerName() + "'s claim" : chunk.name() + " (" + chunk.playerName() + ")");
     }
 
     @Override
     public boolean isInWorld(@NotNull World world) {
-        return Pl3xMarkers.isOpacLoaded();
+        return Pl3xMarkersFabric.isOpacLoaded();
     }
+
+	final protected MinecraftServer getServer() {
+		if (getWorld().getLevel() instanceof ServerWorld serverWorld) {
+			return serverWorld.getServer();
+		}
+		throw new IllegalStateException("World is not a server world");
+	}
 
 }

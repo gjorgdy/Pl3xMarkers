@@ -9,8 +9,7 @@ import nl.gjorgdy.pl3xmarkers.core.layers.NetherPortalIconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
 import org.intellij.lang.annotations.Language;
 
-import java.util.Set;
-import java.util.function.Consumer;
+import java.util.*;
 import java.util.function.Function;
 
 public class Layers {
@@ -35,8 +34,6 @@ public class Layers {
 
     public static class Tooltips {
         @Language("HTML")
-        public static String OPAC = "Open Parties and Claims";
-        @Language("HTML")
         public static String BEACONS = "Beacon";
         @Language("HTML")
         public static String END_GATEWAYS = "End Gateway";
@@ -46,13 +43,21 @@ public class Layers {
         public static String NETHER_PORTALS = "Nether Portal";
     }
 
-    public static Set<Function<World, MarkerLayer>> ALL = Set.of(
-		OPACAreaMarkerLayer::new,
-        w -> new IconMarkerLayer(Icons.Keys.BEACON, Keys.BEACONS, Labels.BEACONS, Tooltips.BEACONS, w),
-        EndGatewayIconMarkerLayer::new,
-        EndPortalIconMarkerLayer::new,
-        NetherPortalIconMarkerLayer::new,
-        w -> new AreaMarkerLayer(Keys.AREAS, Labels.AREAS, w)
-    );
+	private static final List<Function<World, MarkerLayer>> _layers = new ArrayList<>(List.of(
+			w -> new IconMarkerLayer(Icons.Keys.BEACON, Keys.BEACONS, Labels.BEACONS, Tooltips.BEACONS, w),
+			EndGatewayIconMarkerLayer::new,
+			EndPortalIconMarkerLayer::new,
+			NetherPortalIconMarkerLayer::new,
+			w -> new AreaMarkerLayer(Keys.AREAS, Labels.AREAS, w)
+	));
+
+	public static Collection<Function<World, MarkerLayer>> getLayerFactories() {
+		return List.copyOf(_layers);
+	}
+
+	public static void registerLayerFactory(Function<World, MarkerLayer> factory) {
+		System.out.println("Registering layer factory");
+		_layers.add(factory);
+	}
 
 }
