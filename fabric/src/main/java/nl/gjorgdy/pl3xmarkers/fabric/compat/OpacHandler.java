@@ -2,8 +2,10 @@ package nl.gjorgdy.pl3xmarkers.fabric.compat;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.ChunkPos;
 import xaero.pac.common.server.api.OpenPACServerAPI;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.UUID;
@@ -32,9 +34,23 @@ public class OpacHandler {
         return chunks;
     }
 
-    private static boolean isServerClaim(UUID playerId) {
-        return playerId.equals(UUID.fromString("00000000-0000-0000-0000-000000000000"))
-                || playerId.equals(UUID.fromString("00000000-0000-0000-0000-000000000001"));
-    }
+	public static Collection<OpacChunk> getClaimedChunks(MinecraftServer server, Identifier world, UUID uuid) {
+		var playerInfo = OpenPACServerAPI.get(server)
+							 .getServerClaimsManager()
+							 .getPlayerInfo(uuid);
+		var pdc = playerInfo.getDimension(world);
+		if (pdc == null) return new ArrayList<>();
+		return pdc.getStream().flatMap(claim ->
+				claim.getStream().map(chunk ->
+				  new OpacChunk(chunk, playerInfo.getPlayerUsername(), playerInfo.getClaimsName(), playerInfo.getClaimsColor()
+	    ))).toList();
+	}
+
+	public static OpacChunk getChunk(MinecraftServer server, UUID uuid, int x, int z) {
+		var playerInfo = OpenPACServerAPI.get(server)
+								 .getServerClaimsManager()
+								 .getPlayerInfo(uuid);
+		return new OpacChunk(new ChunkPos(x, z), playerInfo.getPlayerUsername(), playerInfo.getClaimsName(), playerInfo.getClaimsColor());
+	}
 
 }

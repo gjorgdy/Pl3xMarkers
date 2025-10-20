@@ -12,7 +12,9 @@ import nl.gjorgdy.pl3xmarkers.core.markers.MarkerBuilder;
 import nl.gjorgdy.pl3xmarkers.fabric.Pl3xMarkersFabric;
 import nl.gjorgdy.pl3xmarkers.fabric.compat.OpacChunk;
 import nl.gjorgdy.pl3xmarkers.fabric.compat.OpacHandler;
+import nl.gjorgdy.pl3xmarkers.fabric.compat.OpacListener;
 import org.jetbrains.annotations.NotNull;
+import xaero.pac.common.server.api.OpenPACServerAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,7 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
         ServerLifecycleEvents.ServerStarted fun = (server) -> {
             if (!Pl3xMarkersFabric.isOpacLoaded()) return;
             var chunks = OpacHandler.load(server, worldIdentifier);
-            chunks.forEach(chunk -> addMarker(createAreaMarker(chunk)));
+            chunks.forEach(this::addChunk);
         };
         // wait till server is ready
         if (getServer().isLoading()) {
@@ -38,12 +40,20 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
         else {
             System.out.println("Server already started, running OPAC load directly");
             fun.onServerStarted(getServer());
-        }
+		}
+		// register listener for claim changes
+		OpenPACServerAPI.get(getServer())
+				.getServerClaimsManager()
+				.getTracker().register(new OpacListener(this));
     }
 
-    protected MarkerBuilder<?> createAreaMarker(OpacChunk chunk) {
+	public void addChunk(OpacChunk chunk) {
+		addMarker(createAreaMarker(chunk));
+	}
+
+    private MarkerBuilder<?> createAreaMarker(OpacChunk chunk) {
         return AreaMarkerBuilder.newAreaMarker(
-            chunk.playerName() + ":" + chunk.pos().x + ":" + chunk.pos().z,
+            chunk.getKey(),
             new ArrayList<>(List.of(
                 new AreaPointEntity(chunk.pos().x * 16, chunk.pos().z * 16),
                 new AreaPointEntity((chunk.pos().x + 1) * 16, chunk.pos().z * 16),
@@ -53,7 +63,7 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
         )
         .fill(chunk.color())
         .stroke(chunk.color())
-        .addPopup(chunk.name().isEmpty() ? chunk.playerName() + "'s claim" : chunk.name() + " (" + chunk.playerName() + ")");
+        .addPopup(chunk.getName());
     }
 
     @Override
@@ -61,7 +71,7 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
         return Pl3xMarkersFabric.isOpacLoaded();
     }
 
-	final protected MinecraftServer getServer() {
+	public final MinecraftServer getServer() {
 		if (getWorld().getLevel() instanceof ServerWorld serverWorld) {
 			return serverWorld.getServer();
 		}

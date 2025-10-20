@@ -20,7 +20,7 @@ public class Pl3xMarkersFabric implements DedicatedServerModInitializer {
     @Override
     public void onInitializeServer() {
 		// register layers
-		Layers.registerLayerFactory(OPACAreaMarkerLayer::new);
+		if (isOpacLoaded()) Layers.registerLayerFactory(OPACAreaMarkerLayer::new);
 		// initialize core
         Pl3xMarkersCore.onInitialize(false);
         // register events
