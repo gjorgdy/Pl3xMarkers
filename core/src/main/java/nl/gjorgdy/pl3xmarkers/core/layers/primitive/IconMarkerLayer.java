@@ -15,7 +15,7 @@ public class IconMarkerLayer extends MarkerLayer {
     @Language("HTML")
     public final String tooltip;
 
-    public IconMarkerLayer(String icon, String key, String label, String tooltip, @NotNull World world) {
+    public IconMarkerLayer(String icon, String key, String label, @Language("HTML") String tooltip, @NotNull World world) {
         super(key, label, world);
         this.iconId = icon;
         this.key = key;
@@ -25,10 +25,11 @@ public class IconMarkerLayer extends MarkerLayer {
 
     @Override
     public void load() {
-        Pl3xMarkersCore.iconMarkerRepository()
-            .getMarkers(getWorld().getKey(), key)
+        Pl3xMarkersCore.storage()
+			.getIconMarkerRepository()
+            .getIconMarkers(getWorld().getKey(), key)
             .forEach(marker ->
-                addIconMarker(marker.getX(), marker.getZ())
+                addIconMarker(marker.getLocation().getX(), marker.getLocation().getZ())
             );
     }
 
@@ -44,9 +45,10 @@ public class IconMarkerLayer extends MarkerLayer {
      * @param z z coordinate of marker
      */
     public void addSimpleMarker(int x, int z) {
-        boolean added = Pl3xMarkersCore.iconMarkerRepository()
-            .addMarker(getWorld().getKey(), key, x, z);
-        if (added) {
+        var marker = Pl3xMarkersCore.storage()
+			.getIconMarkerRepository()
+            .createIconMarker(getWorld().getKey(), key, x, z);
+        if (marker != null) {
             addIconMarker(x, z);
         }
     }
@@ -58,8 +60,9 @@ public class IconMarkerLayer extends MarkerLayer {
      * @param z z coordinate of marker
      */
     public void removeMarker(int x, int z) {
-        Pl3xMarkersCore.iconMarkerRepository()
-            .removeMarker(getWorld().getKey(), key, x, z);
+		Pl3xMarkersCore.storage()
+			.getIconMarkerRepository()
+            .removeIconMarker(getWorld().getKey(), key, x, z);
         super.removeMarker(toMarkerKey(x, z));
     }
 

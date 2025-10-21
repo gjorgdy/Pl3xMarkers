@@ -1,6 +1,6 @@
 package nl.gjorgdy.pl3xmarkers.core.helpers;
 
-import nl.gjorgdy.pl3xmarkers.core.entities.AreaPointEntity;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,7 +18,7 @@ public class ConvexHull {
      * @param points input list of points to use
      * @return a line of external points
      */
-    public static List<AreaPointEntity> calculate(List<AreaPointEntity> points) {
+    public static List<IPoint> calculate(List<IPoint> points) {
         if (points.isEmpty()) return points;
 		else if (points.size() < 3) return minimalArea(points.getFirst());
 
@@ -32,10 +32,10 @@ public class ConvexHull {
 		return points.size() < 3 ?  minimalArea(points.getFirst()) : calculateInternal(points);
 	}
 
-	private static List<AreaPointEntity> cluster(List<AreaPointEntity> points) {
+	private static List<IPoint> cluster(List<IPoint> points) {
 		// Calculate center point
-		int centerX = points.stream().map(AreaPointEntity::getX).reduce(0, Integer::sum) / points.size();
-		int centerZ = points.stream().map(AreaPointEntity::getZ).reduce(0, Integer::sum) / points.size();
+		int centerX = points.stream().map(IPoint::getX).reduce(0, Integer::sum) / points.size();
+		int centerZ = points.stream().map(IPoint::getZ).reduce(0, Integer::sum) / points.size();
 		var center = points.getFirst().set(centerX, centerZ);
 		// Find the furthest point from center
 		var furthest = points.stream().max(Comparator.comparing(p -> p.distance(center))).orElse(points.getLast());
@@ -49,8 +49,8 @@ public class ConvexHull {
 		}
 	}
 
-	private static List<AreaPointEntity> calculateInternal(List<AreaPointEntity> points) {
-		List<AreaPointEntity> lower = new ArrayList<>();
+	private static List<IPoint> calculateInternal(List<IPoint> points) {
+		List<IPoint> lower = new ArrayList<>();
 		// Step 2: Build the lower half of the hull
 		for (var p : points) {
 			// Remove last point from lower if we turn clockwise or straight (<= 0 cross product)
@@ -61,10 +61,10 @@ public class ConvexHull {
 			lower.add(p);
 		}
 
-		List<AreaPointEntity> upper = new ArrayList<>();
+		List<IPoint> upper = new ArrayList<>();
 		// Step 3: Build the upper half of the hull (in reverse)
 		for (int i = points.size() - 1; i >= 0; i--) {
-			AreaPointEntity p = points.get(i);
+			IPoint p = points.get(i);
 			// Same logic: remove point if it makes a non-left turn
 			while (upper.size() >= 2 &&
 						   cross(upper.get(upper.size() - 2), upper.getLast(), p) <= 0) {
@@ -84,7 +84,7 @@ public class ConvexHull {
 		return lower; // This is the convex hull in counter-clockwise order
 	}
 
-	private static List<AreaPointEntity> minimalArea(AreaPointEntity center) {
+	private static List<IPoint> minimalArea(IPoint center) {
 		return List.of(
 			center.add(0, -8),
 			center.add(8, 8),
@@ -93,7 +93,7 @@ public class ConvexHull {
 	}
 
     // Cross product of AB and AC vectors: positive = left turn, negative = right turn
-    private static long cross(AreaPointEntity a, AreaPointEntity b, AreaPointEntity c) {
+    private static long cross(IPoint a, IPoint b, IPoint c) {
         return (long)(b.getX() - a.getX()) * (c.getZ() - a.getZ()) - (long)(b.getZ() - a.getZ()) * (c.getX() - a.getX());
     }
 

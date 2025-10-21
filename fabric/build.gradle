@@ -42,6 +42,7 @@ dependencies {
     modCompileOnly "maven.modrinth:pl3xmap:${project.pl3xmap_version}"
 
     implementation project(':core')
+    implementation project(':json')
 }
 
 processResources {

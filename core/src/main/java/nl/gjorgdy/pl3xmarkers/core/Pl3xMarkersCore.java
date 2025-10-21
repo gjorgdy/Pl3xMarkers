@@ -1,17 +1,12 @@
 package nl.gjorgdy.pl3xmarkers.core;
 
 import net.pl3x.map.core.Pl3xMap;
-import nl.gjorgdy.pl3xmarkers.core.repositories.AreaRepository;
-import nl.gjorgdy.pl3xmarkers.core.repositories.IconMarkerRepository;
-
-import java.sql.SQLException;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.IStorage;
 
 public class Pl3xMarkersCore {
 
     private static boolean IS_BUKKIT = false;
-    private static Database DATABASE = null;
-    private static AreaRepository AREA_REPOSITORY = null;
-    private static IconMarkerRepository MARKER_REPOSITORY = null;
+    private static IStorage STORAGE = null;
 
     private static Api API = null;
     static Pl3xMapHandler PL3X_MAP_HANDLER = null;
@@ -34,33 +29,15 @@ public class Pl3xMarkersCore {
         return PL3X_MAP_HANDLER;
     }
 
-    static Database database() {
-        if (DATABASE == null) {
-            try {
-                DATABASE = new Database();
-            } catch (SQLException e) {
-                System.out.println("Failed to create/read database ");
-                throw new RuntimeException(e);
-            }
+    public static IStorage storage() {
+        if (STORAGE == null) {
+			throw new RuntimeException("Failed to create/read database ");
         }
-        return DATABASE;
+        return STORAGE;
     }
 
-    public static AreaRepository areaRepository() {
-        if (AREA_REPOSITORY == null) {
-            AREA_REPOSITORY = new AreaRepository(database());
-        }
-        return AREA_REPOSITORY;
-    }
-
-    public static IconMarkerRepository iconMarkerRepository() {
-        if (MARKER_REPOSITORY == null) {
-            MARKER_REPOSITORY = new IconMarkerRepository(database());
-        }
-        return MARKER_REPOSITORY;
-    }
-
-    public static void onInitialize(boolean isBukkit) {
+    public static void onInitialize(boolean isBukkit, IStorage storage) {
+		STORAGE = storage;
         IS_BUKKIT = isBukkit;
     }
 
@@ -69,7 +46,7 @@ public class Pl3xMarkersCore {
     }
 
     public static void onDisable() {
-        Pl3xMarkersCore.database().close();
+        Pl3xMarkersCore.storage().close();
         Pl3xMarkersCore.api().executor.shutdown();
     }
 

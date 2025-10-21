@@ -16,7 +16,7 @@ tasks {
 
         archiveClassifier = ''
 
-        dependsOn(':core:shadowJar', 'paper:build', 'fabric:remapJar')
+        dependsOn(':core:shadowJar', ':json:build', 'paper:build', 'fabric:remapJar')
 
         def manifestFiles = subprojects.collect {
             var file = it.layout.buildDirectory.file("libs/${project.name}-${it.name}-${project.version}.jar")
