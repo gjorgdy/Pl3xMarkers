@@ -1,6 +1,9 @@
 package nl.gjorgdy.pl3xmarkers.json.entities;
 
+import com.google.gson.*;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
+
+import java.util.Objects;
 
 public class Point implements IPoint {
 
@@ -31,4 +34,15 @@ public class Point implements IPoint {
 		return new Point(x, z);
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || getClass() != o.getClass()) return false;
+		Point point = (Point) o;
+		return x == point.x && z == point.z;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(x, z);
+	}
 }

@@ -5,7 +5,7 @@ import java.util.Locale;
 
 public interface IAreaMarker {
 
-	String getWorldIdentifier();
+	String getWorld();
 
 	String getName();
 

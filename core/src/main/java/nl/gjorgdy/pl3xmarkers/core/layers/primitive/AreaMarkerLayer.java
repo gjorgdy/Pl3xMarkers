@@ -69,7 +69,7 @@ public class AreaMarkerLayer extends MarkerLayer {
 		var area = Pl3xMarkersCore.storage()
 					   .getAreaMarkerRepository()
 					   .getArea(worldIdentifier, label, color);
-        if (area.removePoint(x, z)) {
+        if (area != null && area.removePoint(x, z)) {
 			loadArea(area);
         }
     }

@@ -8,27 +8,25 @@ import java.util.stream.Collectors;
 
 public class IconMarkerRepository extends JsonRepository<IconMarker> implements IIconMarkerRepository<IconMarker> {
 
-	private final Set<IconMarker> iconMarkers;
-
-	public IconMarkerRepository(String filePath) {
-		super(filePath, IconMarker[].class);
-		this.iconMarkers = new HashSet<>();
-		iconMarkers.add(new IconMarker("minecraft:overworld", "beacons", 10, 10));
-		iconMarkers.add(new IconMarker("minecraft:overworld", "nether_portals", 49, -59));
+	public IconMarkerRepository(String folderPath, String fileName) {
+		super(folderPath, fileName, IconMarker[].class);
+//		createIconMarker("minecraft:overworld", "beacons", 10, 10);
+//		createIconMarker("minecraft:overworld", "nether_portals", 49, -59);
 	}
 
 	@Override
 	public Collection<IconMarker> getIconMarkers(String worldIdentifier, String layerKey) {
-		return iconMarkers.stream()
-				   .filter(m -> m.getWorldIdentifier().equals(worldIdentifier) && m.getLayerKey().equals(layerKey))
+		return markers.stream()
+				   .filter(m -> m.getWorld().equals(worldIdentifier) && m.getLayer().equals(layerKey))
 				   .collect(Collectors.toSet());
 	}
 
 	@Override
 	public IconMarker createIconMarker(String worldIdentifier, String layerKey, int x, int z) {
 		var marker = new IconMarker(worldIdentifier, layerKey, x, z);
-		var added = iconMarkers.add(marker);
+		var added = markers.add(marker);
 		if (added) {
+			markDirty();
 			write();
 		}
 		return added ? marker : null;
@@ -36,14 +34,15 @@ public class IconMarkerRepository extends JsonRepository<IconMarker> implements 
 
 	@Override
 	public boolean removeIconMarker(String worldIdentifier, String layerKey, int x, int z) {
-		var removed = iconMarkers.removeIf(
+		var removed = markers.removeIf(
 				m ->
-					m.getWorldIdentifier().equals(worldIdentifier)
-					&& m.getLayerKey().equals(layerKey)
+					m.getWorld().equals(worldIdentifier)
+					&& m.getLayer().equals(layerKey)
 					&& m.getLocation().getX() == x
 					&& m.getLocation().getZ() == z
 		);
 		if (removed) {
+			markDirty();
 			write();
 		}
 		return removed;

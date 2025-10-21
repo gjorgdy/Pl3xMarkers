@@ -2,9 +2,9 @@ package nl.gjorgdy.pl3xmarkers.core.interfaces.entities;
 
 public interface IIconMarker {
 
-	String getWorldIdentifier();
+	String getWorld();
 
-	String getLayerKey();
+	String getLayer();
 
 	IPoint getLocation();
 

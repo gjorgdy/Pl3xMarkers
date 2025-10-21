@@ -17,8 +17,8 @@ public class FileStorage implements IStorage {
 		// read files
 		String configPath = Pl3xMarkersCore.isBukkit() ? "plugins/Pl3xMarkers" : "config/pl3xmarkers";
 		// load repositories
-		iconMarkerRepository = new IconMarkerRepository(configPath + "/icons.json");
-		areaMarkerRepository = new AreaMarkerRepository(configPath + "/areas.json");
+		iconMarkerRepository = new IconMarkerRepository(configPath + "/markers", "icons");
+		areaMarkerRepository = new AreaMarkerRepository(configPath + "/markers", "areas");
 	}
 
 	@Override

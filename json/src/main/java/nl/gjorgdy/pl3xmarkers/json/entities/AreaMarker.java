@@ -4,30 +4,28 @@ import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IAreaMarker;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
 import nl.gjorgdy.pl3xmarkers.json.repositories.AreaMarkerRepository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class AreaMarker implements IAreaMarker {
 
-	private final AreaMarkerRepository areaMarkerRepository;
+	public transient AreaMarkerRepository areaMarkerRepository;
 
-	private final String worldIdentifier;
+	private final String world;
 	private final String name;
 	private final int color;
-	private final List<Point> points;
+	private final Set<Point> points;
 
 	public AreaMarker(AreaMarkerRepository areaMarkerRepository, String worldIdentifier, String name, int color) {
 		this.areaMarkerRepository = areaMarkerRepository;
-		this.worldIdentifier = worldIdentifier;
+		this.world = worldIdentifier;
 		this.name = name;
 		this.color = color;
-		this.points = new ArrayList<>();
+		this.points = new HashSet<>();
 	}
 
 	@Override
-	public String getWorldIdentifier() {
-		return worldIdentifier;
+	public String getWorld() {
+		return world;
 	}
 
 	@Override
@@ -47,12 +45,29 @@ public class AreaMarker implements IAreaMarker {
 
 	@Override
 	public boolean addPoint(int x, int z) {
-		return points.add(new Point(x, z));
+		var added = points.add(new Point(x, z));
+		areaMarkerRepository.markDirty();
+		areaMarkerRepository.write();
+		return added;
 	}
 
 	@Override
 	public boolean removePoint(int x, int z) {
-		return points.removeIf(p -> p.getX() == x && p.getZ() == z);
+		var removed = points.removeIf(p -> p.getX() == x && p.getZ() == z);
+		areaMarkerRepository.markDirty();
+		areaMarkerRepository.write();
+		return removed;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || getClass() != o.getClass()) return false;
+		AreaMarker that = (AreaMarker) o;
+		return color == that.color && Objects.equals(areaMarkerRepository, that.areaMarkerRepository) && Objects.equals(world, that.world) && Objects.equals(name, that.name) && Objects.equals(points, that.points);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(areaMarkerRepository, world, name, color, points);
+	}
 }

@@ -4,20 +4,19 @@ import nl.gjorgdy.pl3xmarkers.core.interfaces.IAreaMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IAreaMarker;
 import nl.gjorgdy.pl3xmarkers.json.entities.AreaMarker;
 
-import java.io.*;
 import java.util.List;
 
 public class AreaMarkerRepository extends JsonRepository<AreaMarker> implements IAreaMarkerRepository {
 
-	public AreaMarkerRepository(String filePath) {
-		super(filePath, AreaMarker[].class);
+	public AreaMarkerRepository(String folderPath, String fileName) {
+		super(folderPath, fileName, AreaMarker[].class);
 	}
 
 	@Override
 	public List<? extends IAreaMarker> getAreas(String worldIdentifier) {
 		return markers
 				   .stream()
-				   .filter(m -> m.getWorldIdentifier().equals(worldIdentifier))
+				   .filter(m -> m.getWorld().equals(worldIdentifier))
 				   .toList();
 	}
 
@@ -26,7 +25,7 @@ public class AreaMarkerRepository extends JsonRepository<AreaMarker> implements 
 		return markers
 			   .stream()
 			   .filter(m ->
-				   m.getWorldIdentifier().equals(worldIdentifier)
+				   m.getWorld().equals(worldIdentifier)
 				   && m.getName().equals(name)
 				   && m.getColor() == color
 			   )
@@ -37,9 +36,10 @@ public class AreaMarkerRepository extends JsonRepository<AreaMarker> implements 
 	@Override
 	public AreaMarker getOrCreateArea(String worldIdentifier, String name, int color) {
 		var marker = getArea(worldIdentifier, name, color);
-		if (marker != null) {
+		if (marker == null) {
 			marker = new AreaMarker(this, worldIdentifier, name, color);
 			markers.add(marker);
+			markDirty();
 			write();
 		}
 		return marker;
@@ -49,11 +49,12 @@ public class AreaMarkerRepository extends JsonRepository<AreaMarker> implements 
 	public boolean removeArea(String worldIdentifier, String name, int color) {
 		var removed = markers.removeIf(
 				m ->
-					m.getWorldIdentifier().equals(worldIdentifier)
+					m.getWorld().equals(worldIdentifier)
 					&& m.getName().equals(name)
 					&& m.getColor() == color
 		);
 		if (removed) {
+			markDirty();
 			write();
 		}
 		return removed;
