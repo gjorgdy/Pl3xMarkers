@@ -10,8 +10,6 @@ public class IconMarkerRepository extends JsonRepository<IconMarker> implements 
 
 	public IconMarkerRepository(String folderPath, String fileName) {
 		super(folderPath, fileName, IconMarker[].class);
-//		createIconMarker("minecraft:overworld", "beacons", 10, 10);
-//		createIconMarker("minecraft:overworld", "nether_portals", 49, -59);
 	}
 
 	@Override

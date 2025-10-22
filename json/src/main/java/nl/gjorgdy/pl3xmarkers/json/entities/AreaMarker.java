@@ -56,8 +56,7 @@ public class AreaMarker implements IAreaMarker {
 		var removed = points.removeIf(p -> p.getX() == x && p.getZ() == z);
 		// If no points are left, remove the entire area marker
 		if (points.isEmpty()) {
-			repository.removeArea(this);
-			return true;
+			removed = removed && repository.removeArea(this);
 		}
 		repository.markDirty();
 		repository.write();

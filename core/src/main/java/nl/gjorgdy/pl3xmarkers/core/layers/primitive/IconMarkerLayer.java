@@ -60,10 +60,10 @@ public class IconMarkerLayer extends MarkerLayer {
      * @param z z coordinate of marker
      */
     public void removeMarker(int x, int z) {
-		Pl3xMarkersCore.storage()
+		var removed = Pl3xMarkersCore.storage()
 			.getIconMarkerRepository()
             .removeIconMarker(getWorld().getKey(), key, x, z);
-        super.removeMarker(toMarkerKey(x, z));
+        if (removed) super.removeMarker(toMarkerKey(x, z));
     }
 
     private void addIconMarker(int x, int z) {
