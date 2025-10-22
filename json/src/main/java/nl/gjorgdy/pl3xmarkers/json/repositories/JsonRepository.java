@@ -2,34 +2,36 @@ package nl.gjorgdy.pl3xmarkers.json.repositories;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import nl.gjorgdy.pl3xmarkers.json.entities.AreaMarker;
+import nl.gjorgdy.pl3xmarkers.json.entities.IconMarker;
 import nl.gjorgdy.pl3xmarkers.json.entities.Point;
+import nl.gjorgdy.pl3xmarkers.json.interfaces.IJsonRepositoryData;
 import nl.gjorgdy.pl3xmarkers.json.serializers.PointSerializer;
 
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class JsonRepository<T> {
+public abstract class JsonRepository<T extends IJsonRepositoryData> {
 
 	private final Gson gson;
 	private final String folderPath;
 	private final String filePath;
-	private final Class<T[]> markerClass;
+	private final Class<T> markerClass;
 
 	private final AtomicBoolean dirty = new AtomicBoolean(false);
 
-	protected Set<T> markers;
+	protected T data;
 
-	public JsonRepository(String folderPath, String fileName, Class<T[]> markerClass) {
+	public JsonRepository(String folderPath, String fileName, Class<T> markerClass, T defaultData) {
 		this.gson = new GsonBuilder()
 						.setPrettyPrinting()
 						.registerTypeAdapter(Point.class, new PointSerializer())
+						.registerTypeAdapter(IconMarker.class, new PointSerializer())
 						.create();
 		this.folderPath = folderPath;
 		this.filePath = folderPath + "/"+ fileName + ".json";
 		this.markerClass = markerClass;
-		this.markers = new HashSet<>();
+		this.data = defaultData;
 		read();
 	}
 
@@ -55,8 +57,10 @@ public abstract class JsonRepository<T> {
 		if (!dirty.get()) return;
 		try (Writer writer = new FileWriter(filePath, false)) {
 			if (invalidFile()) return;
-			var array = markers.toArray();
-			gson.toJson(array, writer);
+//			var array = markers.toArray();
+			if (data == null || data.isEmpty()) return;
+			data.strip();
+			gson.toJson(data, writer);
 			dirty.set(false);
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -69,15 +73,11 @@ public abstract class JsonRepository<T> {
 		try {
 			if (invalidFile()) return;
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
-			var array = gson.fromJson(bufferedReader, markerClass);
-			if (array == null) return;
-			markers = new HashSet<>(
-				Arrays.stream(array).peek(m -> {
-					if (m instanceof AreaMarker am) {
-						am.repository = (AreaMarkerRepository) this;
-					}
-				}).toList()
-			);
+			var jsonData = gson.fromJson(bufferedReader, markerClass);
+			if (jsonData != null && !jsonData.isEmpty()) {
+				jsonData.setContext(this);
+				data = jsonData;
+			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}

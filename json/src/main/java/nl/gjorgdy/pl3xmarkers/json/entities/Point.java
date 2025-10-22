@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Point implements IPoint {
 
-	private final int x, z;
+	protected final int x, z;
 
 	public Point(int x, int z) {
 		this.x = x;

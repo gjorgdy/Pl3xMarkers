@@ -8,9 +8,9 @@ import java.util.*;
 
 public class AreaMarker implements IAreaMarker {
 
-	public transient AreaMarkerRepository repository;
+	private transient AreaMarkerRepository repository;
+	private transient String world;
 
-	private final String world;
 	private final String name;
 	private final int color;
 	private final Set<Point> points;
@@ -21,6 +21,11 @@ public class AreaMarker implements IAreaMarker {
 		this.name = name;
 		this.color = color;
 		this.points = new HashSet<>();
+	}
+
+	public void setContext(AreaMarkerRepository repository, String worldIdentifier) {
+		if (this.repository == null) this.repository = repository;
+		if (this.world == null) this.world = worldIdentifier;
 	}
 
 	@Override

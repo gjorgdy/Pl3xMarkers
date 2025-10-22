@@ -2,12 +2,12 @@ package nl.gjorgdy.pl3xmarkers.core.interfaces;
 
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IAreaMarker;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface IAreaMarkerRepository<T extends IAreaMarker> {
 
 	@SuppressWarnings("Unused")
-	List<T> getAreas(String worldIdentifier);
+	Collection<T> getAreas(String worldIdentifier);
 
 	@SuppressWarnings("Unused")
 	T getArea(String worldIdentifier, String name, int color);
