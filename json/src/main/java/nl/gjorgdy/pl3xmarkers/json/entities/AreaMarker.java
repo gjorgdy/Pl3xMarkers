@@ -8,7 +8,7 @@ import java.util.*;
 
 public class AreaMarker implements IAreaMarker {
 
-	public transient AreaMarkerRepository areaMarkerRepository;
+	public transient AreaMarkerRepository repository;
 
 	private final String world;
 	private final String name;
@@ -16,7 +16,7 @@ public class AreaMarker implements IAreaMarker {
 	private final Set<Point> points;
 
 	public AreaMarker(AreaMarkerRepository areaMarkerRepository, String worldIdentifier, String name, int color) {
-		this.areaMarkerRepository = areaMarkerRepository;
+		this.repository = areaMarkerRepository;
 		this.world = worldIdentifier;
 		this.name = name;
 		this.color = color;
@@ -46,16 +46,21 @@ public class AreaMarker implements IAreaMarker {
 	@Override
 	public boolean addPoint(int x, int z) {
 		var added = points.add(new Point(x, z));
-		areaMarkerRepository.markDirty();
-		areaMarkerRepository.write();
+		repository.markDirty();
+		repository.write();
 		return added;
 	}
 
 	@Override
 	public boolean removePoint(int x, int z) {
 		var removed = points.removeIf(p -> p.getX() == x && p.getZ() == z);
-		areaMarkerRepository.markDirty();
-		areaMarkerRepository.write();
+		// If no points are left, remove the entire area marker
+		if (points.isEmpty()) {
+			repository.removeArea(this);
+			return true;
+		}
+		repository.markDirty();
+		repository.write();
 		return removed;
 	}
 
@@ -63,11 +68,11 @@ public class AreaMarker implements IAreaMarker {
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 		AreaMarker that = (AreaMarker) o;
-		return color == that.color && Objects.equals(areaMarkerRepository, that.areaMarkerRepository) && Objects.equals(world, that.world) && Objects.equals(name, that.name) && Objects.equals(points, that.points);
+		return color == that.color && Objects.equals(repository, that.repository) && Objects.equals(world, that.world) && Objects.equals(name, that.name) && Objects.equals(points, that.points);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(areaMarkerRepository, world, name, color, points);
+		return Objects.hash(repository, world, name, color, points);
 	}
 }

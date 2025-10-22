@@ -74,7 +74,7 @@ public abstract class JsonRepository<T> {
 			markers = new HashSet<>(
 				Arrays.stream(array).peek(m -> {
 					if (m instanceof AreaMarker am) {
-						am.areaMarkerRepository = (AreaMarkerRepository) this;
+						am.repository = (AreaMarkerRepository) this;
 					}
 				}).toList()
 			);

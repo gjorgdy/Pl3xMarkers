@@ -1,19 +1,18 @@
 package nl.gjorgdy.pl3xmarkers.json.repositories;
 
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IAreaMarkerRepository;
-import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IAreaMarker;
 import nl.gjorgdy.pl3xmarkers.json.entities.AreaMarker;
 
 import java.util.List;
 
-public class AreaMarkerRepository extends JsonRepository<AreaMarker> implements IAreaMarkerRepository {
+public class AreaMarkerRepository extends JsonRepository<AreaMarker> implements IAreaMarkerRepository<AreaMarker> {
 
 	public AreaMarkerRepository(String folderPath, String fileName) {
 		super(folderPath, fileName, AreaMarker[].class);
 	}
 
 	@Override
-	public List<? extends IAreaMarker> getAreas(String worldIdentifier) {
+	public List<AreaMarker> getAreas(String worldIdentifier) {
 		return markers
 				   .stream()
 				   .filter(m -> m.getWorld().equals(worldIdentifier))
@@ -53,6 +52,15 @@ public class AreaMarkerRepository extends JsonRepository<AreaMarker> implements 
 					&& m.getName().equals(name)
 					&& m.getColor() == color
 		);
+		if (removed) {
+			markDirty();
+			write();
+		}
+		return removed;
+	}
+
+	public boolean removeArea(AreaMarker areaMarker) {
+		var removed = markers.remove(areaMarker);
 		if (removed) {
 			markDirty();
 			write();
