@@ -17,17 +17,19 @@ public class AreaMarkerRepository extends JsonRepository<AreaMarkerRepository.Da
 
 	@Override
 	public Collection<AreaMarker> getAreas(String worldIdentifier) {
-		return data.getOrCreate(worldIdentifier);
+		var area = data.get(worldIdentifier);
+		return area != null ? area : Set.of();
 	}
 
 	@Override
 	public AreaMarker getArea(String worldIdentifier, String name, int color) {
-		return data.getOrCreate(worldIdentifier).findFirst(name, color);
+		var area = data.get(worldIdentifier);
+		return area != null ? area.findFirst(name, color) : null;
 	}
 
 	@Override
 	public AreaMarker getOrCreateArea(String worldIdentifier, String name, int color) {
-		var marker = getArea(worldIdentifier, name, color);
+		var marker = data.getOrCreate(worldIdentifier).findFirst(name, color);
 		if (marker == null) {
 			marker = new AreaMarker(this, worldIdentifier, name, color);
 			getAreas(worldIdentifier).add(marker);

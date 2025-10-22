@@ -14,7 +14,10 @@ public class IconMarkerRepository extends JsonRepository<IconMarkerRepository.Da
 
 	@Override
 	public Collection<IconMarker> getIconMarkers(String worldIdentifier, String layerKey) {
-		return data.getOrCreate(worldIdentifier).getOrCreate(layerKey);
+		var world = data.get(worldIdentifier);
+		if (world == null) return Set.of();
+		var layer = world.get(layerKey);
+		return layer != null ? layer : Set.of();
 	}
 
 	@Override
