@@ -1,19 +1,16 @@
 package nl.gjorgdy.pl3xmarkers.json;
 
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
-import nl.gjorgdy.pl3xmarkers.core.interfaces.IAreaMarkerRepository;
-import nl.gjorgdy.pl3xmarkers.core.interfaces.IIconMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IStorage;
-import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IIconMarker;
 import nl.gjorgdy.pl3xmarkers.json.repositories.AreaMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.json.repositories.IconMarkerRepository;
 
-public class FileStorage implements IStorage {
+public class JsonStorage implements IStorage {
 
-	private final IIconMarkerRepository<? extends IIconMarker> iconMarkerRepository;
-	private final IAreaMarkerRepository areaMarkerRepository;
+	private final IconMarkerRepository iconMarkerRepository;
+	private final AreaMarkerRepository areaMarkerRepository;
 
-	public FileStorage() {
+	public JsonStorage() {
 		// read files
 		String configPath = Pl3xMarkersCore.isBukkit() ? "plugins/Pl3xMarkers" : "config/pl3xmarkers";
 		// load repositories
@@ -22,17 +19,27 @@ public class FileStorage implements IStorage {
 	}
 
 	@Override
-	public IAreaMarkerRepository getAreaMarkerRepository() {
+	public AreaMarkerRepository getAreaMarkerRepository() {
 		return areaMarkerRepository;
 	}
 
 	@Override
-	public IIconMarkerRepository<? extends IIconMarker> getIconMarkerRepository() {
+	public IconMarkerRepository getIconMarkerRepository() {
 		return iconMarkerRepository;
 	}
 
 	@Override
 	public void close() {
+		writeInternal();
+	}
 
+	public void write() {
+		writeInternal();
+	}
+
+	private void writeInternal() {
+		// save files
+		iconMarkerRepository.write();
+		areaMarkerRepository.write();
 	}
 }

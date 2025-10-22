@@ -47,7 +47,6 @@ public class AreaMarker implements IAreaMarker {
 	public boolean addPoint(int x, int z) {
 		var added = points.add(new Point(x, z));
 		repository.markDirty();
-		repository.write();
 		return added;
 	}
 
@@ -59,7 +58,6 @@ public class AreaMarker implements IAreaMarker {
 			removed = removed && repository.removeArea(this);
 		}
 		repository.markDirty();
-		repository.write();
 		return removed;
 	}
 
@@ -67,11 +65,11 @@ public class AreaMarker implements IAreaMarker {
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 		AreaMarker that = (AreaMarker) o;
-		return color == that.color && Objects.equals(repository, that.repository) && Objects.equals(world, that.world) && Objects.equals(name, that.name) && Objects.equals(points, that.points);
+		return color == that.color && Objects.equals(world, that.world) && Objects.equals(name, that.name) && Objects.equals(points, that.points);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(repository, world, name, color, points);
+		return Objects.hash(world, name, color, points);
 	}
 }

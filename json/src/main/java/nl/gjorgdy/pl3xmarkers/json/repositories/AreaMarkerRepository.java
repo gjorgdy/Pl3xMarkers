@@ -39,7 +39,6 @@ public class AreaMarkerRepository extends JsonRepository<AreaMarker> implements 
 			marker = new AreaMarker(this, worldIdentifier, name, color);
 			markers.add(marker);
 			markDirty();
-			write();
 		}
 		return marker;
 	}
@@ -52,19 +51,13 @@ public class AreaMarkerRepository extends JsonRepository<AreaMarker> implements 
 					&& m.getName().equals(name)
 					&& m.getColor() == color
 		);
-		if (removed) {
-			markDirty();
-			write();
-		}
+		if (removed) markDirty();
 		return removed;
 	}
 
 	public boolean removeArea(AreaMarker areaMarker) {
 		var removed = markers.remove(areaMarker);
-		if (removed) {
-			markDirty();
-			write();
-		}
+		if (removed) markDirty();
 		return removed;
 	}
 

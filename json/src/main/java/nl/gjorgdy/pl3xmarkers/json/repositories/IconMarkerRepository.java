@@ -23,10 +23,7 @@ public class IconMarkerRepository extends JsonRepository<IconMarker> implements 
 	public IconMarker createIconMarker(String worldIdentifier, String layerKey, int x, int z) {
 		var marker = new IconMarker(worldIdentifier, layerKey, x, z);
 		var added = markers.add(marker);
-		if (added) {
-			markDirty();
-			write();
-		}
+		if (added) markDirty();
 		return added ? marker : null;
 	}
 
@@ -39,10 +36,7 @@ public class IconMarkerRepository extends JsonRepository<IconMarker> implements 
 					&& m.getLocation().getX() == x
 					&& m.getLocation().getZ() == z
 		);
-		if (removed) {
-			markDirty();
-			write();
-		}
+		if (removed) markDirty();
 		return removed;
 	}
 }
