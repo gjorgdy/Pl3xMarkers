@@ -8,6 +8,7 @@ import nl.gjorgdy.pl3xmarkers.json.serializers.PointSerializer;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class JsonRepository<T> {
 
@@ -16,7 +17,7 @@ public abstract class JsonRepository<T> {
 	private final String filePath;
 	private final Class<T[]> markerClass;
 
-	private boolean dirty = false;
+	private final AtomicBoolean dirty = new AtomicBoolean(false);
 
 	protected Set<T> markers;
 
@@ -32,8 +33,11 @@ public abstract class JsonRepository<T> {
 		read();
 	}
 
+	/**
+	 * Marks the repository as dirty, indicating that it needs to be written to disk.
+	 */
 	final public void markDirty() {
-		this.dirty = true;
+		this.dirty.set(true);
 	}
 
 	private boolean invalidFile() throws IOException {
@@ -48,18 +52,20 @@ public abstract class JsonRepository<T> {
 	}
 
 	final public void write() {
-		if (!dirty) return;
+		if (!dirty.get()) return;
 		try (Writer writer = new FileWriter(filePath, false)) {
 			if (invalidFile()) return;
 			var array = markers.toArray();
 			gson.toJson(array, writer);
-			dirty = false;
+			dirty.set(false);
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 
 	final public void read() {
+		// only read if not dirty
+		if (dirty.get()) return;
 		try {
 			if (invalidFile()) return;
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
