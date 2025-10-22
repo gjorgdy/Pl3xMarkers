@@ -36,27 +36,22 @@ public abstract class JsonRepository<T> {
 		this.dirty = true;
 	}
 
-	private void checkFile() {
-		try {
-			// make sure parent directories exist
-			var folder = new File(folderPath);
-			var unused = folder.mkdirs();
-			// create file if it doesn't exist
-			var file = new File(filePath);
-			if (!file.exists()) {
-				file.createNewFile()
-			}
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-		}
+	private boolean invalidFile() throws IOException {
+		// make sure parent directories exist
+		var folder = new File(folderPath);
+		var madeFolders = folder.mkdirs();
+		// create file if it doesn't exist
+		var file = new File(filePath);
+		if (file.exists()) return false;
+		var madeFile = file.createNewFile();
+		return !madeFolders || !madeFile;
 	}
 
 	final public void write() {
 		if (!dirty) return;
 		try (Writer writer = new FileWriter(filePath, false)) {
-			checkFile();
+			if (invalidFile()) return;
 			var array = markers.toArray();
-//			System.out.println(gson.toJson(array));
 			gson.toJson(array, writer);
 			dirty = false;
 		} catch (IOException e) {
@@ -66,7 +61,7 @@ public abstract class JsonRepository<T> {
 
 	final public void read() {
 		try {
-			checkFile();
+			if (invalidFile()) return;
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
 			var array = gson.fromJson(bufferedReader, markerClass);
 			if (array == null) return;
