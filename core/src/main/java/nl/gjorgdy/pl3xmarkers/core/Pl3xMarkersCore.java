@@ -3,6 +3,8 @@ package nl.gjorgdy.pl3xmarkers.core;
 import net.pl3x.map.core.Pl3xMap;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IStorage;
 
+import java.nio.file.Path;
+
 public class Pl3xMarkersCore {
 
     private static boolean IS_BUKKIT = false;
@@ -14,6 +16,10 @@ public class Pl3xMarkersCore {
     public static boolean isBukkit() {
         return IS_BUKKIT;
     }
+
+	public static Path getMainDir() {
+		return isBukkit() ? Path.of("plugins/Pl3xMarkers") : Path.of("config/pl3xmarkers");
+	}
 
     public static Api api() {
         if (API == null) {
@@ -39,6 +45,7 @@ public class Pl3xMarkersCore {
     public static void onInitialize(boolean isBukkit, IStorage storage) {
 		STORAGE = storage;
         IS_BUKKIT = isBukkit;
+		MarkersConfig.reload();
     }
 
     public static void onStarted() {
