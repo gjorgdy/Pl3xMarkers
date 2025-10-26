@@ -1,6 +1,5 @@
-package nl.gjorgdy.pl3xmarkers.json.entities;
+package nl.gjorgdy.pl3xmarkers.core.json.entities;
 
-import com.google.gson.*;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
 
 import java.util.Objects;

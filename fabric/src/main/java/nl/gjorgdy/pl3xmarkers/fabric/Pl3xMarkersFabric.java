@@ -3,7 +3,7 @@ package nl.gjorgdy.pl3xmarkers.fabric;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
-import nl.gjorgdy.pl3xmarkers.json.JsonStorage;
+import nl.gjorgdy.pl3xmarkers.core.json.JsonStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

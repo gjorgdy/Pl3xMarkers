@@ -1,14 +1,13 @@
-package nl.gjorgdy.pl3xmarkers.json.repositories;
+package nl.gjorgdy.pl3xmarkers.core.json.repositories;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import nl.gjorgdy.pl3xmarkers.json.entities.IconMarker;
-import nl.gjorgdy.pl3xmarkers.json.entities.Point;
-import nl.gjorgdy.pl3xmarkers.json.interfaces.IJsonRepositoryData;
-import nl.gjorgdy.pl3xmarkers.json.serializers.PointSerializer;
+import nl.gjorgdy.pl3xmarkers.core.json.entities.IconMarker;
+import nl.gjorgdy.pl3xmarkers.core.json.entities.Point;
+import nl.gjorgdy.pl3xmarkers.core.json.interfaces.IJsonRepositoryData;
+import nl.gjorgdy.pl3xmarkers.core.json.serializers.PointSerializer;
 
 import java.io.*;
-import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class JsonRepository<T extends IJsonRepositoryData> {

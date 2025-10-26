@@ -2,7 +2,7 @@ package nl.gjorgdy.pl3xMarkers.paper;
 
 import nl.gjorgdy.pl3xMarkers.paper.listeners.*;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
-import nl.gjorgdy.pl3xmarkers.json.JsonStorage;
+import nl.gjorgdy.pl3xmarkers.core.json.JsonStorage;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 

@@ -1,9 +1,9 @@
-package nl.gjorgdy.pl3xmarkers.json.serializers;
+package nl.gjorgdy.pl3xmarkers.core.json.serializers;
 
 import com.google.gson.*;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
-import nl.gjorgdy.pl3xmarkers.json.entities.IconMarker;
-import nl.gjorgdy.pl3xmarkers.json.entities.Point;
+import nl.gjorgdy.pl3xmarkers.core.json.entities.IconMarker;
+import nl.gjorgdy.pl3xmarkers.core.json.entities.Point;
 
 import java.lang.reflect.Type;
 

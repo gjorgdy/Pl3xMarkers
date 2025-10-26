@@ -1,8 +1,8 @@
-package nl.gjorgdy.pl3xmarkers.json.repositories;
+package nl.gjorgdy.pl3xmarkers.core.json.repositories;
 
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IIconMarkerRepository;
-import nl.gjorgdy.pl3xmarkers.json.entities.IconMarker;
-import nl.gjorgdy.pl3xmarkers.json.interfaces.IJsonRepositoryData;
+import nl.gjorgdy.pl3xmarkers.core.json.entities.IconMarker;
+import nl.gjorgdy.pl3xmarkers.core.json.interfaces.IJsonRepositoryData;
 
 import java.util.*;
 

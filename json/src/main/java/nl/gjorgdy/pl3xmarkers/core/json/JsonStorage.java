@@ -1,9 +1,9 @@
-package nl.gjorgdy.pl3xmarkers.json;
+package nl.gjorgdy.pl3xmarkers.core.json;
 
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IStorage;
-import nl.gjorgdy.pl3xmarkers.json.repositories.AreaMarkerRepository;
-import nl.gjorgdy.pl3xmarkers.json.repositories.IconMarkerRepository;
+import nl.gjorgdy.pl3xmarkers.core.json.repositories.AreaMarkerRepository;
+import nl.gjorgdy.pl3xmarkers.core.json.repositories.IconMarkerRepository;
 
 public class JsonStorage implements IStorage {
 

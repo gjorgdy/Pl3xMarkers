@@ -1,8 +1,8 @@
-package nl.gjorgdy.pl3xmarkers.json.repositories;
+package nl.gjorgdy.pl3xmarkers.core.json.repositories;
 
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IAreaMarkerRepository;
-import nl.gjorgdy.pl3xmarkers.json.entities.AreaMarker;
-import nl.gjorgdy.pl3xmarkers.json.interfaces.IJsonRepositoryData;
+import nl.gjorgdy.pl3xmarkers.core.json.entities.AreaMarker;
+import nl.gjorgdy.pl3xmarkers.core.json.interfaces.IJsonRepositoryData;
 
 import java.util.Collection;
 import java.util.HashMap;

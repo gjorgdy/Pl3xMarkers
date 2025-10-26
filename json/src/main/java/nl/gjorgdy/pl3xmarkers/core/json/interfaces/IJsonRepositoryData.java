@@ -1,6 +1,6 @@
-package nl.gjorgdy.pl3xmarkers.json.interfaces;
+package nl.gjorgdy.pl3xmarkers.core.json.interfaces;
 
-import nl.gjorgdy.pl3xmarkers.json.repositories.JsonRepository;
+import nl.gjorgdy.pl3xmarkers.core.json.repositories.JsonRepository;
 
 public interface IJsonRepositoryData {
 
