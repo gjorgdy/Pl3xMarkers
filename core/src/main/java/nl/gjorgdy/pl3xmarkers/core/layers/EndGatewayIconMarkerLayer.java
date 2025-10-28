@@ -12,9 +12,4 @@ public class EndGatewayIconMarkerLayer extends IconMarkerLayer {
         super(Icons.Keys.END_GATEWAY, Layers.Keys.END_GATEWAYS, Layers.Labels.END_GATEWAYS, Layers.Tooltips.END_GATEWAYS, world);
     }
 
-    @Override
-    public boolean isInWorld(@NotNull World world) {
-        return isEnd(world);
-    }
-
 }

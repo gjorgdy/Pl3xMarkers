@@ -1,17 +1,14 @@
 package nl.gjorgdy.pl3xmarkers.core;
 
-import net.pl3x.map.core.world.World;
+import nl.gjorgdy.pl3xmarkers.core.helpers.WorldHelpers;
 import nl.gjorgdy.pl3xmarkers.core.layers.EndGatewayIconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.EndPortalIconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.NetherPortalIconMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
 import org.intellij.lang.annotations.Language;
 
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class Layers {
 
@@ -42,12 +39,27 @@ public class Layers {
         public static String NETHER_PORTALS = "Nether Portal";
     }
 
-    public static Set<Function<World, MarkerLayer>> ALL = Set.of(
-        w -> new IconMarkerLayer(Icons.Keys.BEACON, Keys.BEACONS, Labels.BEACONS, Tooltips.BEACONS, w),
-        EndGatewayIconMarkerLayer::new,
-        EndPortalIconMarkerLayer::new,
-        NetherPortalIconMarkerLayer::new,
-        w -> new AreaMarkerLayer(Keys.AREAS, Labels.AREAS, w)
+    public static Set<LayerFactory> ALL = Set.of(
+		new LayerFactory(
+			world -> new IconMarkerLayer(Icons.Keys.BEACON, Keys.BEACONS, Labels.BEACONS, Tooltips.BEACONS, world),
+			world -> MarkersConfig.BEACON_MARKERS_ENABLED
+		),
+		new LayerFactory(
+			EndGatewayIconMarkerLayer::new,
+			world -> MarkersConfig.END_GATEWAY_MARKERS_ENABLED && WorldHelpers.isEnd(world)
+		),
+		new LayerFactory(
+			EndPortalIconMarkerLayer::new,
+			world -> MarkersConfig.END_PORTAL_MARKERS_ENABLED && WorldHelpers.isOverworld(world)
+		),
+		new LayerFactory(
+			NetherPortalIconMarkerLayer::new,
+			world -> MarkersConfig.NETHER_PORTAL_MARKERS_ENABLED && (WorldHelpers.isOverworld(world) || WorldHelpers.isNether(world))
+		),
+		new LayerFactory(
+			world -> new AreaMarkerLayer(Keys.AREAS, Labels.AREAS, world),
+			world -> MarkersConfig.AREA_MARKERS_ENABLED
+		)
     );
 
 }

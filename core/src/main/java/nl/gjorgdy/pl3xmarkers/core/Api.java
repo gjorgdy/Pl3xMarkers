@@ -2,14 +2,12 @@ package nl.gjorgdy.pl3xmarkers.core;
 
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.markers.layer.Layer;
 import net.pl3x.map.core.world.World;
 import org.intellij.lang.annotations.Language;
 
 import java.util.concurrent.*;
-import java.util.function.Function;
 
 public class Api {
 
@@ -22,9 +20,9 @@ public class Api {
         return world;
     }
     @SuppressWarnings("unused")
-    public void registerMarkerLayer(Function<World, MarkerLayer> function) {
+    public void registerMarkerLayer(LayerFactory factory) {
         // parse through to internal handler
-        Pl3xMarkersCore.pl3xHandler().registerMarkerLayer(function);
+        Pl3xMarkersCore.pl3xHandler().registerMarkerLayer(factory);
     }
 
     @SuppressWarnings("unused")

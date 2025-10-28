@@ -33,11 +33,6 @@ public class IconMarkerLayer extends MarkerLayer {
             );
     }
 
-    @Override
-    public boolean isInWorld(@NotNull World world) {
-        return true;
-    }
-
     /**
      * Add and store a new marker
      *
