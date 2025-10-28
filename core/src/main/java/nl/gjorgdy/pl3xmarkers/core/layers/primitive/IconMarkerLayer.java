@@ -39,13 +39,15 @@ public class IconMarkerLayer extends MarkerLayer {
      * @param x x coordinate of marker
      * @param z z coordinate of marker
      */
-    public void addSimpleMarker(int x, int z) {
+    public boolean addSimpleMarker(int x, int z) {
         var marker = Pl3xMarkersCore.storage()
 			.getIconMarkerRepository()
             .createIconMarker(getWorld().getKey(), key, x, z);
         if (marker != null) {
             addIconMarker(x, z);
+			return true;
         }
+		return false;
     }
 
     /**
@@ -54,11 +56,12 @@ public class IconMarkerLayer extends MarkerLayer {
      * @param x x coordinate of marker
      * @param z z coordinate of marker
      */
-    public void removeMarker(int x, int z) {
+    public boolean removeMarker(int x, int z) {
 		var removed = Pl3xMarkersCore.storage()
 			.getIconMarkerRepository()
             .removeIconMarker(getWorld().getKey(), key, x, z);
         if (removed) super.removeMarker(toMarkerKey(x, z));
+		return removed;
     }
 
     private void addIconMarker(int x, int z) {

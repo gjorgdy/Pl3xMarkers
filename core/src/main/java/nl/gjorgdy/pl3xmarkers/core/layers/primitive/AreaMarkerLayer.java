@@ -48,25 +48,29 @@ public class AreaMarkerLayer extends MarkerLayer {
     /**
      * Add a new point to an area
      */
-    public void addPoint(@Language("HTML") String label, int color, int x, int z) {
+    public boolean addPoint(@Language("HTML") String label, int color, int x, int z) {
 		var area = Pl3xMarkersCore.storage()
 					   .getAreaMarkerRepository()
 					   .getOrCreateArea(worldIdentifier, label, color);
         if (area.addPoint(x, z)) {
-            loadArea(area);
+			Pl3xMarkersCore.runParallel(() -> loadArea(area));
+			return true;
         }
+		return false;
     }
 
     /**
      * Remove a point from an area
      */
-    public void removePoint(@Language("HTML") String label, int color, int x, int z) {
+    public boolean removePoint(@Language("HTML") String label, int color, int x, int z) {
 		var area = Pl3xMarkersCore.storage()
 					   .getAreaMarkerRepository()
 					   .getArea(worldIdentifier, label, color);
         if (area != null && area.removePoint(x, z)) {
-			loadArea(area);
+			Pl3xMarkersCore.runParallel(() -> loadArea(area));
+			return true;
         }
+		return false;
     }
 
 }

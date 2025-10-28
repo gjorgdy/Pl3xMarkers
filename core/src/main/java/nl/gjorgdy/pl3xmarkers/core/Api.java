@@ -5,6 +5,7 @@ import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.markers.layer.Layer;
 import net.pl3x.map.core.world.World;
+import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
 import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.intellij.lang.annotations.Language;
@@ -12,9 +13,6 @@ import org.intellij.lang.annotations.Language;
 import java.util.concurrent.*;
 
 public class Api {
-
-    public ExecutorService executor = new ThreadPoolExecutor(2, 8, 5L, TimeUnit.SECONDS,new LinkedBlockingQueue<>(1000));
-
     @SuppressWarnings("unused")
     private static World getWorld(String worldIdentifier) {
         World world = Pl3xMap.api().getWorldRegistry().get(worldIdentifier);
@@ -34,75 +32,91 @@ public class Api {
     }
 
     @SuppressWarnings("unused")
-    public void addAreaPoint(String worldIdentifier, @Language("HTML") String label, int color, int x, int z) {
-        executor.execute(() -> {
-            Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(Layers.Keys.AREAS);
-            if (layer instanceof AreaMarkerLayer aml) {
-                aml.addPoint(label, color, x, z);
-            }
-        });
+    public InteractionResult addAreaPoint(String worldIdentifier, @Language("HTML") String label, int color, int x, int z) {
+		Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(Layers.Keys.AREAS);
+		if (layer instanceof AreaMarkerLayer aml) {
+			var added = aml.addPoint(label, color, x, z);
+			return added ? new InteractionResult(InteractionResult.State.ADDED, "Added a point to area: " + label) :
+						   InteractionResult.skip();
+		}
+		return new InteractionResult(InteractionResult.State.FAILURE, "Could not add point to area: " + label);
     }
 
     @SuppressWarnings("unused")
-    public void removeAreaPoint(String worldIdentifier, @Language("HTML") String label, int color, int x, int z) {
-        executor.execute(() -> {
-            Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(Layers.Keys.AREAS);
-            if (layer instanceof AreaMarkerLayer aml) {
-                aml.removePoint(label, color, x, z);
-            }
-        });
+    public InteractionResult removeAreaPoint(String worldIdentifier, @Language("HTML") String label, int color, int x, int z) {
+		Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(Layers.Keys.AREAS);
+		if (layer instanceof AreaMarkerLayer aml) {
+			var removed = aml.removePoint(label, color, x, z);
+			return removed ? new InteractionResult(InteractionResult.State.REMOVED, "Removed a point from area: " + label) :
+			   InteractionResult.skip();
+		}
+		return new InteractionResult(InteractionResult.State.FAILURE, "Could not remove point from area: " + label);
     }
 
-    public void addNetherPortalIconMarker(String worldIdentifier, int x, int z) {
-        addIconMarker(worldIdentifier, Layers.Keys.NETHER_PORTALS, x, z);
+    public InteractionResult addNetherPortalIconMarker(String worldIdentifier, int x, int z) {
+        var added = addIconMarker(worldIdentifier, Layers.Keys.NETHER_PORTALS, x, z);
+		return added ? new InteractionResult(InteractionResult.State.ADDED, "Nether Portal marker added") :
+		   InteractionResult.skip();
     }
 
-    public void addEndGatewayIconMarker(String worldIdentifier, int x, int z) {
-        addIconMarker(worldIdentifier, Layers.Keys.END_GATEWAYS, x, z);
+    public InteractionResult addEndGatewayIconMarker(String worldIdentifier, int x, int z) {
+        var added = addIconMarker(worldIdentifier, Layers.Keys.END_GATEWAYS, x, z);
+		return added ? new InteractionResult(InteractionResult.State.ADDED, "End Gateway marker added") :
+		   InteractionResult.skip();
     }
 
-    public void addEndPortalIconMarker(String worldIdentifier, int x, int z) {
-        addIconMarker(worldIdentifier, Layers.Keys.END_PORTALS, x, z);
+    public InteractionResult addEndPortalIconMarker(String worldIdentifier, int x, int z) {
+		var added = addIconMarker(worldIdentifier, Layers.Keys.END_PORTALS, x, z);
+		return added ? new InteractionResult(InteractionResult.State.ADDED, "End Portal marker added") :
+		   InteractionResult.skip();
     }
 
-    public void addBeaconIconMarker(String worldIdentifier, int x, int z) {
-        addIconMarker(worldIdentifier, Layers.Keys.BEACONS, x, z);
+    public InteractionResult addBeaconIconMarker(String worldIdentifier, int x, int z) {
+        var added = addIconMarker(worldIdentifier, Layers.Keys.BEACONS, x, z);
+		return added ? new InteractionResult(InteractionResult.State.ADDED, "Beacon marker added") :
+		   InteractionResult.skip();
     }
 
-    public void addIconMarker(String worldIdentifier, String layerKey, int x, int z) {
-        executor.execute(() -> {
-            Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(layerKey);
-            if (layer instanceof IconMarkerLayer simpleIconMarkerLayer) {
-                simpleIconMarkerLayer.addSimpleMarker(x, z);
-            }
-        });
+    private boolean addIconMarker(String worldIdentifier, String layerKey, int x, int z) {
+		Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(layerKey);
+		if (layer instanceof IconMarkerLayer simpleIconMarkerLayer) {
+			return simpleIconMarkerLayer.addSimpleMarker(x, z);
+		}
+		return false;
     }
 
-    public void removeNetherPortalIconMarker(String worldIdentifier, int x, int z) {
-        removeIconMarker(worldIdentifier, Layers.Keys.NETHER_PORTALS, x, z);
+    public InteractionResult removeNetherPortalIconMarker(String worldIdentifier, int x, int z) {
+        var removed = removeIconMarker(worldIdentifier, Layers.Keys.NETHER_PORTALS, x, z);
+		return removed ? new InteractionResult(InteractionResult.State.REMOVED, "Nether Portal marker removed") :
+		   InteractionResult.skip();
     }
 
     @SuppressWarnings("unused")
-    public void removeEndGatewayIconMarker(String worldIdentifier, int x, int z) {
-        removeIconMarker(worldIdentifier, Layers.Keys.END_GATEWAYS, x, z);
+    public InteractionResult removeEndGatewayIconMarker(String worldIdentifier, int x, int z) {
+		var removed = removeIconMarker(worldIdentifier, Layers.Keys.END_GATEWAYS, x, z);
+		return removed ? new InteractionResult(InteractionResult.State.REMOVED, "End Gateway marker removed") :
+		   InteractionResult.skip();
     }
 
     @SuppressWarnings("unused")
-    public void removeEndPortalIconMarker(String worldIdentifier, int x, int z) {
-        removeIconMarker(worldIdentifier, Layers.Keys.END_PORTALS, x, z);
+    public InteractionResult removeEndPortalIconMarker(String worldIdentifier, int x, int z) {
+		var removed = removeIconMarker(worldIdentifier, Layers.Keys.END_PORTALS, x, z);
+		return removed ? new InteractionResult(InteractionResult.State.REMOVED, "End Portal marker removed") :
+			InteractionResult.skip();
     }
 
-    public void removeBeaconIconMarker(String worldIdentifier, int x, int z) {
-        removeIconMarker(worldIdentifier, Layers.Keys.BEACONS, x, z);
+    public InteractionResult removeBeaconIconMarker(String worldIdentifier, int x, int z) {
+        var removed = removeIconMarker(worldIdentifier, Layers.Keys.BEACONS, x, z);
+		return removed ? new InteractionResult(InteractionResult.State.REMOVED, "Beacon marker removed") :
+		   InteractionResult.skip();
     }
 
-    public void removeIconMarker(String worldIdentifier, String layerKey, int x, int z) {
-        executor.execute(() -> {
-            Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(layerKey);
-            if (layer instanceof IconMarkerLayer markerLayer) {
-                markerLayer.removeMarker(x, z);
-            }
-        });
+    private boolean removeIconMarker(String worldIdentifier, String layerKey, int x, int z) {
+		Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(layerKey);
+		if (layer instanceof IconMarkerLayer markerLayer) {
+			return markerLayer.removeMarker(x, z);
+		}
+		return false;
     }
 
 }

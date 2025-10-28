@@ -4,6 +4,10 @@ import net.pl3x.map.core.Pl3xMap;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IStorage;
 
 import java.nio.file.Path;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class Pl3xMarkersCore {
 
@@ -13,7 +17,10 @@ public class Pl3xMarkersCore {
     private static Api API = null;
     static Pl3xMapHandler PL3X_MAP_HANDLER = null;
 
-    public static boolean isBukkit() {
+	private static final ExecutorService executor = new ThreadPoolExecutor(2, 8, 5L, TimeUnit.SECONDS,new LinkedBlockingQueue<>(1000));
+
+
+	public static boolean isBukkit() {
         return IS_BUKKIT;
     }
 
@@ -42,6 +49,10 @@ public class Pl3xMarkersCore {
         return STORAGE;
     }
 
+	public static void runParallel(Runnable task) {
+		executor.execute(task);
+	}
+
     public static void onInitialize(boolean isBukkit, IStorage storage) {
 		STORAGE = storage;
         IS_BUKKIT = isBukkit;
@@ -54,7 +65,7 @@ public class Pl3xMarkersCore {
 
     public static void onDisable() {
         Pl3xMarkersCore.storage().close();
-        Pl3xMarkersCore.api().executor.shutdown();
+        executor.shutdown();
     }
 
 }
