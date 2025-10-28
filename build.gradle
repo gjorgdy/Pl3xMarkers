@@ -64,7 +64,7 @@ modrinth {
     versionType = project.mod_release_type
     uploadFile = jar
     gameVersions = [project.minecraft_version]
-    loaders = ["fabric", "quilt", "bukkit", "paper", "purpur", "folia", "spigot"]
+    loaders = ["fabric", "quilt", "paper", "purpur", "folia"]
     dependencies {
         required.project "fabric-api"
         required.version "pl3xmap", project.pl3xmap_version
