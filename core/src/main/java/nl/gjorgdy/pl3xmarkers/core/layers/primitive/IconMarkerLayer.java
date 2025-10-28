@@ -15,8 +15,8 @@ public class IconMarkerLayer extends MarkerLayer {
     @Language("HTML")
     public final String tooltip;
 
-    public IconMarkerLayer(String icon, String key, String label, @Language("HTML") String tooltip, @NotNull World world) {
-        super(key, label, world);
+    public IconMarkerLayer(String icon, String key, String label, @Language("HTML") String tooltip, @NotNull World world, int priority) {
+        super(key, label, world, priority);
         this.iconId = icon;
         this.key = key;
         this.label = label;

@@ -9,9 +9,10 @@ public abstract class MarkerLayer extends WorldLayer {
 
     public final String worldIdentifier;
 
-    public MarkerLayer(String key, String label, @NotNull World world) {
+    public MarkerLayer(String key, String label, @NotNull World world, int priority) {
         super(key, world, () -> label);
         this.worldIdentifier = world.getKey();
+		this.setPriority(priority);
     }
 
     /**

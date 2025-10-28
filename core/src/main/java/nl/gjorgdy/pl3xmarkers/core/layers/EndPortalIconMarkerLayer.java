@@ -1,5 +1,6 @@
 package nl.gjorgdy.pl3xmarkers.core.layers;
 
+import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.registries.Icons;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class EndPortalIconMarkerLayer extends IconMarkerLayer {
 
     public EndPortalIconMarkerLayer(@NotNull World world) {
-        super(Icons.Keys.END_PORTAL, Layers.Keys.END_PORTALS, Layers.Labels.END_PORTALS, Layers.Tooltips.END_PORTALS, world);
+        super(Icons.Keys.END_PORTAL, Layers.Keys.END_PORTALS, Layers.Labels.END_PORTALS, Layers.Tooltips.END_PORTALS, world, MarkersConfig.END_PORTAL_MARKERS_PRIORITY);
     }
 
     @Override

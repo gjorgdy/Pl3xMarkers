@@ -26,19 +26,39 @@ public class MarkersConfig extends AbstractConfig {
 	@Comment("The maximum size that an area is allowed to be \nthis is the distance between the two furthest points in the area")
 	public static int AREA_MARKERS_MAX_SIZE = 512;
 
+	@Key("marker-settings.areas.priority")
+	@Comment("The priority for areas, the lower the number the higher it is on the map")
+	public static int AREA_MARKERS_PRIORITY = 50;
+
 	@Key("marker-settings.nether_portals.enabled")
 	@Comment("Enable nether portal markers on the map")
 	public static boolean NETHER_PORTAL_MARKERS_ENABLED = true;
+
+	@Key("marker-settings.nether_portals.priority")
+	@Comment("The priority for nether portal markers, the lower the number the higher it is on the map")
+	public static int NETHER_PORTAL_MARKERS_PRIORITY = 50;
 
 	@Key("marker-settings.beacons.enabled")
 	@Comment("Enable beacon markers on the map")
 	public static boolean BEACON_MARKERS_ENABLED = true;
 
+	@Key("marker-settings.beacons.priority")
+	@Comment("The priority for beacon markers, the lower the number the higher it is on the map")
+	public static int BEACON_MARKERS_PRIORITY = 50;
+
 	@Key("marker-settings.end_portals.enabled")
 	@Comment("Enable end portal markers on the map")
 	public static boolean END_PORTAL_MARKERS_ENABLED = true;
 
+	@Key("marker-settings.end_portals.priority")
+	@Comment("The priority for end portal markers, the lower the number the higher it is on the map")
+	public static int END_PORTAL_MARKERS_PRIORITY = 50;
+
 	@Key("marker-settings.end_gateways.enabled")
 	@Comment("Enable end gateway markers on the map")
 	public static boolean END_GATEWAY_MARKERS_ENABLED = true;
+
+	@Key("marker-settings.end_gateways.priority")
+	@Comment("The priority for end gateway markers, the lower the number the higher it is on the map")
+	public static int END_GATEWAY_MARKERS_PRIORITY = 50;
 }

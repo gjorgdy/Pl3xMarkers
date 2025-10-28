@@ -1,5 +1,6 @@
 package nl.gjorgdy.pl3xmarkers.core.layers;
 
+import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.registries.Icons;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class NetherPortalIconMarkerLayer extends IconMarkerLayer {
 
     public NetherPortalIconMarkerLayer(@NotNull World world) {
-        super(Icons.Keys.NETHER_PORTAL, Layers.Keys.NETHER_PORTALS, Layers.Labels.NETHER_PORTALS, Layers.Tooltips.NETHER_PORTALS, world);
+        super(Icons.Keys.NETHER_PORTAL, Layers.Keys.NETHER_PORTALS, Layers.Labels.NETHER_PORTALS, Layers.Tooltips.NETHER_PORTALS, world, MarkersConfig.NETHER_PORTAL_MARKERS_PRIORITY);
     }
 
     @Override

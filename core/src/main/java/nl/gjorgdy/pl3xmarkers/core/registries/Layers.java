@@ -43,7 +43,7 @@ public class Layers {
 
     public static Set<LayerFactory> ALL = Set.of(
 		new LayerFactory(
-			world -> new IconMarkerLayer(Icons.Keys.BEACON, Keys.BEACONS, Labels.BEACONS, Tooltips.BEACONS, world),
+			world -> new IconMarkerLayer(Icons.Keys.BEACON, Keys.BEACONS, Labels.BEACONS, Tooltips.BEACONS, world, MarkersConfig.BEACON_MARKERS_PRIORITY),
 			world -> MarkersConfig.BEACON_MARKERS_ENABLED
 		),
 		new LayerFactory(
@@ -59,7 +59,7 @@ public class Layers {
 			world -> MarkersConfig.NETHER_PORTAL_MARKERS_ENABLED && (WorldHelpers.isOverworld(world) || WorldHelpers.isNether(world))
 		),
 		new LayerFactory(
-			world -> new AreaMarkerLayer(Keys.AREAS, Labels.AREAS, world),
+			world -> new AreaMarkerLayer(Keys.AREAS, Labels.AREAS, world, MarkersConfig.AREA_MARKERS_PRIORITY),
 			world -> MarkersConfig.AREA_MARKERS_ENABLED
 		)
     );

@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 public class AreaMarkerLayer extends MarkerLayer {
 
-    public AreaMarkerLayer(String key, String label, @NotNull World world) {
-        super(key, label, world);
+    public AreaMarkerLayer(String key, String label, @NotNull World world, int priority) {
+        super(key, label, world, priority);
     }
 
     @Override
