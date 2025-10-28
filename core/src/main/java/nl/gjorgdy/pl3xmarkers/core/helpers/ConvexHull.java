@@ -1,5 +1,6 @@
 package nl.gjorgdy.pl3xmarkers.core.helpers;
 
+import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
 
 import java.util.ArrayList;
@@ -10,8 +11,13 @@ public class ConvexHull {
 
     private ConvexHull() {}
 
-    private static final int maxSize = 512;
-	private static final int maxRadius = maxSize / 2;
+	private static int getMaxSize() {
+		return MarkersConfig.AREA_MARKERS_MAX_SIZE;
+	}
+
+	private static int getMaxRadius() {
+		return getMaxSize() / 2;
+	}
 
     /**
      * Perform a convex hull calculation to only use the outer hull of points for the area
@@ -25,7 +31,7 @@ public class ConvexHull {
         // Sort points
         points.sort(null);
 		// Cluster points if necessary
-		if (points.getFirst().distance(points.getLast()) > maxSize) {
+		if (points.getFirst().distance(points.getLast()) > getMaxSize()) {
 			points = cluster(points);
 		}
 
@@ -40,7 +46,7 @@ public class ConvexHull {
 		// Find the furthest point from center
 		var furthest = points.stream().max(Comparator.comparing(p -> p.distance(center))).orElse(points.getLast());
 		// Check if we are within radius
-		if (furthest.distance(center) <= maxRadius) {
+		if (furthest.distance(center) <= getMaxRadius()) {
 			return points;
 		} else {
 			// Remove the furthest point and re-cluster if not
