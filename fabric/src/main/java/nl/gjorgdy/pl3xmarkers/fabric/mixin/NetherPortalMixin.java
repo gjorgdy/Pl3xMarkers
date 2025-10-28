@@ -1,6 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.fabric.mixin;
 
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.fabric.helpers.FeedbackHelper;
 import nl.gjorgdy.pl3xmarkers.fabric.helpers.PortalHelper;
 import nl.gjorgdy.pl3xmarkers.fabric.interfaces.NetherPortalInterface;
 import net.minecraft.util.math.BlockPos;
@@ -35,8 +36,9 @@ public class NetherPortalMixin implements NetherPortalInterface {
     @Override
     public void pl3xMarkers$createMarker(World world) {
         var center = PortalHelper.getNetherPortalCenter(lowerCorner, axis, width);
-        Pl3xMarkersCore.api().addNetherPortalIconMarker(world.getRegistryKey().getValue().toString(), center.getX(), center.getZ());
-    }
+        var result = Pl3xMarkersCore.api().addNetherPortalIconMarker(world.getRegistryKey().getValue().toString(), center.getX(), center.getZ());
+		FeedbackHelper.sendFeedback(result, world, center);
+	}
 
     @Inject(method = "getNewPortal", at = @At("RETURN"))
     private static void onNewPortal(WorldAccess world, BlockPos pos, Direction.Axis firstCheckedAxis, CallbackInfoReturnable<Optional<NetherPortal>> cir) {

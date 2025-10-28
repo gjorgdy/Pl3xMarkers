@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import nl.gjorgdy.pl3xmarkers.fabric.helpers.FeedbackHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,7 +24,8 @@ public class ServerWorldMixin {
         // check if a nether portal block was broken
         if (currentBlockState.isOf(Blocks.NETHER_PORTAL) && !state.isOf(Blocks.NETHER_PORTAL)) {
             // try to remove marker
-            Pl3xMarkersCore.api().removeNetherPortalIconMarker(world.getRegistryKey().getValue().toString(), pos.getX(), pos.getZ());
+            var result = Pl3xMarkersCore.api().removeNetherPortalIconMarker(world.getRegistryKey().getValue().toString(), pos.getX(), pos.getZ());
+			FeedbackHelper.sendFeedback(result, world, pos);
         }
     }
 
