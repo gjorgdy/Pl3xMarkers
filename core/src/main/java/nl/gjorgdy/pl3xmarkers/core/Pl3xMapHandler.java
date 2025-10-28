@@ -9,6 +9,9 @@ import net.pl3x.map.core.event.server.Pl3xMapEnabledEvent;
 import net.pl3x.map.core.event.world.WorldLoadedEvent;
 import net.pl3x.map.core.image.IconImage;
 import net.pl3x.map.core.registry.IconRegistry;
+import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
+import nl.gjorgdy.pl3xmarkers.core.registries.Icons;
+import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

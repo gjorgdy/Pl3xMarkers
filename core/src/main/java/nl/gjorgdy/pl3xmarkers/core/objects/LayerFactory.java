@@ -1,4 +1,4 @@
-package nl.gjorgdy.pl3xmarkers.core;
+package nl.gjorgdy.pl3xmarkers.core.objects;
 
 import net.pl3x.map.core.world.World;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;

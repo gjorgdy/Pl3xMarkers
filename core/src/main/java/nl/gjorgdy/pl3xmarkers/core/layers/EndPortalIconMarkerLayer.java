@@ -1,7 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.core.layers;
 
-import nl.gjorgdy.pl3xmarkers.core.Icons;
-import nl.gjorgdy.pl3xmarkers.core.Layers;
+import nl.gjorgdy.pl3xmarkers.core.registries.Icons;
+import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.markers.IconMarkerBuilder;

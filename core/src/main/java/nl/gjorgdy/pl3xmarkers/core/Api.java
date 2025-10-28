@@ -5,6 +5,8 @@ import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.markers.layer.Layer;
 import net.pl3x.map.core.world.World;
+import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
+import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.intellij.lang.annotations.Language;
 
 import java.util.concurrent.*;

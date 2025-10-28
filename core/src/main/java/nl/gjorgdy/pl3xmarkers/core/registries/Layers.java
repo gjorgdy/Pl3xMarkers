@@ -1,5 +1,7 @@
-package nl.gjorgdy.pl3xmarkers.core;
+package nl.gjorgdy.pl3xmarkers.core.registries;
 
+import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
+import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.helpers.WorldHelpers;
 import nl.gjorgdy.pl3xmarkers.core.layers.EndGatewayIconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
