@@ -1,5 +1,6 @@
 package nl.gjorgdy.pl3xMarkers.paper.listeners;
 
+import nl.gjorgdy.pl3xMarkers.paper.helpers.FeedbackHelper;
 import nl.gjorgdy.pl3xMarkers.paper.helpers.PortalHelper;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import org.bukkit.Location;
@@ -45,12 +46,14 @@ public class NetherPortalListener implements Listener {
 
     private void onNetherPortalBreak(Location location) {
         var center = PortalHelper.getNetherPortalCenter(location);
-        Pl3xMarkersCore.api().removeNetherPortalIconMarker(location.getWorld().getName(), center.getBlockX(), center.getBlockZ());
+        var result = Pl3xMarkersCore.api().removeNetherPortalIconMarker(location.getWorld().getName(), center.getBlockX(), center.getBlockZ());
+		FeedbackHelper.sendFeedback(result, center);
     }
 
     private void onNetherPortalTeleport(Location location) {
         var center = PortalHelper.getNetherPortalCenter(location);
-        Pl3xMarkersCore.api().addNetherPortalIconMarker(location.getWorld().getName(), center.getBlockX(), center.getBlockZ());
+        var result = Pl3xMarkersCore.api().addNetherPortalIconMarker(location.getWorld().getName(), center.getBlockX(), center.getBlockZ());
+		FeedbackHelper.sendFeedback(result, location);
     }
 
 }

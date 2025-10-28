@@ -2,6 +2,7 @@ package nl.gjorgdy.pl3xMarkers.paper.listeners;
 
 import io.papermc.paper.event.block.BeaconActivatedEvent;
 import io.papermc.paper.event.block.BeaconDeactivatedEvent;
+import nl.gjorgdy.pl3xMarkers.paper.helpers.FeedbackHelper;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,7 +14,8 @@ public class BeaconListener implements Listener {
         var block = event.getBeacon();
         var world = block.getWorld();
         var blockPos = block.getLocation().getBlock();
-        Pl3xMarkersCore.api().addBeaconIconMarker(world.getName(), blockPos.getX(), blockPos.getZ());
+        var result = Pl3xMarkersCore.api().addBeaconIconMarker(world.getName(), blockPos.getX(), blockPos.getZ());
+		FeedbackHelper.sendFeedback(result, block.getLocation());
     }
 
     @EventHandler
@@ -22,7 +24,8 @@ public class BeaconListener implements Listener {
         var block = event.getBlock();
         var world = block.getWorld();
         var blockPos = block.getLocation().getBlock();
-        Pl3xMarkersCore.api().removeBeaconIconMarker(world.getName(), blockPos.getX(), blockPos.getZ());
+		var result = Pl3xMarkersCore.api().removeBeaconIconMarker(world.getName(), blockPos.getX(), blockPos.getZ());
+		FeedbackHelper.sendFeedback(result, block.getLocation());
     }
 
 }

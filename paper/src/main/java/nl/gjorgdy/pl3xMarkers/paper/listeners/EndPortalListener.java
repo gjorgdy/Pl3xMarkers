@@ -1,5 +1,6 @@
 package nl.gjorgdy.pl3xMarkers.paper.listeners;
 
+import nl.gjorgdy.pl3xMarkers.paper.helpers.FeedbackHelper;
 import nl.gjorgdy.pl3xMarkers.paper.helpers.PortalHelper;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import org.bukkit.block.BlockType;
@@ -13,7 +14,8 @@ public class EndPortalListener implements Listener {
     public void onPortalTeleport(PlayerPortalEvent event) {
         if (event.getFrom().getBlock().getType().asBlockType() == BlockType.END_PORTAL) {
             var center = PortalHelper.getEndPortalCenter(event.getFrom());
-            Pl3xMarkersCore.api().addEndPortalIconMarker(center.getWorld().getName(), center.getBlockX(), center.getBlockZ());
+            var result = Pl3xMarkersCore.api().addEndPortalIconMarker(center.getWorld().getName(), center.getBlockX(), center.getBlockZ());
+			FeedbackHelper.sendFeedback(result, event.getPlayer());
         }
     }
 
