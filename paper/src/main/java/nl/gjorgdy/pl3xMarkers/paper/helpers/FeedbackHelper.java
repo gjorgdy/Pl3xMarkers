@@ -2,6 +2,7 @@ package nl.gjorgdy.pl3xMarkers.paper.helpers;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
 import org.bukkit.Location;
 import org.bukkit.Sound;
@@ -10,15 +11,19 @@ import org.bukkit.entity.Player;
 public class FeedbackHelper {
 
 	public static void sendFeedback(InteractionResult result, Player player) {
-		if (result.state() == InteractionResult.State.SKIP) {
+		if (result.state() == InteractionResult.State.SKIP || Pl3xMarkersCore.isFeedbackDisabled()) {
 			return;
 		}
 		// send message
-		player.sendActionBar(
-			Component.text(result.message()).color(TextColor.color(color(result.state())))
-		);
+		if (Pl3xMarkersCore.areFeedbackMessagesEnabled()) {
+			player.sendActionBar(
+					Component.text(result.message()).color(TextColor.color(color(result.state())))
+			);
+		}
 		// play sound
-		player.playSound(player.getLocation(), sound(result.state()), 1.0F, 1.5F);
+		if (Pl3xMarkersCore.areFeedbackSoundsEnabled()) {
+			player.playSound(player.getLocation(), sound(result.state()), 1.0F, 1.5F);
+		}
 	}
 
 	public static void sendFeedback(InteractionResult result, Location pos) {
@@ -30,11 +35,15 @@ public class FeedbackHelper {
 		// send message
 		pos.getWorld().getNearbyPlayers(pos, 8).forEach(player -> {
 			// send message
-			player.sendActionBar(
-					Component.text(result.message()).color(TextColor.color(color))
-			);
+			if (Pl3xMarkersCore.areFeedbackMessagesEnabled()) {
+				player.sendActionBar(
+						Component.text(result.message()).color(TextColor.color(color))
+				);
+			}
 			// play sound
-			player.playSound(player.getLocation(), sound, 1.0F, 1.5F);
+			if (Pl3xMarkersCore.areFeedbackSoundsEnabled()) {
+				player.playSound(player.getLocation(), sound, 1.0F, 1.5F);
+			}
 		});
 	}
 

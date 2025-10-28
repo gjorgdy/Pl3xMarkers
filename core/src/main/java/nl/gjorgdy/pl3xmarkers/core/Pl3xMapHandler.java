@@ -51,6 +51,7 @@ public class Pl3xMapHandler implements EventListener {
     @EventHandler
     @SuppressWarnings("unused") // event is used by pl3xmap
     public void onEnable(Pl3xMapEnabledEvent event) {
+		MarkersConfig.reload();
         Icons.ALL.forEach(address -> {
             try {
                 registerIconImage(address);

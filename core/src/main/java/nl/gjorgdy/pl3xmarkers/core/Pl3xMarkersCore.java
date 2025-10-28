@@ -19,10 +19,21 @@ public class Pl3xMarkersCore {
 
 	private static final ExecutorService executor = new ThreadPoolExecutor(2, 8, 5L, TimeUnit.SECONDS,new LinkedBlockingQueue<>(1000));
 
-
 	public static boolean isBukkit() {
         return IS_BUKKIT;
     }
+
+	public static boolean isFeedbackDisabled() {
+		return !MarkersConfig.FEEDBACK_MESSAGES_ENABLED && !MarkersConfig.FEEDBACK_SOUNDS_ENABLED;
+	}
+
+	public static boolean areFeedbackMessagesEnabled() {
+		return MarkersConfig.FEEDBACK_MESSAGES_ENABLED;
+	}
+
+	public static boolean areFeedbackSoundsEnabled() {
+		return MarkersConfig.FEEDBACK_SOUNDS_ENABLED;
+	}
 
 	public static Path getMainDir() {
 		return isBukkit() ? Path.of("plugins/Pl3xMarkers") : Path.of("config/pl3xmarkers");
@@ -56,7 +67,6 @@ public class Pl3xMarkersCore {
     public static void onInitialize(boolean isBukkit, IStorage storage) {
 		STORAGE = storage;
         IS_BUKKIT = isBukkit;
-		MarkersConfig.reload();
     }
 
     public static void onStarted() {

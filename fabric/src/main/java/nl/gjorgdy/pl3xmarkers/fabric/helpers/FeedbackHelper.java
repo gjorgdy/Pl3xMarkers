@@ -9,21 +9,26 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
+import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
 
 public class FeedbackHelper {
 
 	public static void sendFeedback(InteractionResult result, ServerPlayerEntity player) {
-		if (result.state() == InteractionResult.State.SKIP) {
+		if (result.state() == InteractionResult.State.SKIP || Pl3xMarkersCore.isFeedbackDisabled()) {
 			return;
 		}
 		// send message
-		player.sendMessage(
-			Text.of(result.message()).getWithStyle(Style.EMPTY.withColor(color(result.state()))).getFirst(),
-			true
-		);
+		if (Pl3xMarkersCore.areFeedbackMessagesEnabled()) {
+			player.sendMessage(
+					Text.of(result.message()).getWithStyle(Style.EMPTY.withColor(color(result.state()))).getFirst(),
+					true
+			);
+		}
 		// play sound
-		player.playSoundToPlayer(sound(result.state()), SoundCategory.UI, 1.0F, 1.0F);
+		if (Pl3xMarkersCore.areFeedbackSoundsEnabled()) {
+			player.playSoundToPlayer(sound(result.state()), SoundCategory.UI, 1.0F, 1.0F);
+		}
 	}
 
 	public static void sendFeedback(InteractionResult result, World world, BlockPos pos) {
@@ -33,20 +38,25 @@ public class FeedbackHelper {
 		var color = color(result.state());
 		var sound = sound(result.state());
 		// send message
-		world.getNonSpectatingEntities(ServerPlayerEntity.class, box(pos, 8)).forEach(player -> {
-			player.sendMessage(
-				Text.of(result.message()).getWithStyle(Style.EMPTY.withColor(color)).getFirst(),
-				true
-			);
+		world.getNonSpectatingEntities(ServerPlayerEntity.class, box(pos)).forEach(player -> {
+			// send message
+			if (Pl3xMarkersCore.areFeedbackMessagesEnabled()) {
+				player.sendMessage(
+						Text.of(result.message()).getWithStyle(Style.EMPTY.withColor(color)).getFirst(),
+						true
+				);
+			}
 			// play sound
-			player.playSoundToPlayer(sound, SoundCategory.UI, 1.0F, 1.5F);
+			if (Pl3xMarkersCore.areFeedbackSoundsEnabled()) {
+				player.playSoundToPlayer(sound, SoundCategory.UI, 1.0F, 1.5F);
+			}
 		});
 	}
 
-	private static Box box(BlockPos center, int range) {
+	private static Box box(BlockPos center) {
 		return new Box(
-			center.getX() - range, center.getY() - range, center.getZ() - range,
-			center.getX() + range, center.getY() + range, center.getZ() + range
+			center.getX() - 8, center.getY() - 8, center.getZ() - 8,
+			center.getX() + 8, center.getY() + 8, center.getZ() + 8
 		);
 	}
 
