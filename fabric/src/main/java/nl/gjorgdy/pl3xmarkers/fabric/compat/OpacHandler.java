@@ -18,13 +18,9 @@ public class OpacHandler {
                 .getServerClaimsManager()
                 .getPlayerInfoStream()
                 .forEach(p -> {
-//                    if (isServerClaim(p.getPlayerId())) return;
-//                    Pl3xMarkers.LOGGER.info("Reading claim data for {} in {}", p.getPlayerUsername(), world);
+//                    Pl3xMarkersFabric.LOGGER.info("Reading claim data for {} in {}", p.getPlayerUsername(), worldIdentifier);
                     var dimensionManager = p.getDimension(Identifier.of(worldIdentifier));
-                    if (dimensionManager == null) {
-//                        Pl3xMarkers.LOGGER.info("No chunks found");
-                        return;
-                    }
+                    if (dimensionManager == null) return;
                     dimensionManager.getStream().forEach(claim ->
                         claim.getStream().forEach(chunk -> chunks.add(
                             new OpacChunk(chunk, p.getPlayerUsername(), p.getClaimsName(), p.getClaimsColor())

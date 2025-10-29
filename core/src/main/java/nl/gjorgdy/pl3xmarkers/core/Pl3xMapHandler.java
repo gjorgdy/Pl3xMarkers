@@ -17,7 +17,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.function.Function;
 
 public class Pl3xMapHandler implements EventListener {
 
@@ -41,7 +40,7 @@ public class Pl3xMapHandler implements EventListener {
     @EventHandler
     @SuppressWarnings("unused") // event is used by pl3xmap
     public void onWorldLoad(WorldLoadedEvent event) {
-        Layers.ALL.forEach(factory -> {
+        Layers.getAll().forEach(factory -> {
 			if (factory.disabledFor(event.getWorld())) return;
             MarkerLayer swl = factory.create(event.getWorld());
             event.getWorld().getLayerRegistry().register(swl);
