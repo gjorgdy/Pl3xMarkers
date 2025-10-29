@@ -15,8 +15,8 @@ public class IconMarkerLayer extends MarkerLayer {
     @Language("HTML")
     public final String tooltip;
 
-    public IconMarkerLayer(String icon, String key, String label, String tooltip, @NotNull World world) {
-        super(key, label, world);
+    public IconMarkerLayer(String icon, String key, String label, @Language("HTML") String tooltip, @NotNull World world, int priority) {
+        super(key, label, world, priority);
         this.iconId = icon;
         this.key = key;
         this.label = label;
@@ -25,16 +25,12 @@ public class IconMarkerLayer extends MarkerLayer {
 
     @Override
     public void load() {
-        Pl3xMarkersCore.iconMarkerRepository()
-            .getMarkers(getWorld().getKey(), key)
+        Pl3xMarkersCore.storage()
+			.getIconMarkerRepository()
+            .getIconMarkers(getWorld().getKey(), key)
             .forEach(marker ->
-                addIconMarker(marker.getX(), marker.getZ())
+                addIconMarker(marker.getLocation().getX(), marker.getLocation().getZ())
             );
-    }
-
-    @Override
-    public boolean isInWorld(@NotNull World world) {
-        return true;
     }
 
     /**
@@ -43,12 +39,15 @@ public class IconMarkerLayer extends MarkerLayer {
      * @param x x coordinate of marker
      * @param z z coordinate of marker
      */
-    public void addSimpleMarker(int x, int z) {
-        boolean added = Pl3xMarkersCore.iconMarkerRepository()
-            .addMarker(getWorld().getKey(), key, x, z);
-        if (added) {
+    public boolean addSimpleMarker(int x, int z) {
+        var marker = Pl3xMarkersCore.storage()
+			.getIconMarkerRepository()
+            .createIconMarker(getWorld().getKey(), key, x, z);
+        if (marker != null) {
             addIconMarker(x, z);
+			return true;
         }
+		return false;
     }
 
     /**
@@ -57,10 +56,12 @@ public class IconMarkerLayer extends MarkerLayer {
      * @param x x coordinate of marker
      * @param z z coordinate of marker
      */
-    public void removeMarker(int x, int z) {
-        Pl3xMarkersCore.iconMarkerRepository()
-            .removeMarker(getWorld().getKey(), key, x, z);
-        super.removeMarker(toMarkerKey(x, z));
+    public boolean removeMarker(int x, int z) {
+		var removed = Pl3xMarkersCore.storage()
+			.getIconMarkerRepository()
+            .removeIconMarker(getWorld().getKey(), key, x, z);
+        if (removed) super.removeMarker(toMarkerKey(x, z));
+		return removed;
     }
 
     private void addIconMarker(int x, int z) {

@@ -1,10 +1,9 @@
 package nl.gjorgdy.pl3xmarkers.core.layers;
 
-import nl.gjorgdy.pl3xmarkers.core.Icons;
-import nl.gjorgdy.pl3xmarkers.core.Layers;
-import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
+import nl.gjorgdy.pl3xmarkers.core.registries.Icons;
+import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
-import nl.gjorgdy.pl3xmarkers.core.helpers.WorldHelpers;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.markers.IconMarkerBuilder;
 import net.pl3x.map.core.markers.marker.Marker;
@@ -14,12 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class EndPortalIconMarkerLayer extends IconMarkerLayer {
 
     public EndPortalIconMarkerLayer(@NotNull World world) {
-        super(Icons.Keys.END_PORTAL, Layers.Keys.END_PORTALS, Layers.Labels.END_PORTALS, Layers.Tooltips.END_PORTALS, world);
-    }
-
-    @Override
-    public boolean isInWorld(@NotNull World world) {
-        return isOverworld(world);
+        super(Icons.Keys.END_PORTAL, Layers.Keys.END_PORTALS, Layers.Labels.END_PORTALS, Layers.Tooltips.END_PORTALS, world, MarkersConfig.END_PORTAL_MARKERS_PRIORITY);
     }
 
     @Override

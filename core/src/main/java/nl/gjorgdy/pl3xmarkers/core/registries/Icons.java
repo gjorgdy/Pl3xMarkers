@@ -1,4 +1,4 @@
-package nl.gjorgdy.pl3xmarkers.core;
+package nl.gjorgdy.pl3xmarkers.core.registries;
 
 import nl.gjorgdy.pl3xmarkers.core.objects.IconImageAddress;
 

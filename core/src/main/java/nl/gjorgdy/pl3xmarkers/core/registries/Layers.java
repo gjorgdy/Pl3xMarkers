@@ -1,21 +1,20 @@
-package nl.gjorgdy.pl3xmarkers.core;
+package nl.gjorgdy.pl3xmarkers.core.registries;
 
-import net.pl3x.map.core.world.World;
+import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
+import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
+import nl.gjorgdy.pl3xmarkers.core.helpers.WorldHelpers;
 import nl.gjorgdy.pl3xmarkers.core.layers.EndGatewayIconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.EndPortalIconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.NetherPortalIconMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
 import org.intellij.lang.annotations.Language;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.Set;
 
 public class Layers {
 
     public static class Keys {
-        public static String OPAC = "openpartiesandclaims";
         public static String BEACONS = "beacons";
         public static String END_GATEWAYS = "end_gateways";
         public static String END_PORTALS = "end_portals";
@@ -24,7 +23,6 @@ public class Layers {
     }
 
     public static class Labels {
-        public static String OPAC = "Open Parties and Claims";
         public static String BEACONS = "Beacons";
         public static String END_GATEWAYS = "End Gateways";
         public static String END_PORTALS = "End Portals";
@@ -43,21 +41,27 @@ public class Layers {
         public static String NETHER_PORTALS = "Nether Portal";
     }
 
-	private static final List<Function<World, MarkerLayer>> _layers = new ArrayList<>(List.of(
-			w -> new IconMarkerLayer(Icons.Keys.BEACON, Keys.BEACONS, Labels.BEACONS, Tooltips.BEACONS, w),
+    public static Set<LayerFactory> ALL = Set.of(
+		new LayerFactory(
+			world -> new IconMarkerLayer(Icons.Keys.BEACON, Keys.BEACONS, Labels.BEACONS, Tooltips.BEACONS, world, MarkersConfig.BEACON_MARKERS_PRIORITY),
+			world -> MarkersConfig.BEACON_MARKERS_ENABLED
+		),
+		new LayerFactory(
 			EndGatewayIconMarkerLayer::new,
+			world -> MarkersConfig.END_GATEWAY_MARKERS_ENABLED && WorldHelpers.isEnd(world)
+		),
+		new LayerFactory(
 			EndPortalIconMarkerLayer::new,
+			world -> MarkersConfig.END_PORTAL_MARKERS_ENABLED && WorldHelpers.isOverworld(world)
+		),
+		new LayerFactory(
 			NetherPortalIconMarkerLayer::new,
-			w -> new AreaMarkerLayer(Keys.AREAS, Labels.AREAS, w)
-	));
-
-	public static Collection<Function<World, MarkerLayer>> getLayerFactories() {
-		return List.copyOf(_layers);
-	}
-
-	public static void registerLayerFactory(Function<World, MarkerLayer> factory) {
-		System.out.println("Registering layer factory");
-		_layers.add(factory);
-	}
+			world -> MarkersConfig.NETHER_PORTAL_MARKERS_ENABLED && (WorldHelpers.isOverworld(world) || WorldHelpers.isNether(world))
+		),
+		new LayerFactory(
+			world -> new AreaMarkerLayer(Keys.AREAS, Labels.AREAS, world, MarkersConfig.AREA_MARKERS_PRIORITY),
+			world -> MarkersConfig.AREA_MARKERS_ENABLED
+		)
+    );
 
 }

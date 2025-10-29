@@ -16,7 +16,7 @@ tasks {
 
         archiveClassifier = ''
 
-        dependsOn(':core:shadowJar', 'paper:build', 'fabric:remapJar')
+        dependsOn(':core:shadowJar', ':json:build', 'paper:build', 'fabric:remapJar')
 
         def manifestFiles = subprojects.collect {
             var file = it.layout.buildDirectory.file("libs/${project.name}-${it.name}-${project.version}.jar")
@@ -64,7 +64,7 @@ modrinth {
     versionType = project.mod_release_type
     uploadFile = jar
     gameVersions = [project.minecraft_version]
-    loaders = ["fabric", "quilt", "bukkit", "paper", "purpur", "folia", "spigot"]
+    loaders = ["fabric", "quilt", "paper", "purpur", "folia"]
     dependencies {
         required.project "fabric-api"
         required.version "pl3xmap", project.pl3xmap_version

@@ -1,6 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.fabric.mixin;
 
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.fabric.helpers.FeedbackHelper;
 import nl.gjorgdy.pl3xmarkers.fabric.interfaces.BeaconBlockEntityInterface;
 import net.minecraft.block.entity.BeaconBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
@@ -25,11 +26,10 @@ public class BeaconBlockEntityMixin implements BeaconBlockEntityInterface {
         if (blockEntity instanceof BeaconBlockEntityInterface beaconBlockEntityInterface
                 && cir.getReturnValue() != beaconBlockEntityInterface.helixMarkers$getLevel()
         ) {
-            if (cir.getReturnValue() > 0) {
-                Pl3xMarkersCore.api().addBeaconIconMarker(world.getRegistryKey().getValue().toString(), blockPos.getX(), blockPos.getZ());
-            } else {
-                Pl3xMarkersCore.api().removeBeaconIconMarker(world.getRegistryKey().getValue().toString(), blockPos.getX(), blockPos.getZ());
-            }
+			var result = cir.getReturnValue() > 0 ?
+				 Pl3xMarkersCore.api().addBeaconIconMarker(world.getRegistryKey().getValue().toString(), blockPos.getX(), blockPos.getZ()) :
+				 Pl3xMarkersCore.api().removeBeaconIconMarker(world.getRegistryKey().getValue().toString(), blockPos.getX(), blockPos.getZ());
+			FeedbackHelper.sendFeedback(result, world, blockPos);
         }
     }
 

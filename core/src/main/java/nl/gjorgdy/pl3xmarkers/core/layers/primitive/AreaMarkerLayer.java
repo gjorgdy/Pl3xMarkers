@@ -3,8 +3,8 @@ package nl.gjorgdy.pl3xmarkers.core.layers.primitive;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.helpers.ConvexHull;
 import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IAreaMarker;
 import nl.gjorgdy.pl3xmarkers.core.markers.AreaMarkerBuilder;
-import nl.gjorgdy.pl3xmarkers.core.entities.AreaEntity;
 import net.pl3x.map.core.world.World;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
@@ -13,23 +13,19 @@ import java.util.ArrayList;
 
 public class AreaMarkerLayer extends MarkerLayer {
 
-    public AreaMarkerLayer(String key, String label, @NotNull World world) {
-        super(key, label, world);
+    public AreaMarkerLayer(String key, String label, @NotNull World world, int priority) {
+        super(key, label, world, priority);
     }
 
     @Override
     public void load() {
-        Pl3xMarkersCore.areaRepository()
-            .getAreas(getWorld().getKey())
+        Pl3xMarkersCore.storage()
+			.getAreaMarkerRepository()
+            .getAreas(worldIdentifier)
             .forEach(this::loadArea);
     }
 
-    @Override
-    public boolean isInWorld(@NotNull World world) {
-        return true;
-    }
-
-    public void loadArea(AreaEntity area) {
+    public void loadArea(IAreaMarker area) {
         if (super.hasMarker(area.getKey())) {
             super.removeMarker(area.getKey());
         }
@@ -44,33 +40,37 @@ public class AreaMarkerLayer extends MarkerLayer {
 					.newAreaMarker(area.getKey(), sortedPoints)
 					.fill(area.getColor())
 					.stroke(area.getColor())
-					.addPopup(HtmlHelper.sanitize(area.getLabel()))
+					.addPopup(HtmlHelper.sanitize(area.getName()))
 			);
 		}
     }
 
     /**
-     * Add and store a new marker
+     * Add a new point to an area
      */
-    public void addPoint(@Language("HTML") String label, int color, int x, int z) {
-        boolean added = Pl3xMarkersCore.areaRepository().addPoint(getWorld().getKey(), label, color, x, z);
-        if (added) {
-            // reload the area
-            AreaEntity area = Pl3xMarkersCore.areaRepository().getArea(getWorld().getKey(), label, color);
-            if (area != null) loadArea(area);
+    public boolean addPoint(@Language("HTML") String label, int color, int x, int z) {
+		var area = Pl3xMarkersCore.storage()
+					   .getAreaMarkerRepository()
+					   .getOrCreateArea(worldIdentifier, label, color);
+        if (area.addPoint(x, z)) {
+			Pl3xMarkersCore.runParallel(() -> loadArea(area));
+			return true;
         }
+		return false;
     }
 
     /**
-     * Remove a marker
+     * Remove a point from an area
      */
-    public void removePoint(@Language("HTML") String label, int color, int x, int z) {
-        boolean removed = Pl3xMarkersCore.areaRepository().removePoint(getWorld().getKey(), label, color, x, z);
-        if (removed) {
-            // reload the area
-            AreaEntity area = Pl3xMarkersCore.areaRepository().getArea(getWorld().getKey(), label, color);
-            if (area != null) loadArea(area);
+    public boolean removePoint(@Language("HTML") String label, int color, int x, int z) {
+		var area = Pl3xMarkersCore.storage()
+					   .getAreaMarkerRepository()
+					   .getArea(worldIdentifier, label, color);
+        if (area != null && area.removePoint(x, z)) {
+			Pl3xMarkersCore.runParallel(() -> loadArea(area));
+			return true;
         }
+		return false;
     }
 
 }

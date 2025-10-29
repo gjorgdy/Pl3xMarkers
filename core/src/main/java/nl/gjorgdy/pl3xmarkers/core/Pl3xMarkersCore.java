@@ -1,24 +1,43 @@
 package nl.gjorgdy.pl3xmarkers.core;
 
 import net.pl3x.map.core.Pl3xMap;
-import nl.gjorgdy.pl3xmarkers.core.repositories.AreaRepository;
-import nl.gjorgdy.pl3xmarkers.core.repositories.IconMarkerRepository;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.IStorage;
 
-import java.sql.SQLException;
+import java.nio.file.Path;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 public class Pl3xMarkersCore {
 
     private static boolean IS_BUKKIT = false;
-    private static Database DATABASE = null;
-    private static AreaRepository AREA_REPOSITORY = null;
-    private static IconMarkerRepository MARKER_REPOSITORY = null;
+    private static IStorage STORAGE = null;
 
     private static Api API = null;
     static Pl3xMapHandler PL3X_MAP_HANDLER = null;
 
-    public static boolean isBukkit() {
+	private static final ExecutorService executor = new ThreadPoolExecutor(2, 8, 5L, TimeUnit.SECONDS,new LinkedBlockingQueue<>(1000));
+
+	public static boolean isBukkit() {
         return IS_BUKKIT;
     }
+
+	public static boolean isFeedbackDisabled() {
+		return !MarkersConfig.FEEDBACK_MESSAGES_ENABLED && !MarkersConfig.FEEDBACK_SOUNDS_ENABLED;
+	}
+
+	public static boolean areFeedbackMessagesEnabled() {
+		return MarkersConfig.FEEDBACK_MESSAGES_ENABLED;
+	}
+
+	public static boolean areFeedbackSoundsEnabled() {
+		return MarkersConfig.FEEDBACK_SOUNDS_ENABLED;
+	}
+
+	public static Path getMainDir() {
+		return isBukkit() ? Path.of("plugins/Pl3xMarkers") : Path.of("config/pl3xmarkers");
+	}
 
     public static Api api() {
         if (API == null) {
@@ -34,33 +53,19 @@ public class Pl3xMarkersCore {
         return PL3X_MAP_HANDLER;
     }
 
-    static Database database() {
-        if (DATABASE == null) {
-            try {
-                DATABASE = new Database();
-            } catch (SQLException e) {
-                System.out.println("Failed to create/read database ");
-                throw new RuntimeException(e);
-            }
+    public static IStorage storage() {
+        if (STORAGE == null) {
+			throw new RuntimeException("Failed to create/read database ");
         }
-        return DATABASE;
+        return STORAGE;
     }
 
-    public static AreaRepository areaRepository() {
-        if (AREA_REPOSITORY == null) {
-            AREA_REPOSITORY = new AreaRepository(database());
-        }
-        return AREA_REPOSITORY;
-    }
+	public static void runParallel(Runnable task) {
+		executor.execute(task);
+	}
 
-    public static IconMarkerRepository iconMarkerRepository() {
-        if (MARKER_REPOSITORY == null) {
-            MARKER_REPOSITORY = new IconMarkerRepository(database());
-        }
-        return MARKER_REPOSITORY;
-    }
-
-    public static void onInitialize(boolean isBukkit) {
+    public static void onInitialize(boolean isBukkit, IStorage storage) {
+		STORAGE = storage;
         IS_BUKKIT = isBukkit;
     }
 
@@ -69,8 +74,8 @@ public class Pl3xMarkersCore {
     }
 
     public static void onDisable() {
-        Pl3xMarkersCore.database().close();
-        Pl3xMarkersCore.api().executor.shutdown();
+        Pl3xMarkersCore.storage().close();
+        executor.shutdown();
     }
 
 }

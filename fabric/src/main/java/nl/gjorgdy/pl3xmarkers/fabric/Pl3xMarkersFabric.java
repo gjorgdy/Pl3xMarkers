@@ -6,9 +6,11 @@ import net.fabricmc.loader.api.FabricLoader;
 import nl.gjorgdy.pl3xmarkers.core.Layers;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.fabric.compat.layers.OPACAreaMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.json.JsonStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@SuppressWarnings("unused") // Called by fabric
 public class Pl3xMarkersFabric implements DedicatedServerModInitializer {
 
     public static Logger LOGGER = LoggerFactory.getLogger(Pl3xMarkersCore.class);
@@ -22,8 +24,12 @@ public class Pl3xMarkersFabric implements DedicatedServerModInitializer {
 		// register layers
 		if (isOpacLoaded()) Layers.registerLayerFactory(OPACAreaMarkerLayer::new);
 		// initialize core
-        Pl3xMarkersCore.onInitialize(false);
+		var storage = new JsonStorage();
+		Pl3xMarkersCore.onInitialize(false, storage);
         // register events
+		ServerLifecycleEvents.AFTER_SAVE.register(
+			(server, flush, force) -> storage.write()
+		);
         ServerLifecycleEvents.SERVER_STARTING.register(
             unused -> Pl3xMarkersCore.onStarted()
         );

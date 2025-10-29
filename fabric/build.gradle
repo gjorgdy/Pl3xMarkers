@@ -46,6 +46,7 @@ dependencies {
     modCompileOnly "curse.maven:open-parties-and-claims-636608:6859742"
 
     implementation project(':core')
+    implementation project(':json')
 }
 
 processResources {

@@ -1,5 +1,6 @@
 package nl.gjorgdy.pl3xmarkers.fabric.mixin;
 
+import net.minecraft.server.network.ServerPlayerEntity;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -11,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import nl.gjorgdy.pl3xmarkers.fabric.helpers.FeedbackHelper;
 import org.intellij.lang.annotations.Language;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,12 +30,15 @@ public class BlockMixin {
         if (blockEntity instanceof BannerBlockEntity banner && world.getBlockState(pos.down()).isOf(Blocks.LODESTONE)) {
             @Language("HTML") var name = banner.getName().getLiteralString();
             if (name == null) return;
-            Pl3xMarkersCore.api().addAreaPoint(
+            var result = Pl3xMarkersCore.api().addAreaPoint(
                 world.getRegistryKey().getValue().toString(),
                 name,
                 banner.getColorForState().getEntityColor(),
                 pos.getX(), pos.getZ()
             );
+			if (placer instanceof ServerPlayerEntity player) {
+				FeedbackHelper.sendFeedback(result, player);
+			}
         }
     }
 
@@ -51,12 +56,15 @@ public class BlockMixin {
             if (blockEntity instanceof BannerBlockEntity banner) {
                 @Language("HTML") var name = banner.getName().getLiteralString();
                 if (name == null) return;
-                Pl3xMarkersCore.api().removeAreaPoint(
+				var result = Pl3xMarkersCore.api().removeAreaPoint(
                         serverWorld.getRegistryKey().getValue().toString(),
                         name,
                         banner.getColorForState().getEntityColor(),
                         pos.getX(), pos.getZ()
                 );
+				if (player instanceof ServerPlayerEntity serverPlayer) {
+					FeedbackHelper.sendFeedback(result, serverPlayer);
+				}
             }
         }
     }

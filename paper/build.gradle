@@ -23,6 +23,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:${paper_version}")
 
     implementation project(':core')
+    implementation project(':json')
 }
 
 compileJava {

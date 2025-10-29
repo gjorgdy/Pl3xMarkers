@@ -1,6 +1,9 @@
 package nl.gjorgdy.pl3xmarkers.fabric.mixin;
 
+import net.minecraft.server.network.ServerPlayerEntity;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
+import nl.gjorgdy.pl3xmarkers.fabric.helpers.FeedbackHelper;
 import nl.gjorgdy.pl3xmarkers.fabric.helpers.PortalHelper;
 import nl.gjorgdy.pl3xmarkers.fabric.interfaces.NetherPortalInterface;
 import net.minecraft.block.BlockState;
@@ -30,26 +33,30 @@ public class PortalManagerMixin {
     @Inject(method = "createTeleportTarget", at =@At("RETURN"))
     public void onTick(ServerWorld world, Entity entity, CallbackInfoReturnable<TeleportTarget> cir) {
         // origin
-        tryCreateMarker(world, this.pos);
+        tryCreateMarker(world, this.pos, entity);
         // destination
-        tryCreateMarker(cir.getReturnValue().world(), BlockPos.ofFloored(cir.getReturnValue().position()));
+        tryCreateMarker(cir.getReturnValue().world(), BlockPos.ofFloored(cir.getReturnValue().position()), entity);
     }
 
     @Unique
-    private void tryCreateMarker(World world, BlockPos pos) {
+    private void tryCreateMarker(World world, BlockPos pos, Entity entity) {
         BlockState portalBlock = world.getBlockState(pos);
+		InteractionResult result = InteractionResult.skip();
         if (portalBlock.isOf(Blocks.NETHER_PORTAL)) {
             Direction.Axis axis = portalBlock.get(Properties.HORIZONTAL_AXIS);
             var portal = (NetherPortalInterface) NetherPortal.getOnAxis(world, pos, axis);
             portal.pl3xMarkers$createMarker(world);
         }
         if (portalBlock.isOf(Blocks.END_GATEWAY)) {
-            Pl3xMarkersCore.api().addEndGatewayIconMarker(world.getRegistryKey().getValue().toString(), pos.getX(), pos.getZ());
+            result = Pl3xMarkersCore.api().addEndGatewayIconMarker(world.getRegistryKey().getValue().toString(), pos.getX(), pos.getZ());
         }
         if (portalBlock.isOf(Blocks.END_PORTAL)) {
             pos = PortalHelper.getEndPortalCenter(world, pos);
-            Pl3xMarkersCore.api().addEndPortalIconMarker(world.getRegistryKey().getValue().toString(), pos.getX(), pos.getZ());
+            result = Pl3xMarkersCore.api().addEndPortalIconMarker(world.getRegistryKey().getValue().toString(), pos.getX(), pos.getZ());
         }
+		if (entity instanceof ServerPlayerEntity serverPlayer) {
+			FeedbackHelper.sendFeedback(result, serverPlayer);
+		}
     }
 
 }

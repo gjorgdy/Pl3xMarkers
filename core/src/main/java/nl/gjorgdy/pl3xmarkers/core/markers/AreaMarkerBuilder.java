@@ -1,11 +1,11 @@
 package nl.gjorgdy.pl3xmarkers.core.markers;
 
-import nl.gjorgdy.pl3xmarkers.core.entities.AreaPointEntity;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.marker.Polygon;
 import net.pl3x.map.core.markers.marker.Polyline;
 import net.pl3x.map.core.markers.option.Fill;
 import net.pl3x.map.core.markers.option.Stroke;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
 
 import java.util.List;
 
@@ -15,9 +15,9 @@ public class AreaMarkerBuilder extends MarkerBuilder<Polygon> {
         super(marker);
     }
 
-    public static AreaMarkerBuilder newAreaMarker(String key, List<AreaPointEntity> points) {
+    public static AreaMarkerBuilder newAreaMarker(String key, List<IPoint> points) {
         var line = new Polyline(key);
-		points.stream().map(AreaPointEntity::toPl3xPoint).forEach(line::addPoint);
+		points.stream().map(IPoint::toPl3xPoint).forEach(line::addPoint);
         Polygon area = new Polygon(key, line);
         return new AreaMarkerBuilder(area);
     }

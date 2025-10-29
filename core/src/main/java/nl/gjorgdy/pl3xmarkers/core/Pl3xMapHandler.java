@@ -9,7 +9,9 @@ import net.pl3x.map.core.event.server.Pl3xMapEnabledEvent;
 import net.pl3x.map.core.event.world.WorldLoadedEvent;
 import net.pl3x.map.core.image.IconImage;
 import net.pl3x.map.core.registry.IconRegistry;
-import net.pl3x.map.core.world.World;
+import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
+import nl.gjorgdy.pl3xmarkers.core.registries.Icons;
+import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -19,10 +21,10 @@ import java.util.function.Function;
 
 public class Pl3xMapHandler implements EventListener {
 
-    public void registerMarkerLayer(Function<World, MarkerLayer> function) {
+    public void registerMarkerLayer(LayerFactory factory) {
         Pl3xMap.api().getWorldRegistry().forEach(world -> {
-            MarkerLayer swl = function.apply(world);
-            if (!swl.isInWorld(world)) return;
+			if (factory.disabledFor(world)) return;
+			MarkerLayer swl = factory.create(world);
             world.getLayerRegistry().register(swl);
             swl.load();
         });
@@ -39,13 +41,9 @@ public class Pl3xMapHandler implements EventListener {
     @EventHandler
     @SuppressWarnings("unused") // event is used by pl3xmap
     public void onWorldLoad(WorldLoadedEvent event) {
-        Layers.getLayerFactories().forEach(function -> {
-            MarkerLayer swl = function.apply(event.getWorld());
-			System.out.println("Registering layer " + swl.getClass().getName() + " for world " + event.getWorld().getKey());
-            if (!swl.isInWorld(event.getWorld())) {
-				System.out.println("not in world, skipping");
-				return;
-			}
+        Layers.ALL.forEach(factory -> {
+			if (factory.disabledFor(event.getWorld())) return;
+            MarkerLayer swl = factory.create(event.getWorld());
             event.getWorld().getLayerRegistry().register(swl);
             swl.load();
         });
@@ -54,6 +52,7 @@ public class Pl3xMapHandler implements EventListener {
     @EventHandler
     @SuppressWarnings("unused") // event is used by pl3xmap
     public void onEnable(Pl3xMapEnabledEvent event) {
+		MarkersConfig.reload();
         Icons.ALL.forEach(address -> {
             try {
                 registerIconImage(address);

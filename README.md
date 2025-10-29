@@ -49,6 +49,8 @@ A: Areas are made out of the outermost points. If you have points inside the are
 A: Yes! Area names support basic HTML tags such as `<b>`, `<i>`, `<u>`, `<br>`, and `<span style="color: #RRGGBB;"> mooi ding </span>`.
 ### Q: Why is my area a small triangle?
 A: You either have too few points (minimum 3) or your points are too far apart.
+### Q: How to reload the config?
+A: Pl3xMarkers listens to Pl3xMap's reload, so you can reload using `/pl3xmap reload`
 
 ## Demo
 
