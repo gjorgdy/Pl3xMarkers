@@ -14,6 +14,7 @@ import nl.gjorgdy.pl3xmarkers.fabric.compat.OpacHandler;
 import nl.gjorgdy.pl3xmarkers.fabric.compat.OpacListener;
 import org.jetbrains.annotations.NotNull;
 import xaero.pac.common.server.api.OpenPACServerAPI;
+import xaero.pac.common.server.claims.ServerClaimsManager;
 
 public class OPACAreaMarkerLayer extends MarkerLayer {
 
@@ -23,19 +24,17 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
 
     @Override
     public void load() {
-		System.out.println("OPACAreaMarkerLayer loading for world " + getWorld().getName());
         ServerLifecycleEvents.ServerStarted fun = (server) -> {
-			System.out.println("OPACAreaMarkerLayer loading OPAC chunks for world " + getWorld().getName());
-            if (!Pl3xMarkersFabric.isOpacInstalled()) return;
             var chunks = OpacHandler.load(server, worldIdentifier);
             chunks.forEach(this::addChunk);
         };
-		ServerLifecycleEvents.SERVER_STARTED.register(fun);
-        // wait till server is ready
-        if (Pl3xMarkersFabric.isOpacLoaded()) {
-			System.out.println("Server already started, running OPAC load directly");
+		// or directly if server already started
+		if (Pl3xMarkersFabric.isOpacLoaded(getServer())) {
 			fun.onServerStarted(getServer());
-        }
+		// run on server start
+		} else {
+			ServerLifecycleEvents.SERVER_STARTED.register(fun);
+		}
 		// register listener for claim changes
 		OpenPACServerAPI.get(getServer())
 				.getServerClaimsManager()
@@ -47,7 +46,6 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
 	}
 
     private MarkerBuilder<?> createAreaMarker(OpacChunk chunk) {
-		System.out.println("Creating area marker for chunk " + chunk.getKey());
         return AreaMarkerBuilder.newAreaMarker(chunk.getKey(), chunk.getCorners())
 			.fill(chunk.color())
 			.stroke(chunk.color())
