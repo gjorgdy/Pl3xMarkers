@@ -15,13 +15,18 @@ public class Pl3xMarkersCore {
     private static IStorage STORAGE = null;
 
     private static Api API = null;
-    static Pl3xMapHandler PL3X_MAP_HANDLER = null;
+    private static Pl3xMapHandler PL3X_MAP_HANDLER = null;
+	private static Runnable reloadConfig = MarkersConfig::reload;
 
 	private static final ExecutorService executor = new ThreadPoolExecutor(2, 8, 5L, TimeUnit.SECONDS,new LinkedBlockingQueue<>(1000));
 
 	public static boolean isBukkit() {
         return IS_BUKKIT;
     }
+
+	public static void reloadConfig() {
+		reloadConfig.run();
+	}
 
 	public static boolean isFeedbackDisabled() {
 		return !MarkersConfig.FEEDBACK_MESSAGES_ENABLED && !MarkersConfig.FEEDBACK_SOUNDS_ENABLED;
@@ -62,6 +67,11 @@ public class Pl3xMarkersCore {
 
 	public static void runParallel(Runnable task) {
 		executor.execute(task);
+	}
+
+	public static void onInitialize(boolean isBukkit, IStorage storage, Runnable reloadConfig) {
+		Pl3xMarkersCore.reloadConfig = reloadConfig;
+		onInitialize(isBukkit, storage);
 	}
 
     public static void onInitialize(boolean isBukkit, IStorage storage) {

@@ -19,12 +19,13 @@ public class Pl3xMarkersFabric implements DedicatedServerModInitializer {
 
     public static Logger LOGGER = LoggerFactory.getLogger(Pl3xMarkersCore.class);
 
-	public static boolean isOpacInstalled() {
-		return FabricLoader.getInstance().isModLoaded("openpartiesandclaims");
+	public static boolean isOpacEnabled() {
+		return FabricLoader.getInstance().isModLoaded("openpartiesandclaims")
+				&& FabricMarkersConfig.OPAC_MARKERS_ENABLED;
 	}
 
 	public static boolean isOpacLoaded(MinecraftServer server) {
-		return isOpacInstalled()
+		return isOpacEnabled()
 		   && OpenPACServerAPI.get(server).getServerClaimsManager() instanceof ServerClaimsManager scm
 		   && scm.isLoaded();
 	}
@@ -32,10 +33,10 @@ public class Pl3xMarkersFabric implements DedicatedServerModInitializer {
     @Override
     public void onInitializeServer() {
 		// register layers
-		Layers.register(OPACAreaMarkerLayer::new, unused -> isOpacInstalled());
+		Layers.register(OPACAreaMarkerLayer::new, unused -> isOpacEnabled());
 		// initialize core
 		var storage = new JsonStorage();
-		Pl3xMarkersCore.onInitialize(false, storage);
+		Pl3xMarkersCore.onInitialize(false, storage, FabricMarkersConfig::reload);
         // register events
 		ServerLifecycleEvents.AFTER_SAVE.register(
 			(server, flush, force) -> storage.write()
