@@ -7,24 +7,29 @@ import nl.gjorgdy.pl3xmarkers.core.json.repositories.IconMarkerRepository;
 
 public class JsonStorage implements IStorage {
 
-	private final IconMarkerRepository iconMarkerRepository;
-	private final AreaMarkerRepository areaMarkerRepository;
+	private  IconMarkerRepository iconMarkerRepository;
+	private AreaMarkerRepository areaMarkerRepository;
+	private boolean loaded = false;
 
-	public JsonStorage() {
+	private void load() {
 		// read files
 		String configPath = Pl3xMarkersCore.isBukkit() ? "plugins/Pl3xMarkers" : "config/pl3xmarkers";
 		// load repositories
 		iconMarkerRepository = new IconMarkerRepository(configPath + "/markers", "icons");
 		areaMarkerRepository = new AreaMarkerRepository(configPath + "/markers", "areas");
+		// mark as loaded
+		loaded = true;
 	}
 
 	@Override
 	public AreaMarkerRepository getAreaMarkerRepository() {
+		if (!loaded) load();
 		return areaMarkerRepository;
 	}
 
 	@Override
 	public IconMarkerRepository getIconMarkerRepository() {
+		if (!loaded) load();
 		return iconMarkerRepository;
 	}
 
@@ -38,6 +43,7 @@ public class JsonStorage implements IStorage {
 	}
 
 	private void writeInternal() {
+		if (!loaded) load();
 		// save files
 		iconMarkerRepository.write();
 		areaMarkerRepository.write();
