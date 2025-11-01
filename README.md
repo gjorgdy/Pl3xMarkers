@@ -6,19 +6,21 @@
 
 <br>
 
-## Features
+## Added markers
 
-- 'Usable' Portals through tooltips
-- Nether Portal Markers
-- End Portal Markers
-- End Gateway Markers
-- Beacon Markers
+- 'Open Parties and Claims' claimed chunks
 - Player made areas
+- Nether Portals
+- End Portals
+- End Gateways
+- Beacons
 
+All without the need for any commands and fully configurable
 
 ## How to -
 
-### Make an area
+<details>
+<summary>Make an area</summary>
 
 1. Get a lodestone and a banner (all the same color) for all corners of your area.
 2. Give all banners the name of your area in an anvil.
@@ -31,14 +33,24 @@
 - You can add or remove points as you wish, the area will adept.
 - For the best results, use at least 4 points.
 
-### Add a portal marker
+</details>
+
+<details>
+<summary>Add a portal marker</summary>
+
 1. Go through a portal.
 2. Admire your portal on the web map.
 
-### Add a beacon marker
+</details>
+
+<details>
+<summary>Add a beacon marker</summary>
+
 1. Place a beacon.
 2. Activate the beacon.
 3. Admire your b~~e~~acon on the web map.
+
+</details>
 
 ## FAQ
 ### Q: The layers are not showing up on my web map, what do I do?

@@ -1,8 +1,5 @@
-﻿Paper storage fix
+﻿Open Parties And Claims compatibility
 ---
 
-- Fixed the save file location on Paper.
-
-## !! Warning !!
-Files should be moved automatically, but in case it doesn't work, 
-please move the files manually from 'config/pl3xmarkers' to 'plugins/Pl3xMarkers'
+- Added compatibility with Open Parties and Claims, showing claimed chunks on the map with their respective colors and names.
+  - OPAC is a Fabric (and Forge) mod, meaning this feature is only available for Fabric.

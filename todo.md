@@ -6,7 +6,7 @@
 - [ ] Fancy nether portal markers
     - [ ] Named nether portal markers
     - [ ] Colored nether portal markers
-- [ ] Open Parties and Claims compatibility
+- [x] Open Parties and Claims compatibility
 
 # Idealistic plans
 
