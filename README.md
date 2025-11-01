@@ -8,14 +8,14 @@
 
 ## Added markers
 
-- 'Open Parties and Claims' claimed chunks
+- [Open Parties and Claims](https://modrinth.com/mod/open-parties-and-claims) claimed chunks
 - Player made areas
 - Nether Portals
 - End Portals
 - End Gateways
 - Beacons
 
-All without the need for any commands and fully configurable
+All without the need for any commands and all fully configurable
 
 ## How to -
 
@@ -58,7 +58,7 @@ A: You most likely use custom names for your worlds. Make sure they use the corr
 ### Q: Why are some points not showing up?
 A: Areas are made out of the outermost points. If you have points inside the area they will not be used. Or the points are too far apart from the center.
 ### Q: Can I customize area labels?
-A: Yes! Area names support basic HTML tags such as `<b>`, `<i>`, `<u>`, `<br>`, and `<span style="color: #RRGGBB;"> mooi ding </span>`.
+A: Yes! Area names support basic HTML tags such as `<b>`, `<i>`, `<u>`, `<br>`, and `<span style="color: #RRGGBB;"> {text} </span>`.
 ### Q: Why is my area a small triangle?
 A: You either have too few points (minimum 3) or your points are too far apart.
 ### Q: How to reload the config?
