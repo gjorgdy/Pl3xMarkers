@@ -9,12 +9,9 @@ import nl.gjorgdy.pl3xmarkers.core.markers.AreaMarkerBuilder;
 import nl.gjorgdy.pl3xmarkers.core.markers.MarkerBuilder;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.fabric.FabricMarkersConfig;
-import nl.gjorgdy.pl3xmarkers.fabric.Pl3xMarkersFabric;
 import nl.gjorgdy.pl3xmarkers.fabric.compat.OpacChunk;
 import nl.gjorgdy.pl3xmarkers.fabric.compat.OpacHandler;
-import nl.gjorgdy.pl3xmarkers.fabric.compat.OpacListener;
 import org.jetbrains.annotations.NotNull;
-import xaero.pac.common.server.api.OpenPACServerAPI;
 
 public class OPACAreaMarkerLayer extends MarkerLayer {
 
@@ -26,7 +23,7 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
     public void load() {
 		Pl3xMarkersCore.runParallel(() -> {
 			var server = getServer();
-			while (!Pl3xMarkersFabric.isOpacLoaded(server)) {
+			while (!OpacHandler.isOpacLoaded(server)) {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -37,9 +34,7 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
 				.forEach(this::addChunk);
 		});
 		// register listener for claim changes
-		OpenPACServerAPI.get(getServer())
-				.getServerClaimsManager()
-				.getTracker().register(new OpacListener(this));
+		OpacHandler.registerListener(getServer(), this);
     }
 
 	public void addChunk(OpacChunk chunk) {

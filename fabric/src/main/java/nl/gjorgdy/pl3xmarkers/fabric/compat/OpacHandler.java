@@ -3,7 +3,10 @@ package nl.gjorgdy.pl3xmarkers.fabric.compat;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.ChunkPos;
+import nl.gjorgdy.pl3xmarkers.fabric.Pl3xMarkersFabric;
+import nl.gjorgdy.pl3xmarkers.fabric.compat.layers.OPACAreaMarkerLayer;
 import xaero.pac.common.server.api.OpenPACServerAPI;
+import xaero.pac.common.server.claims.ServerClaimsManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,6 +14,18 @@ import java.util.HashSet;
 import java.util.UUID;
 
 public class OpacHandler {
+
+	public static boolean isOpacLoaded(MinecraftServer server) {
+		return Pl3xMarkersFabric.isOpacEnabled()
+			&& OpenPACServerAPI.get(server).getServerClaimsManager() instanceof ServerClaimsManager scm
+			&& scm.isLoaded();
+	}
+
+	public static void registerListener(MinecraftServer server, OPACAreaMarkerLayer markerLayer) {
+		OpenPACServerAPI.get(server)
+				.getServerClaimsManager()
+				.getTracker().register(new OpacListener(markerLayer));
+	}
 
     public static Collection<OpacChunk> load(MinecraftServer server, String worldIdentifier) {
         var chunks = new HashSet<OpacChunk>();
