@@ -11,17 +11,19 @@ base {
 
 repositories {
     mavenCentral()
-    maven {
-        url = "https://api.modrinth.com/maven"
+    exclusiveContent {
+        forRepository {
+            maven {
+                url "https://cursemaven.com"
+            }
+        }
+        filter {
+            includeGroup "curse.maven"
+        }
     }
-    maven {
-        name = "Nova Committee - Release"
-        url = "https://maven.nova-committee.cn/releases/"
-    }
-    maven {
-        name = "Nova Committee - Snapshot"
-        url = "https://maven.nova-committee.cn/snapshots/"
-    }
+    maven {url = "https://api.modrinth.com/maven"}
+    maven {url = "https://maven.nova-committee.cn/releases/"}
+    maven {url = "https://maven.nova-committee.cn/snapshots/"}
     maven {
         url = uri('../local-maven')
         metadataSources {
@@ -40,6 +42,8 @@ dependencies {
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     // Pl3xmap Marker
     modCompileOnly "maven.modrinth:pl3xmap:${project.pl3xmap_version}"
+    // Open Parties and Claims
+    modCompileOnly "curse.maven:open-parties-and-claims-636608:6859742"
 
     implementation project(':core')
     implementation project(':json')
