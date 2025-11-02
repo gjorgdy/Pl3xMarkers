@@ -1,7 +1,9 @@
 package nl.gjorgdy.pl3xmarkers.core.json;
 
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.ILineMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IStorage;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.ILineMarker;
 import nl.gjorgdy.pl3xmarkers.core.json.repositories.AreaMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.json.repositories.IconMarkerRepository;
 
@@ -25,6 +27,11 @@ public class JsonStorage implements IStorage {
 		areaMarkerRepository = new AreaMarkerRepository(configPath + "/markers", "areas");
 		// mark as loaded
 		loaded = true;
+	}
+
+	@Override
+	public ILineMarkerRepository<? extends ILineMarker> getLineMarkerRepository() {
+		throw new UnsupportedOperationException("Not implemented yet.");
 	}
 
 	@Override

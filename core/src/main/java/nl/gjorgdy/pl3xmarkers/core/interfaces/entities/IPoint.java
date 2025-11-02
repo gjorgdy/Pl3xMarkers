@@ -17,6 +17,10 @@ public interface IPoint extends Comparable<IPoint> {
 
 	IPoint set(int x, int z);
 
+	default String getKey () {
+		return getX() + ":" + getZ();
+	}
+
 	default Point toPl3xPoint() {
 		return new Point(getX(), getZ());
 	}
