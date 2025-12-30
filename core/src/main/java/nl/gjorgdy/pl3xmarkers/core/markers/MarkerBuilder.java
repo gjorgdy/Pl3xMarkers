@@ -3,10 +3,11 @@ package nl.gjorgdy.pl3xmarkers.core.markers;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.option.Options;
 import net.pl3x.map.core.markers.option.Popup;
+import net.pl3x.map.core.markers.option.Stroke;
 import net.pl3x.map.core.markers.option.Tooltip;
 import org.intellij.lang.annotations.Language;
 
-public class MarkerBuilder<T extends Marker<T>> {
+public abstract class MarkerBuilder<T extends Marker<T>> {
 
     protected final Marker<T> marker;
     protected final Options options;
@@ -40,5 +41,22 @@ public class MarkerBuilder<T extends Marker<T>> {
         );
         return this;
     }
+
+	public MarkerBuilder<T> stroke(int color) {
+		return stroke(color, 2);
+	}
+
+	public MarkerBuilder<T> stroke(int color, int weight) {
+		options.setStroke(
+				new Stroke(weight, setAlpha(color, 255))
+						.setEnabled(true)
+		);
+		return this;
+	}
+
+	public static int setAlpha(int color, int alpha) {
+		alpha = alpha & 0xFF; // Ensure alpha is in 0-255 range
+		return (color & 0x00FFFFFF) | (alpha << 24);
+	}
 
 }

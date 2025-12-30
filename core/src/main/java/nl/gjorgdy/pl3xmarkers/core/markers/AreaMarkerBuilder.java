@@ -34,21 +34,4 @@ public class AreaMarkerBuilder extends MarkerBuilder<Polygon> {
         return this;
     }
 
-    public AreaMarkerBuilder stroke(int color) {
-        return stroke(color, 2);
-    }
-
-    public AreaMarkerBuilder stroke(int color, int weight) {
-        options.setStroke(
-            new Stroke(weight, setAlpha(color, 255))
-				.setEnabled(true)
-        );
-        return this;
-    }
-
-    public static int setAlpha(int color, int alpha) {
-        alpha = alpha & 0xFF; // Ensure alpha is in 0-255 range
-        return (color & 0x00FFFFFF) | (alpha << 24);
-    }
-
 }
