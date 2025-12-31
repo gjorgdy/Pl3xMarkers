@@ -1,9 +1,9 @@
 plugins {
     id "java"
-    id "com.modrinth.minotaur" version "2.+"
+    alias(libs.plugins.minotaur)
 }
 
-project.version = "${project.mod_version}+${project.minecraft_version}"
+project.version = "${project.mod_version}+${libs.versions.minecraft.get()}"
 group = project.maven_group
 
 tasks {
@@ -63,10 +63,10 @@ modrinth {
     syncBodyFrom = rootProject.file("README.md").text
     versionType = project.mod_release_type
     uploadFile = jar
-    gameVersions = [project.minecraft_version]
+    gameVersions = [libs.versions.minecraft.get()]
     loaders = ["fabric", "quilt", "paper", "purpur", "folia"]
     dependencies {
         required.project "fabric-api"
-        required.version "pl3xmap", project.pl3xmap_version
+        required.version "pl3xmap", libs.versions.pl3xmap.get()
     }
 }
