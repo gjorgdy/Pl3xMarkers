@@ -11,7 +11,7 @@ tasks {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
         from("LICENSE") {
-            rename { "${it}_${project.archivesBaseName}" }
+            rename { "${it}_${project.archives_base_name}" }
         }
 
         archiveClassifier = ''
@@ -67,6 +67,7 @@ modrinth {
     loaders = ["fabric", "quilt", "paper", "purpur", "folia"]
     dependencies {
         required.project "fabric-api"
-        required.version "pl3xmap", libs.versions.pl3xmap.get()
+        required.project "pl3xmap"
+//        required.version "pl3xmap", libs.versions.pl3xmap.get()
     }
 }

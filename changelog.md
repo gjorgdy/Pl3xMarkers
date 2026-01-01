@@ -1,5 +1,4 @@
-﻿Open Parties And Claims compatibility
+﻿Updated to 1.21.11
 ---
 
-- Added compatibility with Open Parties and Claims, showing claimed chunks on the map with their respective colors and names.
-  - OPAC is a Fabric (and Forge) mod, meaning this feature is only available for Fabric.
+- Updated to Minecraft 1.21.11.
