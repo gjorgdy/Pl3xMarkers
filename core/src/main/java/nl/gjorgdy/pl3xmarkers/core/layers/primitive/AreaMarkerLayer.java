@@ -8,13 +8,19 @@ import nl.gjorgdy.pl3xmarkers.core.helpers.PolygonArea;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IAreaMarker;
 import nl.gjorgdy.pl3xmarkers.core.markers.AreaMarkerBuilder;
 import net.pl3x.map.core.world.World;
+import nl.gjorgdy.pl3xmarkers.core.objects.Boundary;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 public class AreaMarkerLayer extends MarkerLayer {
+
+	private Set<Boundary> boundaries;
 
     public AreaMarkerLayer(String key, String label, @NotNull World world, int priority) {
         super(key, label, world, priority);
@@ -22,6 +28,9 @@ public class AreaMarkerLayer extends MarkerLayer {
 
     @Override
     public void load() {
+		if (MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED) {
+			boundaries = new HashSet<>();
+		}
         Pl3xMarkersCore.storage()
 			.getAreaMarkerRepository()
             .getAreas(worldIdentifier)
@@ -36,17 +45,22 @@ public class AreaMarkerLayer extends MarkerLayer {
 		if (points == null || points.isEmpty()) {
 			return;
 		}
-        var sortedPoints = ConvexHull.calculate(new ArrayList<>(area.getPoints()));
+        var orderedPoints = ConvexHull.calculate(new ArrayList<>(area.getPoints()));
 		@Language("HTML") var popup = "<b>" + HtmlHelper.sanitize(area.getName()) + "</b>";
 		if (MarkersConfig.AREA_MARKERS_SHOW_SIZE) {
-			var polygonArea = PolygonArea.calculate(sortedPoints);
+			var polygonArea = PolygonArea.calculate(orderedPoints);
 			var areaFormatted = new DecimalFormat("#.#").format(polygonArea);
 			popup += "<br><i>" + areaFormatted + " b²<i/>";
 		}
-		if (!sortedPoints.isEmpty()) {
+		if (MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED) {
+			boundaries.add(
+				new Boundary(area.getMinCorner(), area.getMaxCorner(), orderedPoints, area)
+			);
+		}
+		if (!orderedPoints.isEmpty()) {
 			super.addMarker(
 				AreaMarkerBuilder
-					.newAreaMarker(area.getKey(), sortedPoints)
+					.newAreaMarker(area.getKey(), orderedPoints)
 					.fill(area.getColor())
 					.stroke(area.getColor())
 					.addPopup(popup)
@@ -81,5 +95,14 @@ public class AreaMarkerLayer extends MarkerLayer {
         }
 		return false;
     }
+
+	public Optional<IAreaMarker> getArea(int x, int z) {
+		return boundaries.stream().filter(b -> {
+			boolean xInside = x >= b.min().getX() && x <= b.max().getX();
+			boolean zInside = z >= b.min().getZ() && z <= b.max().getZ();
+			// TODO improve point-in-polygon check
+			return xInside && zInside;
+		}).map(Boundary::areaMarker).findFirst();
+	}
 
 }

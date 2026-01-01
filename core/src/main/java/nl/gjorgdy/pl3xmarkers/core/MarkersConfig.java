@@ -18,6 +18,10 @@ public class MarkersConfig extends AbstractConfig {
 	@Comment("Enable sound effects when adding/removing markers or points")
 	public static boolean FEEDBACK_SOUNDS_ENABLED = true;
 
+	@Key("settings.feedback.area-enter")
+	@Comment("Enable action messages when entering an area")
+	public static boolean FEEDBACK_AREA_ENTER_ENABLED = true;
+
 	@Key("marker-settings.areas.enabled")
 	@Comment("Enable player made areas on the map")
 	public static boolean AREA_MARKERS_ENABLED = true;
