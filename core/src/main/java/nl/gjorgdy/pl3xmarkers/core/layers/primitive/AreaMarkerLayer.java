@@ -1,14 +1,17 @@
 package nl.gjorgdy.pl3xmarkers.core.layers.primitive;
 
+import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.helpers.ConvexHull;
 import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
+import nl.gjorgdy.pl3xmarkers.core.helpers.PolygonArea;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IAreaMarker;
 import nl.gjorgdy.pl3xmarkers.core.markers.AreaMarkerBuilder;
 import net.pl3x.map.core.world.World;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class AreaMarkerLayer extends MarkerLayer {
@@ -34,13 +37,19 @@ public class AreaMarkerLayer extends MarkerLayer {
 			return;
 		}
         var sortedPoints = ConvexHull.calculate(new ArrayList<>(area.getPoints()));
+		@Language("HTML") var popup = "<b>" + HtmlHelper.sanitize(area.getName()) + "</b>";
+		if (MarkersConfig.AREA_MARKERS_SHOW_SIZE) {
+			var polygonArea = PolygonArea.calculate(sortedPoints);
+			var areaFormatted = new DecimalFormat("#.#").format(polygonArea);
+			popup += "<br><i>" + areaFormatted + " b²<i/>";
+		}
 		if (!sortedPoints.isEmpty()) {
 			super.addMarker(
 				AreaMarkerBuilder
 					.newAreaMarker(area.getKey(), sortedPoints)
 					.fill(area.getColor())
 					.stroke(area.getColor())
-					.addPopup(HtmlHelper.sanitize(area.getName()))
+					.addPopup(popup)
 			);
 		}
     }

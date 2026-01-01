@@ -22,8 +22,12 @@ public class MarkersConfig extends AbstractConfig {
 	@Comment("Enable player made areas on the map")
 	public static boolean AREA_MARKERS_ENABLED = true;
 
+	@Key("marker-settings.areas.show-area-size")
+	@Comment("Show the area size in square blocks in the pop-up")
+	public static boolean AREA_MARKERS_SHOW_SIZE = false;
+
 	@Key("marker-settings.areas.size")
-	@Comment("The maximum size that an area is allowed to be \nthis is the distance between the two furthest points in the area")
+	@Comment("The maximum diameter that an area is allowed to have \nthis is the distance between the two furthest points in the area")
 	public static int AREA_MARKERS_MAX_SIZE = 512;
 
 	@Key("marker-settings.areas.priority")
