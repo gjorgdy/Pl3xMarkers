@@ -7,8 +7,8 @@ fabricApi = "0.140.2+1.21.11"
 fabricLoom = "1.14-SNAPSHOT"
 yarn_mappings = "1.21.11+build.3"
 
-pl3xmap = "1.21.11-SNAPSHOT"
-openPartiesAndClaims = "6859742"
+pl3xmap = "1.21.11-539"
+openPartiesAndClaims = "7112770"
 
 paper = "1.21.11-R0.1-SNAPSHOT"
 
