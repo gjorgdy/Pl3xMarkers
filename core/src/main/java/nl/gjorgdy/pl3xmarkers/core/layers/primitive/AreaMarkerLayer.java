@@ -96,7 +96,7 @@ public class AreaMarkerLayer extends MarkerLayer {
 		return false;
     }
 
-	public Optional<Boundary> getArea(int x, int z) {
+	public Optional<Boundary> getAreaBoundary(int x, int z) {
 		return boundaries.stream()
 		   .filter(b -> b.contains(x, z))
 		   .findFirst();

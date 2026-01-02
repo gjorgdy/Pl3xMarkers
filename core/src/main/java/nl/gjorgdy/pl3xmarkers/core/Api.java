@@ -5,12 +5,13 @@ import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.markers.layer.Layer;
 import net.pl3x.map.core.world.World;
+import nl.gjorgdy.pl3xmarkers.core.objects.Boundary;
 import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
 import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.intellij.lang.annotations.Language;
 
-import java.util.concurrent.*;
+import java.util.Optional;
 
 public class Api {
     @SuppressWarnings("unused")
@@ -19,6 +20,18 @@ public class Api {
         if (world == null) throw new RuntimeException("World not found " + worldIdentifier);
         return world;
     }
+
+	@SuppressWarnings("unused")
+	public Optional<Boundary> getAreaBoundary(String worldIdentifier, int x, int z) {
+		World world = Pl3xMap.api().getWorldRegistry().get(worldIdentifier);
+		if (world == null) return Optional.empty();
+		var layer = getWorld(worldIdentifier).getLayerRegistry().get(Layers.Keys.AREAS);
+		if (layer instanceof AreaMarkerLayer aml) {
+			return aml.getAreaBoundary(x, z);
+		}
+		return Optional.empty();
+	}
+
     @SuppressWarnings("unused")
     public void registerMarkerLayer(LayerFactory factory) {
         // parse through to internal handler
