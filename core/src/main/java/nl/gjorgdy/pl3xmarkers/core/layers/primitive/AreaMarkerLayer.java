@@ -36,7 +36,7 @@ public class AreaMarkerLayer extends MarkerLayer {
 
     public void loadArea(IAreaMarker area) {
 		super.removeMarker(area.getKey());
-		boundaries.remove(area.getKey());
+		if (boundaries != null) boundaries.remove(area.getKey());
 		var points = area.getPoints();
 		if (points == null || points.isEmpty()) {
 			return;
