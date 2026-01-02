@@ -13,14 +13,11 @@ import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 public class AreaMarkerLayer extends MarkerLayer {
 
-	private Set<Boundary> boundaries;
+	private HashMap<String, Boundary> boundaries;
 
     public AreaMarkerLayer(String key, String label, @NotNull World world, int priority) {
         super(key, label, world, priority);
@@ -29,7 +26,7 @@ public class AreaMarkerLayer extends MarkerLayer {
     @Override
     public void load() {
 		if (MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED) {
-			boundaries = new HashSet<>();
+			boundaries = new HashMap<>();
 		}
         Pl3xMarkersCore.storage()
 			.getAreaMarkerRepository()
@@ -38,9 +35,8 @@ public class AreaMarkerLayer extends MarkerLayer {
     }
 
     public void loadArea(IAreaMarker area) {
-        if (super.hasMarker(area.getKey())) {
-            super.removeMarker(area.getKey());
-        }
+		super.removeMarker(area.getKey());
+		boundaries.remove(area.getKey());
 		var points = area.getPoints();
 		if (points == null || points.isEmpty()) {
 			return;
@@ -53,7 +49,8 @@ public class AreaMarkerLayer extends MarkerLayer {
 			popup += "<br><i>" + areaFormatted + " b²<i/>";
 		}
 		if (MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED) {
-			boundaries.add(
+			boundaries.put(
+				area.getKey(),
 				new Boundary(area.getMinCorner(), area.getMaxCorner(), orderedPoints, area)
 			);
 		}
@@ -97,7 +94,7 @@ public class AreaMarkerLayer extends MarkerLayer {
     }
 
 	public Optional<Boundary> getAreaBoundary(int x, int z) {
-		return boundaries.stream()
+		return boundaries.values().stream()
 		   .filter(b -> b.contains(x, z))
 		   .findFirst();
 	}
