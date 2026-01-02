@@ -96,13 +96,10 @@ public class AreaMarkerLayer extends MarkerLayer {
 		return false;
     }
 
-	public Optional<IAreaMarker> getArea(int x, int z) {
-		return boundaries.stream().filter(b -> {
-			boolean xInside = x >= b.min().getX() && x <= b.max().getX();
-			boolean zInside = z >= b.min().getZ() && z <= b.max().getZ();
-			// TODO improve point-in-polygon check
-			return xInside && zInside;
-		}).map(Boundary::areaMarker).findFirst();
+	public Optional<Boundary> getArea(int x, int z) {
+		return boundaries.stream()
+		   .filter(b -> b.contains(x, z))
+		   .findFirst();
 	}
 
 }
