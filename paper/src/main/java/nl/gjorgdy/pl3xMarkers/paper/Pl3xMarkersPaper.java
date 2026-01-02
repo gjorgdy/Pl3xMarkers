@@ -3,11 +3,17 @@ package nl.gjorgdy.pl3xMarkers.paper;
 import nl.gjorgdy.pl3xMarkers.paper.listeners.*;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.json.JsonStorage;
+import nl.gjorgdy.pl3xmarkers.core.objects.Boundary;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 @SuppressWarnings("unused") // Called by paper
 public final class Pl3xMarkersPaper extends JavaPlugin {
+
+    private final HashMap<UUID, Boundary> playerBoundaries = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -18,6 +24,7 @@ public final class Pl3xMarkersPaper extends JavaPlugin {
                 new BeaconListener(),
                 new EndGatewayListener(),
                 new EndPortalListener(),
+                new MovementListener(playerBoundaries),
                 new NetherPortalListener(),
                 new NodeListener(),
 				new SaveListener(storage)
