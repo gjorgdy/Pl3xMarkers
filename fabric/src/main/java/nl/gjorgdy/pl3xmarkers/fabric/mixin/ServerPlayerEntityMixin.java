@@ -6,6 +6,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
+import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.objects.Boundary;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,6 +29,8 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
 	@Override
 	protected void tickMovementInput() {
 		super.tickMovementInput();
+
+		if (!MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED) return;
 
 		var pos = this.getBlockPos();
 		var worldKey = getEntityWorld().getRegistryKey().getValue().toString();
