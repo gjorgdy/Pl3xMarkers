@@ -32,7 +32,7 @@ public class HtmlHelper {
 
 	@Language("HTML")
 	public static String sanitize(@Language("HTML") String html) {
-		return POLICY.sanitize(html);
+		return POLICY.sanitize(html).replace("\n", "<br>");
 	}
 
 }

@@ -4,6 +4,7 @@ import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IStorage;
 import nl.gjorgdy.pl3xmarkers.core.json.repositories.AreaMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.json.repositories.IconMarkerRepository;
+import nl.gjorgdy.pl3xmarkers.core.json.repositories.NamedIconMarkerRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,7 +12,8 @@ import java.nio.file.Path;
 
 public class JsonStorage implements IStorage {
 
-	private  IconMarkerRepository iconMarkerRepository;
+	private IconMarkerRepository iconMarkerRepository;
+	private NamedIconMarkerRepository namedIconMarkerRepository;
 	private AreaMarkerRepository areaMarkerRepository;
 	private boolean loaded = false;
 
@@ -22,6 +24,7 @@ public class JsonStorage implements IStorage {
 		if (Pl3xMarkersCore.isBukkit()) migrate(Path.of("config/pl3xmarkers"), Path.of("plugins/Pl3xMarkers"));
 		// load repositories
 		iconMarkerRepository = new IconMarkerRepository(configPath + "/markers", "icons");
+		namedIconMarkerRepository = new NamedIconMarkerRepository(configPath + "/markers", "named_icons");
 		areaMarkerRepository = new AreaMarkerRepository(configPath + "/markers", "areas");
 		// mark as loaded
 		loaded = true;
@@ -37,6 +40,12 @@ public class JsonStorage implements IStorage {
 	public IconMarkerRepository getIconMarkerRepository() {
 		if (!loaded) load();
 		return iconMarkerRepository;
+	}
+
+	@Override
+	public NamedIconMarkerRepository getNamedIconMarkerRepository() {
+		if (!loaded) load();
+		return namedIconMarkerRepository;
 	}
 
 	@Override
@@ -63,9 +72,11 @@ public class JsonStorage implements IStorage {
 			files.forEach(oldFile -> {
 				try {
 					Files.move(oldFile, newPath.resolve(oldFile.getFileName()));
-				} catch (Exception ignored) {}
+				} catch (Exception ignored) {
+				}
 			});
 			Files.delete(oldPath);
-		} catch (IOException ignored) {}
+		} catch (IOException ignored) {
+		}
 	}
 }

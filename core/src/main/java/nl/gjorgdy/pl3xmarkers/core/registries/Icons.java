@@ -11,13 +11,15 @@ public class Icons {
         public static final String END_GATEWAY = "end_gateway";
         public static final String END_PORTAL = "end_portal";
         public static final String NETHER_PORTAL = "nether_portal";
+        public static final String SIGN = "sign";
     }
 
     public static Set<IconImageAddress> ALL = Set.of(
         new IconImageAddress("/assets/pl3xmarkers/icons/", Keys.BEACON, "png"),
         new IconImageAddress("/assets/pl3xmarkers/icons/", Keys.END_GATEWAY, "png"),
         new IconImageAddress("/assets/pl3xmarkers/icons/", Keys.END_PORTAL, "png"),
-        new IconImageAddress("/assets/pl3xmarkers/icons/", Keys.NETHER_PORTAL, "png")
+        new IconImageAddress("/assets/pl3xmarkers/icons/", Keys.NETHER_PORTAL, "png"),
+        new IconImageAddress("/assets/pl3xmarkers/icons/", Keys.SIGN, "png")
     );
 
 }

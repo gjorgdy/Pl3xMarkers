@@ -69,4 +69,12 @@ public class MarkersConfig extends AbstractConfig {
 	@Key("marker-settings.end_gateways.priority")
 	@Comment("The priority for end gateway markers, the lower the number the higher it is on the map")
 	public static int END_GATEWAY_MARKERS_PRIORITY = 50;
+
+	@Key("marker-settings.end_gateways.enabled")
+	@Comment("Enable sign markers on the map")
+	public static boolean SIGN_MARKERS_ENABLED = true;
+
+	@Key("marker-settings.end_gateways.priority")
+	@Comment("The priority for sign markers, the lower the number the higher it is on the map")
+	public static int SIGN_MARKERS_PRIORITY = 50;
 }

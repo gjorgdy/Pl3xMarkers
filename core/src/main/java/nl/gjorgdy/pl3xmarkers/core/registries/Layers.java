@@ -1,6 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.core.registries;
 
 import net.pl3x.map.core.world.World;
+import nl.gjorgdy.pl3xmarkers.core.layers.SignsIconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
 import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
@@ -26,6 +27,7 @@ public class Layers {
         public static String NETHER_PORTALS = "nether_portals";
         public static String AREAS = "areas";
 		public static String OPAC = "open_parties_and_claims";
+		public static String SIGNS = "signs";
     }
 
     public static class Labels {
@@ -35,6 +37,7 @@ public class Layers {
         public static String NETHER_PORTALS = "Nether Portals";
         public static String AREAS = "Areas";
 		public static String OPAC = "Open Parties and Claims";
+		public static String SIGNS = "Signs";
     }
 
     public static class Tooltips {
@@ -68,6 +71,10 @@ public class Layers {
 			new LayerFactory(
 					world -> new AreaMarkerLayer(Keys.AREAS, Labels.AREAS, world, MarkersConfig.AREA_MARKERS_PRIORITY),
 					world -> MarkersConfig.AREA_MARKERS_ENABLED
+			),
+			new LayerFactory(
+					world -> new SignsIconMarkerLayer(world, MarkersConfig.SIGN_MARKERS_PRIORITY),
+					world -> MarkersConfig.SIGN_MARKERS_ENABLED
 			)
 	));
 
