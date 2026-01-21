@@ -82,8 +82,12 @@ public class SignsIconMarkerLayer extends MarkerLayer {
 
 	protected <T extends ISignMarker> void addMarker(T markerEntity) {
 		var sanitizedText = new String[4];
-		for (int i = 0; i < markerEntity.getText().length; i++) {
-			sanitizedText[i] = HtmlHelper.sanitize(markerEntity.getText()[i]);
+		for (int i = 0; i < 4; i++) {
+			if (i >= markerEntity.getText().length) {
+				sanitizedText[i] = "⠀";
+			} else {
+				sanitizedText[i] = HtmlHelper.sanitize(markerEntity.getText()[i]);
+			}
 		}
 		// Create tooltip by joining lines with <br> after sanitizing to prevent HTML injection
 		@Language("HTML") var tooltip = String.join("<br>", sanitizedText);
