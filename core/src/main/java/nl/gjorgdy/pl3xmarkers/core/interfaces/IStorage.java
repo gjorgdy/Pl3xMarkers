@@ -2,7 +2,7 @@ package nl.gjorgdy.pl3xmarkers.core.interfaces;
 
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IAreaMarker;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IIconMarker;
-import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.INamedIconMarker;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.ISignMarker;
 
 public interface IStorage {
 
@@ -10,7 +10,7 @@ public interface IStorage {
 
 	IIconMarkerRepository<? extends IIconMarker> getIconMarkerRepository();
 
-	INamedIconMarkerRepository<? extends INamedIconMarker> getNamedIconMarkerRepository();
+	ISignMarkerRepository<? extends ISignMarker> getSignMarkerRepository();
 
 	void close();
 
