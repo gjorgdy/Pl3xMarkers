@@ -81,9 +81,6 @@ public class SignsIconMarkerLayer extends MarkerLayer {
 	}
 
 	protected <T extends ISignMarker> void addMarker(T markerEntity) {
-		if (markerEntity.getText() == null || markerEntity.getText().length > 4) {
-			throw new IllegalArgumentException("text should be a String array with a size of 4");
-		}
 		var sanitizedText = new String[4];
 		for (int i = 0; i < markerEntity.getText().length; i++) {
 			sanitizedText[i] = HtmlHelper.sanitize(markerEntity.getText()[i]);
