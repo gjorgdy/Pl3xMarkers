@@ -21,6 +21,7 @@ repositories {
 
 dependencies {
     implementation(libs.paper.api)
+    implementation(libs.shopkeepers)
 
     implementation project(':core')
     implementation project(':json')

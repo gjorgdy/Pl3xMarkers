@@ -9,6 +9,7 @@ yarn_mappings = "1.21.11+build.3"
 
 pl3xmap = "1.21.11-540"
 openPartiesAndClaims = "7112770"
+shopkeepers = "2.25.0"
 
 paper = "1.21.11-R0.1-SNAPSHOT"
 
@@ -35,6 +36,7 @@ yarn-mappings = { group = "net.fabricmc", name = "yarn", version.ref = "yarn_map
 paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
 
 openPartiesAndClaims = { group = "curse.maven", name = "open-parties-and-claims-636608", version.ref = "openPartiesAndClaims" }
+shopkeepers = { group = "com.nisovin.shopkeepers", name = "ShopkeepersAPI", version.ref = "shopkeepers" }
 
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 owaspJavaHtmlSanitizer = { group = "com.googlecode.owasp-java-html-sanitizer", name = "owasp-java-html-sanitizer", version.ref = "owasp_java_html_sanitizer" }
