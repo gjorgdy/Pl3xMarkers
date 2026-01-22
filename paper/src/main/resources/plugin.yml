@@ -5,4 +5,5 @@ api-version: '1.21'
 authors: [ Gjorgdy ]
 website: https://hexasis.eu/
 loadbefore: [ Pl3xMap ]
+softdepend: [ Shopkeepers ]
 depend: [ Pl3xMap ]

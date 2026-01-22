@@ -17,11 +17,19 @@ repositories {
         name = "papermc-repo"
         url = "https://repo.papermc.io/repository/maven-public/"
     }
+    maven {
+        url = "https://api.modrinth.com/maven"
+    }
+    maven {
+        name = "shopkeepers-repo"
+        url = "https://raw.githubusercontent.com/Shopkeepers/Repository/main/releases/"
+    }
 }
 
 dependencies {
-    implementation(libs.paper.api)
-    implementation(libs.shopkeepers)
+    implementation libs.paper.api
+    compileOnly libs.shopkeepers
+    compileOnly libs.pl3xmap
 
     implementation project(':core')
     implementation project(':json')

@@ -1,16 +1,16 @@
 package nl.gjorgdy.pl3xmarkers.core.registries;
 
 import net.pl3x.map.core.world.World;
-import nl.gjorgdy.pl3xmarkers.core.layers.SignsIconMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
 import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.helpers.WorldHelpers;
 import nl.gjorgdy.pl3xmarkers.core.layers.EndGatewayIconMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.EndPortalIconMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.NetherPortalIconMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.layers.SignsIconMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
 import org.intellij.lang.annotations.Language;
 
 import java.util.HashSet;
@@ -19,37 +19,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class Layers {
-
-    public static class Keys {
-        public static String BEACONS = "beacons";
-        public static String END_GATEWAYS = "end_gateways";
-        public static String END_PORTALS = "end_portals";
-        public static String NETHER_PORTALS = "nether_portals";
-        public static String AREAS = "areas";
-		public static String OPAC = "open_parties_and_claims";
-		public static String SIGNS = "signs";
-    }
-
-    public static class Labels {
-        public static String BEACONS = "Beacons";
-        public static String END_GATEWAYS = "End Gateways";
-        public static String END_PORTALS = "End Portals";
-        public static String NETHER_PORTALS = "Nether Portals";
-        public static String AREAS = "Areas";
-		public static String OPAC = "Open Parties and Claims";
-		public static String SIGNS = "Signs";
-    }
-
-    public static class Tooltips {
-        @Language("HTML")
-        public static String BEACONS = "Beacon";
-        @Language("HTML")
-        public static String END_GATEWAYS = "End Gateway";
-        @Language("HTML")
-        public static String END_PORTALS = "End Portal";
-        @Language("HTML")
-        public static String NETHER_PORTALS = "Nether Portal";
-    }
 
 	private static final Set<LayerFactory> ALL = new HashSet<>(Set.of(
 			new LayerFactory(
@@ -88,6 +57,39 @@ public class Layers {
 
 	public static Set<LayerFactory> getAll() {
 		return ALL;
+	}
+
+	public static class Keys {
+		public static String BEACONS = "beacons";
+		public static String END_GATEWAYS = "end_gateways";
+		public static String END_PORTALS = "end_portals";
+		public static String NETHER_PORTALS = "nether_portals";
+		public static String AREAS = "areas";
+		public static String OPAC = "open_parties_and_claims";
+		public static String SIGNS = "signs";
+		public static String SHOPKEEPERS = "shopkeepers";
+	}
+
+	public static class Labels {
+		public static String BEACONS = "Beacons";
+		public static String END_GATEWAYS = "End Gateways";
+		public static String END_PORTALS = "End Portals";
+		public static String NETHER_PORTALS = "Nether Portals";
+		public static String AREAS = "Areas";
+		public static String OPAC = "Open Parties and Claims";
+		public static String SIGNS = "Signs";
+		public static String SHOPKEEPERS = "Shopkeepers";
+	}
+
+	public static class Tooltips {
+		@Language("HTML")
+		public static String BEACONS = "Beacon";
+		@Language("HTML")
+		public static String END_GATEWAYS = "End Gateway";
+		@Language("HTML")
+		public static String END_PORTALS = "End Portal";
+		@Language("HTML")
+		public static String NETHER_PORTALS = "Nether Portal";
 	}
 
 }
