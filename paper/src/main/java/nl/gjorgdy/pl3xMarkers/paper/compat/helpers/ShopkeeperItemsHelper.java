@@ -5,6 +5,8 @@ import com.nisovin.shopkeepers.api.util.UnmodifiableItemStack;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
+import java.util.Locale;
+
 public class ShopkeeperItemsHelper {
 
 	public static String getItemName(UnmodifiableItemStack item) {
@@ -14,7 +16,7 @@ public class ShopkeeperItemsHelper {
 				return serialize(displayName);
 			}
 		}
-		return item.getType().name();
+		return item.getType().name().toLowerCase(Locale.ROOT).replace("_", " ");
 	}
 
 	public static String serialize(Component component) {
