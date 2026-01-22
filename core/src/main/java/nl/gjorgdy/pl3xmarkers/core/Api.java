@@ -1,10 +1,11 @@
 package nl.gjorgdy.pl3xmarkers.core;
 
-import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.markers.layer.Layer;
 import net.pl3x.map.core.world.World;
+import nl.gjorgdy.pl3xmarkers.core.layers.SignsIconMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.objects.Boundary;
 import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
 import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
@@ -17,14 +18,18 @@ public class Api {
     @SuppressWarnings("unused")
     private static World getWorld(String worldIdentifier) {
         World world = Pl3xMap.api().getWorldRegistry().get(worldIdentifier);
-        if (world == null) throw new RuntimeException("World not found " + worldIdentifier);
+		if (world == null) {
+			throw new RuntimeException("World not found " + worldIdentifier);
+		}
         return world;
     }
 
 	@SuppressWarnings("unused")
 	public Optional<Boundary> getAreaBoundary(String worldIdentifier, int x, int z) {
 		World world = Pl3xMap.api().getWorldRegistry().get(worldIdentifier);
-		if (world == null) return Optional.empty();
+		if (world == null) {
+			return Optional.empty();
+		}
 		var layer = getWorld(worldIdentifier).getLayerRegistry().get(Layers.Keys.AREAS);
 		if (layer instanceof AreaMarkerLayer aml) {
 			return aml.getAreaBoundary(x, z);
@@ -65,6 +70,36 @@ public class Api {
 		}
 		return new InteractionResult(InteractionResult.State.FAILURE, "Could not remove point from area: " + label);
     }
+
+	public InteractionResult editSignMarker(String worldIdentifier, int x, int z, @Language("HTML") String[] text) {
+		Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(Layers.Keys.SIGNS);
+		if (layer instanceof SignsIconMarkerLayer signsLayer) {
+			var edited = signsLayer.editMarker(x, z, text);
+			return edited ? new InteractionResult(InteractionResult.State.ADDED, "Sign marker edited") :
+						   InteractionResult.skip();
+		}
+		return new InteractionResult(InteractionResult.State.FAILURE, "Could not edit sign marker");
+	}
+
+	public InteractionResult addSignMarker(String worldIdentifier, int x, int z, @Language("HTML") String[] text) {
+		Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(Layers.Keys.SIGNS);
+		if (layer instanceof SignsIconMarkerLayer signsLayer) {
+			var added = signsLayer.createMarker(x, z, text);
+			return added ? new InteractionResult(InteractionResult.State.ADDED, "Sign marker added") :
+						   InteractionResult.skip();
+		}
+		return new InteractionResult(InteractionResult.State.FAILURE, "Could not add sign marker");
+	}
+
+	public InteractionResult removeSignMarker(String worldIdentifier, int x, int z) {
+		Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(Layers.Keys.SIGNS);
+		if (layer instanceof SignsIconMarkerLayer signsLayer) {
+			var removed = signsLayer.removeMarker(x, z);
+			return removed ? new InteractionResult(InteractionResult.State.REMOVED, "Sign marker removed") :
+						   InteractionResult.skip();
+		}
+		return new InteractionResult(InteractionResult.State.FAILURE, "Could not remove sign marker");
+	}
 
     public InteractionResult addNetherPortalIconMarker(String worldIdentifier, int x, int z) {
         var added = addIconMarker(worldIdentifier, Layers.Keys.NETHER_PORTALS, x, z);

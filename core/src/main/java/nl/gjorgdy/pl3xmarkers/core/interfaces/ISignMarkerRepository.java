@@ -10,7 +10,7 @@ public interface ISignMarkerRepository<T extends ISignMarker> {
 	@SuppressWarnings("Unused")
 	Collection<T> getMarkers(String worldIdentifier, String layerKey);
 
-	boolean editMarker(String worldIdentifier, String layerKey, int x, int z, @Language("HTML") String[] text);
+	T editMarker(String worldIdentifier, String layerKey, int x, int z, @Language("HTML") String[] text);
 
 	@SuppressWarnings("Unused")
 	T createMarker(String worldIdentifier, String layerKey, int x, int z, @Language("HTML") String[] text);

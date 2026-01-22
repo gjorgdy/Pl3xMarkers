@@ -10,7 +10,8 @@
     "NetherPortalMixin",
     "PortalManagerMixin",
     "ServerPlayerEntityMixin",
-    "ServerWorldMixin"
+    "ServerWorldMixin",
+    "SignBlockEntityMixin"
   ],
   "client": [],
   "injectors": {

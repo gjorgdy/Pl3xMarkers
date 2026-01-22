@@ -38,9 +38,13 @@ public class SignsIconMarkerLayer extends MarkerLayer {
 		if (text == null || text.length != 4) {
 			throw new IllegalArgumentException("text should be a String array with a size of 4");
 		}
-		return Pl3xMarkersCore.storage()
-					   .getSignMarkerRepository()
-					   .editMarker(getWorld().getKey(), key, x, z, text);
+		removeMarker(x, z);
+		addMarker(
+				Pl3xMarkersCore.storage()
+						.getSignMarkerRepository()
+						.editMarker(getWorld().getKey(), key, x, z, text)
+		);
+		return true;
 	}
 
 	/**
