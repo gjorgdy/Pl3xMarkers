@@ -14,6 +14,7 @@
 - End Portals
 - End Gateways
 - Beacons
+- Signs
 
 All without the need for any commands and all fully configurable
 
@@ -49,6 +50,15 @@ All without the need for any commands and all fully configurable
 1. Place a beacon.
 2. Activate the beacon.
 3. Admire your b~~e~~acon on the web map.
+
+</details>
+
+<details>
+<summary>Add a sign marker</summary>
+
+1. Place a sign on top of a lodestone.
+2. Write some text on your sign.
+3. Admire your sign on the web map.
 
 </details>
 
