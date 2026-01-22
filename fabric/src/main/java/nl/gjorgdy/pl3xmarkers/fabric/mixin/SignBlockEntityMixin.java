@@ -84,12 +84,6 @@ public abstract class SignBlockEntityMixin extends BlockEntity {
 	}
 
 	@Unique
-	private boolean isEmpty() {
-		return Arrays.stream(getText(true).getMessages(false))
-					   .allMatch(text -> text.getLiteralString() == null || text.getLiteralString().isEmpty());
-	}
-
-	@Unique
 	private boolean isNotMarkerSign() {
 		return world == null
 					   || !world.getBlockState(pos.down()).isOf(Blocks.LODESTONE)
