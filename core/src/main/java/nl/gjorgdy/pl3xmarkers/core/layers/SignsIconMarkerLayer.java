@@ -38,13 +38,17 @@ public class SignsIconMarkerLayer extends MarkerLayer {
 		if (text == null || text.length != 4) {
 			throw new IllegalArgumentException("text should be a String array with a size of 4");
 		}
-		removeMarker(x, z);
+		boolean edited = false;
+		if (hasMarker(toMarkerKey(x, z))) {
+			removeMarker(x, z);
+			edited = true;
+		}
 		addMarker(
 				Pl3xMarkersCore.storage()
 						.getSignMarkerRepository()
 						.editMarker(getWorld().getKey(), key, x, z, text)
 		);
-		return true;
+		return edited;
 	}
 
 	/**

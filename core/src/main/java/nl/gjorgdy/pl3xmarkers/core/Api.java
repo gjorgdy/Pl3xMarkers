@@ -76,7 +76,7 @@ public class Api {
 		if (layer instanceof SignsIconMarkerLayer signsLayer) {
 			var edited = signsLayer.editMarker(x, z, text);
 			return edited ? new InteractionResult(InteractionResult.State.ADDED, "Sign marker edited") :
-						   InteractionResult.skip();
+						   new InteractionResult(InteractionResult.State.ADDED, "Sign marker added");
 		}
 		return new InteractionResult(InteractionResult.State.FAILURE, "Could not edit sign marker");
 	}
