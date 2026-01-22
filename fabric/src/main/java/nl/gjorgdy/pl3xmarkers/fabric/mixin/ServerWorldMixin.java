@@ -1,10 +1,11 @@
 package nl.gjorgdy.pl3xmarkers.fabric.mixin;
 
-import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.fabric.helpers.FeedbackHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -26,6 +27,10 @@ public class ServerWorldMixin {
             // try to remove marker
             var result = Pl3xMarkersCore.api().removeNetherPortalIconMarker(world.getRegistryKey().getValue().toString(), pos.getX(), pos.getZ());
 			FeedbackHelper.sendFeedback(result, world, pos);
+        }
+        if (currentBlockState.isIn(BlockTags.STANDING_SIGNS) && !state.isIn(BlockTags.STANDING_SIGNS)) {
+            var result = Pl3xMarkersCore.api().removeSignMarker(world.getRegistryKey().getValue().toString(), pos.getX(), pos.getZ());
+            FeedbackHelper.sendFeedback(result, world, pos);
         }
     }
 
