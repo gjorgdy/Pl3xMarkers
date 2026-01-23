@@ -52,8 +52,14 @@ public class ShopkeepersMarkerLayer extends MarkerLayer {
 		if (loc == null) {
 			throw new IllegalArgumentException("Shopkeeper has no location");
 		}
-		@Language("HTML") var tooltip = HtmlHelper.scrollablePopUp(
+		@Language("HTML") var tooltip = HtmlHelper.tooltip(
 				shopkeeper.getDisplayName(),
+				shopkeeper.getType().getDisplayName(),
+				"Click for trades"
+		);
+		@Language("HTML") var popup = HtmlHelper.scrollablePopUp(
+				shopkeeper.getDisplayName(),
+				shopkeeper.getType().getDisplayName(),
 				String.join("<br>", shopkeeper.getTradingRecipes(null).stream()
 											.map(ShopkeeperItemsHelper::formatTrade).toArray(String[]::new))
 		);
@@ -63,8 +69,8 @@ public class ShopkeepersMarkerLayer extends MarkerLayer {
 						loc.getBlockX(), loc.getBlockZ()
 				)
 					   .centerIcon(16, 16)
-					   .addTooltip(HtmlHelper.tooltip(shopkeeper.getDisplayName(), "Click for trades"))
-					   .addPopup(tooltip)
+					   .addTooltip(tooltip)
+					   .addPopup(popup)
 					   .build();
 	}
 }
