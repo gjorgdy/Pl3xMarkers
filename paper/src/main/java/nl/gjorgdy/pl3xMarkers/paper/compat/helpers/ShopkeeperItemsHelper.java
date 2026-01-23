@@ -25,6 +25,9 @@ public class ShopkeeperItemsHelper {
 
 	public static String formatTrade(TradingRecipe tradingRecipe) {
 		var sb = new StringBuilder();
+		if (tradingRecipe.isOutOfStock()) {
+			sb.append("<del>");
+		}
 		String firstItemName = getItemName(tradingRecipe.getItem1());
 		int firstItemAmount = tradingRecipe.getItem1().getAmount();
 		sb.append(firstItemAmount).append("x ").append(firstItemName);
@@ -36,6 +39,9 @@ public class ShopkeeperItemsHelper {
 		String resultItemName = getItemName(tradingRecipe.getResultItem());
 		int resultItemAmount = tradingRecipe.getResultItem().getAmount();
 		sb.append(" → ").append(resultItemAmount).append("x ").append(resultItemName);
+		if (tradingRecipe.isOutOfStock()) {
+			sb.append("</del>");
+		}
 		return sb.toString();
 	}
 
