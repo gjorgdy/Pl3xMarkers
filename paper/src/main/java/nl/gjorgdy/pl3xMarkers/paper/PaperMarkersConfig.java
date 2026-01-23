@@ -9,11 +9,11 @@ public class PaperMarkersConfig extends AbstractConfig {
 	private static final PaperMarkersConfig CONFIG = new PaperMarkersConfig();
 
 	@Key("marker-settings.shopkeepers.enabled")
-	@Comment("Enable Shopkeepers shop on the map")
+	@Comment("Enable Shopkeepers markers on the map")
 	public static boolean SHOPKEEPERS_MARKERS_ENABLED = true;
 
 	@Key("marker-settings.shopkeepers.priority")
-	@Comment("The priority for Shopkeepers shop, the lower the number the higher it is on the map")
+	@Comment("The priority for Shopkeepers markers, the lower the number the higher it is on the map")
 	public static int SHOPKEEPERS_MARKERS_PRIORITY = 40;
 
 	public static void reload() {
