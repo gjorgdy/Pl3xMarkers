@@ -23,7 +23,7 @@ public final class Pl3xMarkersPaper extends JavaPlugin {
     @Override
     public void onLoad() {
         // Plugin startup logic
-        Pl3xMarkersCore.onInitialize(true, storage);
+        Pl3xMarkersCore.onInitialize(true, storage, PaperMarkersConfig::reload);
         super.onLoad();
     }
 
@@ -31,7 +31,7 @@ public final class Pl3xMarkersPaper extends JavaPlugin {
     public void onEnable() {
         // register layers
         if (getServer().getPluginManager().isPluginEnabled("Shopkeepers")) {
-            Layers.register(ShopkeepersMarkerLayer::new, unused -> true);
+            Layers.register(ShopkeepersMarkerLayer::new, unused -> PaperMarkersConfig.SHOPKEEPERS_MARKERS_ENABLED);
             registerEvents(
                     new ShopkeepersListener()
             );

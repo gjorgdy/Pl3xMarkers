@@ -4,6 +4,7 @@ import com.nisovin.shopkeepers.api.ShopkeepersAPI;
 import com.nisovin.shopkeepers.api.shopkeeper.Shopkeeper;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.world.World;
+import nl.gjorgdy.pl3xMarkers.paper.PaperMarkersConfig;
 import nl.gjorgdy.pl3xMarkers.paper.Pl3xMarkersPaper;
 import nl.gjorgdy.pl3xMarkers.paper.compat.helpers.ShopkeeperItemsHelper;
 import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
@@ -17,7 +18,7 @@ import org.jspecify.annotations.NonNull;
 public class ShopkeepersMarkerLayer extends MarkerLayer {
 
 	public ShopkeepersMarkerLayer(@NonNull World world) {
-		super(Layers.Keys.SHOPKEEPERS, Layers.Labels.SHOPKEEPERS, world, 50);
+		super(Layers.Keys.SHOPKEEPERS, Layers.Labels.SHOPKEEPERS, world, PaperMarkersConfig.SHOPKEEPERS_MARKERS_PRIORITY);
 	}
 
 	@Override
