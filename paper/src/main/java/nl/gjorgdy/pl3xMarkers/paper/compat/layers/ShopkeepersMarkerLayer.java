@@ -52,17 +52,18 @@ public class ShopkeepersMarkerLayer extends MarkerLayer {
 		if (loc == null) {
 			throw new IllegalArgumentException("Shopkeeper has no location");
 		}
-		@Language("HTML") var tooltip = "<b>" + HtmlHelper.sanitize(shopkeeper.getDisplayName()) + "</b><br><div style='max-height: 16rem; overflow-y: auto; border: #f0f0f0 solid 2px; padding: 5px; border-radius: 1rem;'>";
-		tooltip += String.join("<br>", shopkeeper.getTradingRecipes(null).stream()
-											   .map(ShopkeeperItemsHelper::formatTrade).toArray(String[]::new));
-		tooltip += "</div>";
+		@Language("HTML") var tooltip = HtmlHelper.scrollablePopUp(
+				shopkeeper.getDisplayName(),
+				String.join("<br>", shopkeeper.getTradingRecipes(null).stream()
+											.map(ShopkeeperItemsHelper::formatTrade).toArray(String[]::new))
+		);
 		return IconMarkerBuilder.newIconMarker(
 						shopkeeper.getIdString(),
 						Icons.Keys.SHOPKEEPERS,
 						loc.getBlockX(), loc.getBlockZ()
 				)
 					   .centerIcon(16, 16)
-					   .addTooltip("<b>" + HtmlHelper.sanitize(shopkeeper.getDisplayName()) + "</b><br><i>Click for trades</i>")
+					   .addTooltip(HtmlHelper.tooltip(shopkeeper.getDisplayName(), "Click for trades"))
 					   .addPopup(tooltip)
 					   .build();
 	}
