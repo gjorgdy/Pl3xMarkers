@@ -1,6 +1,7 @@
 package nl.gjorgdy.pl3xMarkers.paper;
 
 import nl.gjorgdy.pl3xMarkers.paper.compat.layers.ShopkeepersMarkerLayer;
+import nl.gjorgdy.pl3xMarkers.paper.compat.listeners.ShopkeepersListener;
 import nl.gjorgdy.pl3xMarkers.paper.listeners.*;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.json.JsonStorage;
@@ -21,8 +22,6 @@ public final class Pl3xMarkersPaper extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        // register layers
-        Layers.register(ShopkeepersMarkerLayer::new, unused -> true);
         // Plugin startup logic
         Pl3xMarkersCore.onInitialize(true, storage);
         super.onLoad();
@@ -30,6 +29,13 @@ public final class Pl3xMarkersPaper extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // register layers
+        if (getServer().getPluginManager().isPluginEnabled("Shopkeepers")) {
+            Layers.register(ShopkeepersMarkerLayer::new, unused -> true);
+            registerEvents(
+                    new ShopkeepersListener()
+            );
+        }
         // register event listeners
         registerEvents(
                 new BeaconListener(),

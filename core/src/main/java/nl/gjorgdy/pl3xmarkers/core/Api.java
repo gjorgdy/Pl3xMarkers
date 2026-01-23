@@ -6,6 +6,7 @@ import net.pl3x.map.core.world.World;
 import nl.gjorgdy.pl3xmarkers.core.layers.SignsIconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.objects.Boundary;
 import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
 import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
@@ -23,6 +24,14 @@ public class Api {
 		}
         return world;
     }
+
+	public <T extends MarkerLayer> T getMarkerLayer(String worldIdentifier, String layerKey, Class<T> layerClass) {
+		Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(layerKey);
+		if (layerClass.isInstance(layer)) {
+			return layerClass.cast(layer);
+		}
+		throw new RuntimeException("Layer not found " + layerKey + " in world " + worldIdentifier);
+	}
 
 	@SuppressWarnings("unused")
 	public Optional<Boundary> getAreaBoundary(String worldIdentifier, int x, int z) {

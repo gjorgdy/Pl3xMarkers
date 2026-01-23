@@ -11,7 +11,6 @@ import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.markers.IconMarkerBuilder;
 import nl.gjorgdy.pl3xmarkers.core.registries.Icons;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.intellij.lang.annotations.Language;
 import org.jspecify.annotations.NonNull;
 
@@ -24,25 +23,28 @@ public class ShopkeepersMarkerLayer extends MarkerLayer {
 	@Override
 	public void load() {
 		var plugin = Pl3xMarkersPaper.getPlugin(Pl3xMarkersPaper.class);
-		new BukkitRunnable() {
-			@Override
-			public void run() {
-				if (ShopkeepersAPI.isEnabled()) {
-					ShopkeepersAPI.getShopkeeperRegistry().getAllShopkeepers().forEach(sk -> {
-						var loc = sk.getLocation();
-						if (loc == null || !worldIdentifier.equals(loc.getWorld().getName())) {
-							return; // skip shopkeepers from other worlds
-						}
-						if (hasMarker(sk.getIdString())) {
-							removeMarker(sk.getIdString());
-						}
-						addMarker(createIconMarker(sk));
-					});
-				} else {
-					plugin.getLogger().warning("Shopkeepers plugin is not enabled, cannot load shopkeeper markers.");
-				}
-			}
-		}.runTaskTimer(plugin, 0L, 20L * 60L); // run every minute to update shopkeepers
+		if (ShopkeepersAPI.isEnabled()) {
+			ShopkeepersAPI.getShopkeeperRegistry().getAllShopkeepers().forEach(this::loadShopkeeper);
+		} else {
+			plugin.getLogger().warning("Shopkeepers plugin is not enabled, cannot load shopkeeper markers.");
+		}
+	}
+
+	public void loadShopkeeper(Shopkeeper shopkeeper) {
+		var loc = shopkeeper.getLocation();
+		if (loc == null || !worldIdentifier.equals(loc.getWorld().getName())) {
+			return; // skip shopkeepers from other worlds
+		}
+		if (hasMarker(shopkeeper.getIdString())) {
+			removeMarker(shopkeeper.getIdString());
+		}
+		addMarker(createIconMarker(shopkeeper));
+	}
+
+	public void removeShopkeeper(Shopkeeper shopkeeper) {
+		if (hasMarker(shopkeeper.getIdString())) {
+			removeMarker(shopkeeper.getIdString());
+		}
 	}
 
 	protected Marker<?> createIconMarker(Shopkeeper shopkeeper) {
