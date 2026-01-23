@@ -5,7 +5,9 @@ import com.nisovin.shopkeepers.api.util.UnmodifiableItemStack;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public class ShopkeeperItemsHelper {
 
@@ -16,7 +18,10 @@ public class ShopkeeperItemsHelper {
 				return serialize(displayName);
 			}
 		}
-		return item.getType().name().toLowerCase(Locale.ROOT).replace("_", " ");
+		var name = item.getType().name().toLowerCase(Locale.ROOT).replace("_", " ");
+		return Arrays.stream(name.split("\\s"))
+					   .map(word -> Character.toTitleCase(word.charAt(0)) + word.substring(1))
+					   .collect(Collectors.joining(" "));
 	}
 
 	public static String serialize(Component component) {
