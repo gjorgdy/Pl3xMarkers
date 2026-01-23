@@ -9,6 +9,7 @@
 ## Added markers
 
 - [Open Parties and Claims](https://modrinth.com/mod/open-parties-and-claims) claimed chunks
+- [Shopkeepers](https://dev.bukkit.org/projects/shopkeepers) shops
 - Player made areas
 - Nether Portals
 - End Portals

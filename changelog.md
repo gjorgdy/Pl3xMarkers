@@ -1,5 +1,5 @@
-﻿Signs and pings
+﻿Shopkeepers compat
 ---
 
-- Added sign markers - place a sign on a lodestone, and it will show up on the map.
-- Fixed action bar messages showing up from portals that already have markers.
+- Added support for [Shopkeepers](https://dev.bukkit.org/projects/shopkeepers) (Paper only) shops as markers on the web
+  map.
