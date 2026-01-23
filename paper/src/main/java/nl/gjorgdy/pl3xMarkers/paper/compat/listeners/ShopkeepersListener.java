@@ -6,6 +6,7 @@ import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.jspecify.annotations.Nullable;
 
 public class ShopkeepersListener implements Listener {
 
@@ -45,6 +46,7 @@ public class ShopkeepersListener implements Listener {
 		}
 	}
 
+	@Nullable
 	private ShopkeepersMarkerLayer getLayer(String worldIdentifier) {
 		return Pl3xMarkersCore.api().getMarkerLayer(worldIdentifier, Layers.Keys.SHOPKEEPERS, ShopkeepersMarkerLayer.class);
 	}

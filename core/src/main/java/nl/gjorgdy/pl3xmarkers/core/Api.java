@@ -12,6 +12,7 @@ import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
 import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.intellij.lang.annotations.Language;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -25,12 +26,13 @@ public class Api {
         return world;
     }
 
+	@Nullable
 	public <T extends MarkerLayer> T getMarkerLayer(String worldIdentifier, String layerKey, Class<T> layerClass) {
 		Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(layerKey);
 		if (layerClass.isInstance(layer)) {
 			return layerClass.cast(layer);
 		}
-		throw new RuntimeException("Layer not found " + layerKey + " in world " + worldIdentifier);
+		return null;
 	}
 
 	@SuppressWarnings("unused")
