@@ -62,6 +62,7 @@ public class ShopkeepersMarkerLayer extends MarkerLayer {
 						loc.getBlockX(), loc.getBlockZ()
 				)
 					   .centerIcon(16, 16)
+					   .addTooltip("<b>" + HtmlHelper.sanitize(shopkeeper.getDisplayName()) + "</b><br><i>Click for trades</i>")
 					   .addPopup(tooltip)
 					   .build();
 	}
