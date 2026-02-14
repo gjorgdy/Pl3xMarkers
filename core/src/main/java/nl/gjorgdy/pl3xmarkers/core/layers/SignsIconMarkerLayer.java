@@ -1,6 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.core.layers;
 
 import net.pl3x.map.core.world.World;
+import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.ISignMarker;
@@ -9,6 +10,9 @@ import nl.gjorgdy.pl3xmarkers.core.markers.IconMarkerBuilder;
 import nl.gjorgdy.pl3xmarkers.core.registries.Icons;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.intellij.lang.annotations.Language;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SignsIconMarkerLayer extends MarkerLayer {
 
@@ -89,12 +93,22 @@ public class SignsIconMarkerLayer extends MarkerLayer {
 	}
 
 	protected <T extends ISignMarker> void addMarker(T markerEntity) {
-		var sanitizedText = new String[4];
-		for (int i = 0; i < 4; i++) {
-			if (i >= markerEntity.getText().length) {
-				sanitizedText[i] = "⠀";
-			} else {
-				sanitizedText[i] = HtmlHelper.sanitize(markerEntity.getText()[i]);
+		List<String> sanitizedText = new ArrayList<>();
+		var text = markerEntity.getText();
+		if (MarkersConfig.SIGN_MARKERS_FILL_LINES) {
+			for (int i = 0; i < 4; i++) {
+				if (i >= text.length) {
+					sanitizedText.add("⠀");
+				} else {
+					sanitizedText.add(HtmlHelper.sanitize(text[i]));
+				}
+			}
+		} else {
+			for (@Language("HTML") String line : text) {
+				if (line.isBlank()) {
+					continue;
+				}
+				sanitizedText.add(HtmlHelper.sanitize(line));
 			}
 		}
 		// Create tooltip by joining lines with <br> after sanitizing to prevent HTML injection

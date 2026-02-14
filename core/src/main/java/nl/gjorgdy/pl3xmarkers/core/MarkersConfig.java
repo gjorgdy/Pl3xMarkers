@@ -56,6 +56,9 @@ public class MarkersConfig extends AbstractConfig {
 	@Key("marker-settings.signs.priority")
 	@Comment("The priority for sign markers, the lower the number the higher it is on the map")
 	public static int SIGN_MARKERS_PRIORITY = 50;
+	@Key("marker-settings.signs.fill_lines")
+	@Comment("Fill all 4 lines of a sign in a pop-up, if false, only the lines with text will be shown.")
+	public static boolean SIGN_MARKERS_FILL_LINES = true;
 
 	public static void reload() {
 		CONFIG.reload(Pl3xMarkersCore.getMainDir().resolve("config.yml"), MarkersConfig.class);
