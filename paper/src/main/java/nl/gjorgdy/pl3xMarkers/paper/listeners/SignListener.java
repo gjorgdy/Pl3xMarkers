@@ -4,6 +4,7 @@ import com.destroystokyo.paper.event.block.BlockDestroyEvent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import nl.gjorgdy.pl3xMarkers.paper.helpers.FeedbackHelper;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
 import org.bukkit.block.BlockType;
 import org.bukkit.block.data.type.Sign;
 import org.bukkit.event.EventHandler;
@@ -11,6 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.SignChangeEvent;
 import org.intellij.lang.annotations.Language;
+
+import java.util.Arrays;
 
 public class SignListener implements Listener {
 
@@ -26,12 +29,21 @@ public class SignListener implements Listener {
 			@Language("HTML") var text = event.lines().stream()
 												 .map(component -> PlainTextComponentSerializer.plainText().serialize(component))
 												 .toArray(String[]::new);
-			var result = Pl3xMarkersCore.api().editSignMarker(
-					world.getName(),
-					location.getBlockX(),
-					location.getBlockZ(),
-					text
-			);
+			InteractionResult result;
+			if (Arrays.stream(text).allMatch(String::isBlank)) {
+				result = Pl3xMarkersCore.api().removeSignMarker(
+						world.getName(),
+						location.getBlockX(),
+						location.getBlockZ()
+				);
+			} else {
+				result = Pl3xMarkersCore.api().editSignMarker(
+						world.getName(),
+						location.getBlockX(),
+						location.getBlockZ(),
+						text
+				);
+			}
 			FeedbackHelper.sendFeedback(result, event.getPlayer());
 		}
 	}
