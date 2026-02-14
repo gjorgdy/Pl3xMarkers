@@ -1,27 +1,21 @@
-﻿package nl.gjorgdy.pl3xmarkers.core.interfaces.entities;
+package nl.gjorgdy.pl3xmarkers.core.interfaces.entities;
 
 import java.util.Collection;
 
-public interface ILineMarker {
+public interface ILineMarker<T extends IPoint> {
 
 	String getWorld();
 
-	String getName();
+	Collection<T> getPoints();
 
-	void setName(String name);
+	IPoint getFirstPoint();
 
-	int getColor();
+	IPoint getLastPoint();
 
-	void setColor(int color);
-
-	Collection<IPoint> getPoints();
-
-	IPoint getLowerPoint();
-
-	IPoint getUpperPoint();
+	boolean isOnLine(T point);
 
 	default String getKey () {
-		return getLowerPoint().getKey() + "-" + getUpperPoint().getKey();
+		return getFirstPoint().getKey() + "-" + getLastPoint().getKey();
 	}
 
 }

@@ -1,31 +1,22 @@
-﻿package nl.gjorgdy.pl3xmarkers.core.json.entities;
+package nl.gjorgdy.pl3xmarkers.core.json.entities;
 
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.ILineMarker;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
-import nl.gjorgdy.pl3xmarkers.core.json.repositories.LineMarkerRepository;
 
 import java.util.Collection;
 import java.util.List;
 
-public class LineMarker implements ILineMarker {
+public class LineMarker implements ILineMarker<Point> {
 
-	private LineMarkerRepository repository;
-
+	private final List<Point> points;
 	private String world;
-	private String name;
-	private int color = 0xFFFFFF;
 
-	private final Point lowerPoint;
-	private final Point upperPoint;
-
-	public LineMarker(Point lowerPoint, Point upperPoint) {
-		this.lowerPoint = lowerPoint;
-		this.upperPoint = upperPoint;
+	public LineMarker(List<Point> points) {
+		this.points = points;
 	}
 
-	public void setContext(LineMarkerRepository repository, String world) {
+	public void setContext(String world) {
 		this.world = world;
-		this.repository = repository;
 	}
 
 	@Override
@@ -34,40 +25,61 @@ public class LineMarker implements ILineMarker {
 	}
 
 	@Override
-	public String getName() {
-		return name;
+	public Collection<Point> getPoints() {
+		return points;
 	}
 
 	@Override
-	public void setName(String name) {
-		if (repository != null) {
-			repository.markDirty();
+	public IPoint getFirstPoint() {
+		return points.getFirst();
+	}
+
+	@Override
+	public IPoint getLastPoint() {
+		return points.getLast();
+	}
+
+	@Override
+	public boolean isOnLine(Point point) {
+		if (point == null || points == null || points.isEmpty()) {
+			return false;
 		}
-		this.name = name;
+		if (points.contains(point)) {
+			return true;
+		}
+		for (int i = 0; i < points.size() - 1; i++) {
+			Point p1 = points.get(i);
+			Point p2 = points.get(i + 1);
+
+			if (isPointOnSegment(point, p1, p2)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	@Override
-	public int getColor() {
-		return color;
-	}
+	/**
+	 * Checks if a point lies on the line segment between two other points.
+	 * Uses the cross product method to verify collinearity and bounding box check.
+	 *
+	 * @param point the point to check
+	 * @param p1    the first endpoint of the segment
+	 * @param p2    the second endpoint of the segment
+	 * @return true if the point lies on the segment, false otherwise
+	 */
+	private boolean isPointOnSegment(Point point, Point p1, Point p2) {
+		long crossProduct = (long) (point.getZ() - p1.getZ()) * (p2.getX() - p1.getX())
+									- (long) (p2.getZ() - p1.getZ()) * (point.getX() - p1.getX());
 
-	@Override
-	public void setColor(int color) {
-		this.color = color;
-	}
+		if (crossProduct != 0) {
+			return false;
+		}
+		int minX = Math.min(p1.getX(), p2.getX());
+		int maxX = Math.max(p1.getX(), p2.getX());
+		int minZ = Math.min(p1.getZ(), p2.getZ());
+		int maxZ = Math.max(p1.getZ(), p2.getZ());
 
-	@Override
-	public Collection<IPoint> getPoints() {
-		return List.of(lowerPoint, upperPoint);
-	}
-
-	@Override
-	public IPoint getLowerPoint() {
-		return lowerPoint;
-	}
-
-	@Override
-	public IPoint getUpperPoint() {
-		return upperPoint;
+		return point.getX() >= minX && point.getX() <= maxX
+					   && point.getZ() >= minZ && point.getZ() <= maxZ;
 	}
 }

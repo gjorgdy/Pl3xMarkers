@@ -1,11 +1,12 @@
-﻿package nl.gjorgdy.pl3xmarkers.core.interfaces;
+package nl.gjorgdy.pl3xmarkers.core.interfaces;
 
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.ILineMarker;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
 
 import java.util.Collection;
+import java.util.List;
 
-public interface ILineMarkerRepository<T extends ILineMarker> {
+public interface ILineMarkerRepository<T extends ILineMarker<P>, P extends IPoint> {
 
 	/**
 	 * Get all line markers in a world
@@ -18,12 +19,12 @@ public interface ILineMarkerRepository<T extends ILineMarker> {
 	/**
 	 * Get line marker by its start and end points
 	 * @param worldIdentifier the world identifier
-	 * @param lowerPoint the lower point
-	 * @param higherPoint the higher point
+	 * @param firstPoint the lower point
+	 * @param lastPoint the higher point
 	 * @return the line marker or null if not found
 	 */
 	@SuppressWarnings("Unused")
-	T getLineMarker(String worldIdentifier, IPoint lowerPoint, IPoint higherPoint);
+	T getLineMarker(String worldIdentifier, IPoint firstPoint, IPoint lastPoint);
 
 	/**
 	 * Get line marker by a point on the line
@@ -37,12 +38,11 @@ public interface ILineMarkerRepository<T extends ILineMarker> {
 	/**
 	 * Create a line marker between two points
 	 * @param worldIdentifier the world identifier
-	 * @param pointA the first point
-	 * @param pointB the second point
+	 * @param points the points on the line
 	 * @return the created line marker
 	 */
 	@SuppressWarnings("Unused")
-	T createLineMarker(String worldIdentifier, IPoint pointA, IPoint pointB);
+	T createLineMarker(String worldIdentifier, List<P> points);
 
 	/**
 	 * Remove a line marker by its start and end points

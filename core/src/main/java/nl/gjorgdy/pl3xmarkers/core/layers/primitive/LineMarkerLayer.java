@@ -1,7 +1,9 @@
-﻿package nl.gjorgdy.pl3xmarkers.core.layers.primitive;
+package nl.gjorgdy.pl3xmarkers.core.layers.primitive;
 
 import net.pl3x.map.core.world.World;
+import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.ILineMarker;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
 import nl.gjorgdy.pl3xmarkers.core.markers.LineMarkerBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,17 +15,19 @@ public class LineMarkerLayer extends MarkerLayer {
 
 	@Override
 	public void load() {
-		// No-op
+		Pl3xMarkersCore.storage()
+				.getRaillineMarkerRepository()
+				.getLineMarkers(worldIdentifier)
+				.forEach(this::loadLine);
 	}
 
-	public void loadLine(ILineMarker lineMarker) {
+	public void loadLine(ILineMarker<? extends IPoint> lineMarker) {
 		// remove if exists
 		removeMarker(lineMarker.getKey());
 		// add new
 		var builder = LineMarkerBuilder
 		  .newLineMarker(lineMarker.getKey(), lineMarker.getPoints())
-		  .addPopup(lineMarker.getName())
-		  .stroke(lineMarker.getColor());
+							  .stroke(0xFFFFFF);
 		addMarker(builder.build());
 	}
 
