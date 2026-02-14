@@ -49,6 +49,26 @@ public class AreaMarker implements IAreaMarker {
 	}
 
 	@Override
+	public IPoint getMinCorner() {
+		var minX = points.stream().map(Point::getX).min(Integer::compareTo);
+		var minZ = points.stream().map(Point::getZ).min(Integer::compareTo);
+		if (minX.isPresent() && minZ.isPresent()) {
+			return new Point(minX.get(), minZ.get());
+		}
+		return null;
+	}
+
+	@Override
+	public IPoint getMaxCorner() {
+		var maxX = points.stream().map(Point::getX).max(Integer::compareTo);
+		var maxZ = points.stream().map(Point::getZ).max(Integer::compareTo);
+		if (maxX.isPresent() && maxZ.isPresent()) {
+			return new Point(maxX.get(), maxZ.get());
+		}
+		return null;
+	}
+
+	@Override
 	public boolean addPoint(int x, int z) {
 		var added = points.add(new Point(x, z));
 		repository.markDirty();

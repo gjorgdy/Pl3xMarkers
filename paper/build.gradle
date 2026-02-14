@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id("xyz.jpenilla.run-paper") version "2.3.1"
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    alias(libs.plugins.run.paper)
+    alias(libs.plugins.shadow)
 }
 
 group = 'nl.gjorgdy'
@@ -17,10 +17,19 @@ repositories {
         name = "papermc-repo"
         url = "https://repo.papermc.io/repository/maven-public/"
     }
+    maven {
+        url = "https://api.modrinth.com/maven"
+    }
+    maven {
+        name = "shopkeepers-repo"
+        url = "https://raw.githubusercontent.com/Shopkeepers/Repository/main/releases/"
+    }
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:${paper_version}")
+    implementation libs.paper.api
+    compileOnly libs.shopkeepers
+    compileOnly libs.pl3xmap
 
     implementation project(':core')
     implementation project(':json')
@@ -35,7 +44,7 @@ tasks {
         // Configure the Minecraft version for our task.
         // This is the only required configuration besides applying the plugin.
         // Your plugin's jar (or shadowJar if present) will be used automatically.
-        minecraftVersion("${minecraft_version}")
+        minecraftVersion("${libs.versions.minecraft.get()}")
     }
 }
 
@@ -60,7 +69,7 @@ tasks.withType(JavaCompile).configureEach {
 processResources {
     def props = [
         version: rootProject.version,
-        minecraft_version: project.minecraft_version
+        minecraft_version: libs.versions.minecraft.get()
     ]
     inputs.properties props
     filteringCharset 'UTF-8'

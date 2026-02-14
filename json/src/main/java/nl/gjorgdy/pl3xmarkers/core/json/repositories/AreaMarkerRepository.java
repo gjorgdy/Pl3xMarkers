@@ -1,5 +1,6 @@
 package nl.gjorgdy.pl3xmarkers.core.json.repositories;
 
+import com.google.gson.reflect.TypeToken;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IAreaMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.json.entities.AreaMarker;
 import nl.gjorgdy.pl3xmarkers.core.json.interfaces.IJsonRepositoryData;
@@ -12,7 +13,7 @@ import java.util.Set;
 public class AreaMarkerRepository extends JsonRepository<AreaMarkerRepository.Data> implements IAreaMarkerRepository<AreaMarker> {
 
 	public AreaMarkerRepository(String folderPath, String fileName) {
-		super(folderPath, fileName, Data.class, new Data());
+		super(folderPath, fileName, TypeToken.get(Data.class), new Data());
 	}
 
 	@Override

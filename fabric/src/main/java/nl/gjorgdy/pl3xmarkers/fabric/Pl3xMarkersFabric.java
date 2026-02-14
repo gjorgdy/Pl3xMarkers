@@ -4,9 +4,9 @@ import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.json.JsonStorage;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.fabric.compat.layers.OPACAreaMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.json.JsonStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +26,9 @@ public class Pl3xMarkersFabric implements DedicatedServerModInitializer {
     @Override
     public void onInitializeServer() {
 		// register layers
-		if (isOpacInstalled()) Layers.register(OPACAreaMarkerLayer::new, unused -> isOpacEnabled());
+		if (isOpacInstalled()) {
+			Layers.register(OPACAreaMarkerLayer::new, unused -> isOpacEnabled());
+		}
 		// initialize core
 		var storage = new JsonStorage();
 		Pl3xMarkersCore.onInitialize(false, storage, FabricMarkersConfig::reload);

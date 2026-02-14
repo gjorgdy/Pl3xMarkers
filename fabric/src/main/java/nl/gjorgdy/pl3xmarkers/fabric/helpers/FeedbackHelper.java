@@ -27,7 +27,7 @@ public class FeedbackHelper {
 		}
 		// play sound
 		if (Pl3xMarkersCore.areFeedbackSoundsEnabled()) {
-			player.playSoundToPlayer(sound(result.state()), SoundCategory.UI, 1.0F, 1.0F);
+			player.playSound(sound(result.state()), 1.0F, 1.0F);
 		}
 	}
 
@@ -48,7 +48,7 @@ public class FeedbackHelper {
 			}
 			// play sound
 			if (Pl3xMarkersCore.areFeedbackSoundsEnabled()) {
-				player.playSoundToPlayer(sound, SoundCategory.UI, 1.0F, 1.5F);
+				player.playSound(sound, 1.0F, 1.5F);
 			}
 		});
 	}

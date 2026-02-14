@@ -1,13 +1,16 @@
 package nl.gjorgdy.pl3xmarkers.fabric;
 
+import net.pl3x.map.core.configuration.AbstractConfig;
 import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 
-public class FabricMarkersConfig extends MarkersConfig {
+public class FabricMarkersConfig extends AbstractConfig {
 
 	private static final FabricMarkersConfig CONFIG = new FabricMarkersConfig();
 
 	public static void reload() {
+		MarkersConfig.reload();
+		// Append fabric exclusive settings
 		CONFIG.reload(Pl3xMarkersCore.getMainDir().resolve("config.yml"), FabricMarkersConfig.class);
 	}
 

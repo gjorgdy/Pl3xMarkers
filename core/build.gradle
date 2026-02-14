@@ -4,13 +4,13 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath "gradle.plugin.com.github.johnrengelman:shadow:7.1.2"
+        classpath "com.gradleup.shadow:com.gradleup.shadow.gradle.plugin:9.3.0"
     }
 }
 
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    alias(libs.plugins.shadow)
 }
 
 base {
@@ -31,24 +31,18 @@ repositories {
         name = "Nova Committee - Snapshot"
         url = "https://maven.nova-committee.cn/snapshots/"
     }
-    maven {
-        url = uri('../local-maven')
-        metadataSources {
-            artifact()
-            ignoreGradleMetadataRedirection()
-        }
-    }
+    mavenLocal()
 }
 
 dependencies {
     // Pl3xmap Marker
-    compileOnly "maven.modrinth:pl3xmap:${project.pl3xmap_version}"
+    compileOnly libs.pl3xmap
     // https://mvnrepository.com/artifact/com.googlecode.owasp-java-html-sanitizer/owasp-java-html-sanitizer
-    implementation "com.googlecode.owasp-java-html-sanitizer:owasp-java-html-sanitizer:${project.owasp_java_html_sanitizer_version}"
+    implementation libs.owaspJavaHtmlSanitizer
     // https://mvnrepository.com/artifact/com.intellij/annotations
     compileOnly 'com.intellij:annotations:12.0'
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    compileOnly 'com.google.code.gson:gson:2.10.1'
+    compileOnly libs.gson
 }
 
 jar.enabled = false

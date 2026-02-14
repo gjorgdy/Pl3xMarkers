@@ -31,6 +31,22 @@ public class HtmlHelper {
     }
 
 	@Language("HTML")
+	public static String scrollablePopUp(@Language("HTML") String title, @Language("HTML") String subTitle, @Language("HTML") String content) {
+		return "<b>" + HtmlHelper.sanitize(title) + "</b><i style='color: gray; margin-left: 0.5rem'>" + HtmlHelper.sanitize(subTitle) + "</i><br>"
+					   + "<div style='max-height: 16rem; max-width: 32rem; overflow-y: auto; border: #f0f0f0 solid 2px; padding: 5px; border-radius: 1rem;'>"
+					   + content
+					   + "</div>";
+	}
+
+	@Language("HTML")
+	public static String tooltip(@Language("HTML") String title, @Language("HTML") String subTitle, @Language("HTML") String label) {
+		return "<b>" + HtmlHelper.sanitize(title) + "</b>"
+					   + "<i style='color: gray; margin-left: 0.5rem'>" + HtmlHelper.sanitize(subTitle) + "</i>"
+					   + "<br><i>" + HtmlHelper.sanitize(label) + "</i>";
+
+	}
+
+	@Language("HTML")
 	public static String sanitize(@Language("HTML") String html) {
 		return POLICY.sanitize(html);
 	}

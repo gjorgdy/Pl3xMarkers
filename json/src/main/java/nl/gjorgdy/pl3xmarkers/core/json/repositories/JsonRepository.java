@@ -2,6 +2,7 @@ package nl.gjorgdy.pl3xmarkers.core.json.repositories;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import nl.gjorgdy.pl3xmarkers.core.json.entities.IconMarker;
 import nl.gjorgdy.pl3xmarkers.core.json.entities.Point;
 import nl.gjorgdy.pl3xmarkers.core.json.interfaces.IJsonRepositoryData;
@@ -15,13 +16,13 @@ public abstract class JsonRepository<T extends IJsonRepositoryData> {
 	private final Gson gson;
 	private final String folderPath;
 	private final String filePath;
-	private final Class<T> markerClass;
+	private final TypeToken<?> markerClass;
 
 	private final AtomicBoolean dirty = new AtomicBoolean(false);
 
 	protected T data;
 
-	public JsonRepository(String folderPath, String fileName, Class<T> markerClass, T defaultData) {
+	public JsonRepository(String folderPath, String fileName, TypeToken<?> typeToken, T defaultData) {
 		this.gson = new GsonBuilder()
 						.setPrettyPrinting()
 						.registerTypeAdapter(Point.class, new PointSerializer())
@@ -29,8 +30,8 @@ public abstract class JsonRepository<T extends IJsonRepositoryData> {
 						.create();
 		this.folderPath = folderPath;
 		this.filePath = folderPath + "/"+ fileName + ".json";
-		this.markerClass = markerClass;
 		this.data = defaultData;
+		this.markerClass = typeToken;
 		read();
 	}
 
@@ -72,10 +73,11 @@ public abstract class JsonRepository<T extends IJsonRepositoryData> {
 		try {
 			if (invalidFile()) return;
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
-			var jsonData = gson.fromJson(bufferedReader, markerClass);
-			if (jsonData != null && !jsonData.isEmpty()) {
+			var jsonObject = gson.fromJson(bufferedReader, markerClass);
+			if (jsonObject instanceof IJsonRepositoryData jsonData && !jsonData.isEmpty()) {
 				jsonData.setContext(this);
-				data = jsonData;
+				//noinspection unchecked
+				data = (T) jsonData;
 			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());

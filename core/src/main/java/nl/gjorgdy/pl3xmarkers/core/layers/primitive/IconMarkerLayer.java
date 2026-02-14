@@ -1,9 +1,9 @@
 package nl.gjorgdy.pl3xmarkers.core.layers.primitive;
 
-import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
-import nl.gjorgdy.pl3xmarkers.core.markers.IconMarkerBuilder;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.world.World;
+import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.markers.IconMarkerBuilder;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +17,7 @@ public class IconMarkerLayer extends MarkerLayer {
 
     public IconMarkerLayer(String icon, String key, String label, @Language("HTML") String tooltip, @NotNull World world, int priority) {
         super(key, label, world, priority);
-        this.iconId = icon;
+        iconId = icon;
         this.key = key;
         this.label = label;
         this.tooltip = tooltip;
@@ -40,6 +40,9 @@ public class IconMarkerLayer extends MarkerLayer {
      * @param z z coordinate of marker
      */
     public boolean addSimpleMarker(int x, int z) {
+        if (hasMarker(toMarkerKey(x, z))) {
+            return false; // already exists
+        }
         var marker = Pl3xMarkersCore.storage()
 			.getIconMarkerRepository()
             .createIconMarker(getWorld().getKey(), key, x, z);
@@ -60,7 +63,9 @@ public class IconMarkerLayer extends MarkerLayer {
 		var removed = Pl3xMarkersCore.storage()
 			.getIconMarkerRepository()
             .removeIconMarker(getWorld().getKey(), key, x, z);
-        if (removed) super.removeMarker(toMarkerKey(x, z));
+        if (removed) {
+            super.removeMarker(toMarkerKey(x, z));
+        }
 		return removed;
     }
 

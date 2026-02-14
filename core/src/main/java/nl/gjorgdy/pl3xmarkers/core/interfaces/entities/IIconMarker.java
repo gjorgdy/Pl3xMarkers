@@ -8,4 +8,8 @@ public interface IIconMarker {
 
 	IPoint getLocation();
 
+	default String getKey() {
+		return getLocation().getX() + ":" + getLocation().getZ();
+	}
+
 }

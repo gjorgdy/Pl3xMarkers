@@ -1,5 +1,6 @@
-﻿Open Parties And Claims compatibility
+﻿Signs fixes and config
 ---
 
-- Added compatibility with Open Parties and Claims, showing claimed chunks on the map with their respective colors and names.
-  - OPAC is a Fabric (and Forge) mod, meaning this feature is only available for Fabric.
+- Fixed wall signs being added as markers when placed on top of a lodestone
+- Remove markers when a sign is (made) empty
+- Added a config option to fill in all lines of a sign pop-up
