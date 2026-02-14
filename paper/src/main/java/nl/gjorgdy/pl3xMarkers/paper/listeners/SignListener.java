@@ -16,6 +16,10 @@ public class SignListener implements Listener {
 
 	@EventHandler
 	public void onSignChange(SignChangeEvent event) {
+		// early return if the block is a wall sign
+		if (!(event.getBlock().getBlockData() instanceof Sign)) {
+			return;
+		}
 		var world = event.getBlock().getWorld();
 		var location = event.getBlock().getLocation();
 		if (world.getBlockAt(location.add(0, -1, 0)).getType().asBlockType() == BlockType.LODESTONE) {
@@ -30,7 +34,6 @@ public class SignListener implements Listener {
 			);
 			FeedbackHelper.sendFeedback(result, event.getPlayer());
 		}
-
 	}
 
 	@EventHandler
