@@ -1,11 +1,10 @@
 package nl.gjorgdy.pl3xmarkers.core.json;
 
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
-import nl.gjorgdy.pl3xmarkers.core.interfaces.ILineMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IStorage;
-import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.ILineMarker;
 import nl.gjorgdy.pl3xmarkers.core.json.repositories.AreaMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.json.repositories.IconMarkerRepository;
+import nl.gjorgdy.pl3xmarkers.core.json.repositories.LineMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.json.repositories.SignMarkerRepository;
 
 import java.io.IOException;
@@ -17,6 +16,7 @@ public class JsonStorage implements IStorage {
 	private IconMarkerRepository iconMarkerRepository;
 	private SignMarkerRepository signMarkerRepository;
 	private AreaMarkerRepository areaMarkerRepository;
+	private LineMarkerRepository railMarkerRepository;
 	private boolean loaded = false;
 
 	private void load() {
@@ -30,13 +30,17 @@ public class JsonStorage implements IStorage {
 		iconMarkerRepository = new IconMarkerRepository(configPath + "/markers", "icons");
 		signMarkerRepository = new SignMarkerRepository(configPath + "/markers", "signs");
 		areaMarkerRepository = new AreaMarkerRepository(configPath + "/markers", "areas");
+		railMarkerRepository = new LineMarkerRepository(configPath + "/markers", "rails");
 		// mark as loaded
 		loaded = true;
 	}
 
 	@Override
-	public ILineMarkerRepository<? extends ILineMarker> getLineMarkerRepository() {
-		throw new UnsupportedOperationException("Not implemented yet.");
+	public LineMarkerRepository getRaillineMarkerRepository() {
+		if (!loaded) {
+			load();
+		}
+		return railMarkerRepository;
 	}
 
 	@Override
@@ -80,6 +84,7 @@ public class JsonStorage implements IStorage {
 		iconMarkerRepository.write();
 		signMarkerRepository.write();
 		areaMarkerRepository.write();
+		railMarkerRepository.write();
 	}
 
 	private void migrate(Path oldPath, Path newPath) {

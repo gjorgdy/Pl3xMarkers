@@ -1,49 +1,87 @@
-﻿package nl.gjorgdy.pl3xmarkers.core.json.repositories;
+package nl.gjorgdy.pl3xmarkers.core.json.repositories;
 
+import com.google.gson.reflect.TypeToken;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.ILineMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
 import nl.gjorgdy.pl3xmarkers.core.json.entities.LineMarker;
+import nl.gjorgdy.pl3xmarkers.core.json.entities.Point;
 import nl.gjorgdy.pl3xmarkers.core.json.interfaces.IJsonRepositoryData;
 
 import java.util.*;
 
-public class LineMarkerRepository extends JsonRepository<LineMarkerRepository.Data> implements ILineMarkerRepository<LineMarker> {
+public class LineMarkerRepository extends JsonRepository<LineMarkerRepository.Data> implements ILineMarkerRepository<LineMarker, Point> {
 
 	public LineMarkerRepository(String folderPath, String fileName) {
-		super(folderPath, fileName, Data.class, new Data());
+		super(folderPath, fileName, TypeToken.get(Data.class), new Data());
+		// TODO: remove test data
+		createLineMarker(
+				"world",
+				List.of(
+						new Point(20, 64),
+						new Point(20, 64),
+						new Point(20, 44),
+						new Point(40, 24)
+				)
+		);
+		// TODO: remove test data
+		markDirty();
 	}
 
 	@Override
 	public Collection<LineMarker> getLineMarkers(String worldIdentifier) {
-		return List.of();
+		return data.get(worldIdentifier);
 	}
 
 	@Override
-	public LineMarker getLineMarker(String worldIdentifier, IPoint lowerPoint, IPoint higherPoint) {
-		return null;
+	public LineMarker getLineMarker(String worldIdentifier, IPoint firstPoint, IPoint lastPoint) {
+		return data.get(worldIdentifier).stream().filter(
+				l -> l.getFirstPoint().equals(firstPoint)
+							 && l.getLastPoint().equals(lastPoint)
+		).findFirst().orElse(null);
 	}
 
 	@Override
 	public LineMarker getLineMarker(String worldIdentifier, IPoint point) {
-		return null;
+		return data.get(worldIdentifier).stream()
+					   .filter(l -> l.isOnLine((Point) point))
+					   .findFirst()
+					   .orElse(null);
 	}
 
 	@Override
-	public LineMarker createLineMarker(String worldIdentifier, IPoint pointA, IPoint pointB) {
-		return null;
+	public LineMarker createLineMarker(String worldIdentifier, List<Point> points) {
+		var lineMarker = new LineMarker(points);
+		data.get(worldIdentifier).add(lineMarker);
+		return lineMarker;
 	}
 
 	@Override
-	public boolean removeLineMarker(String worldIdentifier, IPoint lowerPoint, IPoint higherPoint) {
-		return false;
+	public boolean removeLineMarker(String worldIdentifier, IPoint firstPoint, IPoint lastPoint) {
+		return data.get(worldIdentifier).removeIf(
+				l -> l.getFirstPoint().equals(firstPoint)
+							 && l.getLastPoint().equals(lastPoint)
+		);
 	}
 
 	@Override
 	public boolean removeLineMarker(String worldIdentifier, IPoint point) {
-		return data.get(worldIdentifier);
+		return data.get(worldIdentifier).removeIf(
+				l -> l.getFirstPoint().equals(point)
+							 || l.getLastPoint().equals(point)
+		);
 	}
 
 	public static class Data extends HashMap<String, WorldData> implements IJsonRepositoryData {
+
+		@Override
+		public WorldData get(Object key) {
+			var world = super.get(key);
+			if (world == null) {
+				world = new WorldData();
+				put((String) key, world);
+			}
+			return world;
+		}
 
 		@Override
 		public void strip() {
@@ -57,7 +95,7 @@ public class LineMarkerRepository extends JsonRepository<LineMarkerRepository.Da
 
 		@Override
 		public void setContext(JsonRepository<?> jsonRepository) {
-			forEach((worldKey, worldData) -> worldData.setContext(worldKey, (LineMarkerRepository) jsonRepository));
+			forEach((worldKey, worldData) -> worldData.setContext(worldKey));
 		}
 	}
 
@@ -65,15 +103,15 @@ public class LineMarkerRepository extends JsonRepository<LineMarkerRepository.Da
 
 		public LineMarker get(IPoint lowerPoint, IPoint higherPoint) {
 			return stream().filter(l ->
-						l.getLowerPoint().equals(lowerPoint)
-							&& l.getUpperPoint().equals(higherPoint)
+										   l.getFirstPoint().equals(lowerPoint)
+												   && l.getLastPoint().equals(higherPoint)
 					)
 					.findFirst()
 					.orElse(null);
 		}
 
-		public void setContext(String worldIdentifier, LineMarkerRepository repository) {
-			forEach(marker -> marker.setContext(repository, worldIdentifier));
+		public void setContext(String worldIdentifier) {
+			forEach(marker -> marker.setContext(worldIdentifier));
 		}
 
 	}

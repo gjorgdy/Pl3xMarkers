@@ -16,13 +16,17 @@ public class IconMarker extends Point implements IIconMarker {
 
 	public IconMarker(String worldIdentifier, String layerKey, int x, int z) {
 		super(x,z);
-		this.world = worldIdentifier;
-		this.layer = layerKey;
+		world = worldIdentifier;
+		layer = layerKey;
 	}
 
 	public void setContext(String worldIdentifier, String layerKey) {
-		if (this.world == null) world = worldIdentifier;
-		if (this.layer == null) layer = layerKey;
+		if (world == null) {
+			world = worldIdentifier;
+		}
+		if (layer == null) {
+			layer = layerKey;
+		}
 	}
 
 	@Override
@@ -42,7 +46,9 @@ public class IconMarker extends Point implements IIconMarker {
 
 	@Override
 	public boolean equals(Object o) {
-		if (o == null || getClass() != o.getClass()) return false;
+		if (o == null || getClass() != o.getClass()) {
+			return false;
+		}
 		IconMarker that = (IconMarker) o;
 		return Objects.equals(world, that.world) && Objects.equals(layer, that.layer) && x == that.x && z == that.z;
 	}
@@ -50,5 +56,10 @@ public class IconMarker extends Point implements IIconMarker {
 	@Override
 	public int hashCode() {
 		return Objects.hash(world, layer, x, z);
+	}
+
+	@Override
+	public String getKey() {
+		return super.getKey();
 	}
 }

@@ -1,4 +1,4 @@
-﻿package nl.gjorgdy.pl3xmarkers.core.markers;
+package nl.gjorgdy.pl3xmarkers.core.markers;
 
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.markers.marker.Polyline;
@@ -12,7 +12,7 @@ public class LineMarkerBuilder extends MarkerBuilder<Polyline> {
 		super(marker);
 	}
 
-	public static LineMarkerBuilder newLineMarker(String key, Collection<IPoint> points) {
+	public static LineMarkerBuilder newLineMarker(String key, Collection<? extends IPoint> points) {
 		var line = new Polyline(key);
 		points.stream().map(IPoint::toPl3xPoint).forEach(line::addPoint);
 		return new LineMarkerBuilder(line);

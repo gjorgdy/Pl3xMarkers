@@ -9,6 +9,7 @@ import nl.gjorgdy.pl3xmarkers.core.layers.NetherPortalIconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.SignsIconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.layers.primitive.LineMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
 import org.intellij.lang.annotations.Language;
@@ -44,6 +45,10 @@ public class Layers {
 			new LayerFactory(
 					world -> new SignsIconMarkerLayer(world, MarkersConfig.SIGN_MARKERS_PRIORITY),
 					world -> MarkersConfig.SIGN_MARKERS_ENABLED
+			),
+			new LayerFactory(
+					world -> new LineMarkerLayer(Keys.RAILLINES, Labels.RAILLINES, world, 50),// TODO: config priority
+					world -> true // TODO: config enabled
 			)
 	));
 
@@ -68,6 +73,7 @@ public class Layers {
 		public static String OPAC = "open_parties_and_claims";
 		public static String SIGNS = "signs";
 		public static String SHOPKEEPERS = "shopkeepers";
+		public static String RAILLINES = "raillines";
 	}
 
 	public static class Labels {
@@ -79,6 +85,7 @@ public class Layers {
 		public static String OPAC = "Open Parties and Claims";
 		public static String SIGNS = "Signs";
 		public static String SHOPKEEPERS = "Shopkeepers";
+		public static String RAILLINES = "Raillines";
 	}
 
 	public static class Tooltips {

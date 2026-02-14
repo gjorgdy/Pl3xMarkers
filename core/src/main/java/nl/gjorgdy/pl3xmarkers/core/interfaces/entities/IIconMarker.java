@@ -1,6 +1,6 @@
 package nl.gjorgdy.pl3xmarkers.core.interfaces.entities;
 
-public interface IIconMarker {
+public interface IIconMarker extends IKeyMarker {
 
 	String getWorld();
 
@@ -8,6 +8,7 @@ public interface IIconMarker {
 
 	IPoint getLocation();
 
+	@Override
 	default String getKey() {
 		return getLocation().getX() + ":" + getLocation().getZ();
 	}
