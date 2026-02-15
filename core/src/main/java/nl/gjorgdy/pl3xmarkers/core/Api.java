@@ -27,7 +27,7 @@ public class Api {
     }
 
 	@Nullable
-	public <T extends MarkerLayer> T getMarkerLayer(String worldIdentifier, String layerKey, Class<T> layerClass) {
+	public static <T extends MarkerLayer> T getMarkerLayer(String worldIdentifier, String layerKey, Class<T> layerClass) {
 		Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(layerKey);
 		if (layerClass.isInstance(layer)) {
 			return layerClass.cast(layer);

@@ -42,7 +42,7 @@ public interface ILineMarkerRepository<T extends ILineMarker<P>, P extends IPoin
 	 * @return the created line marker
 	 */
 	@SuppressWarnings("Unused")
-	T createLineMarker(String worldIdentifier, List<P> points);
+	T createLineMarker(String worldIdentifier, List<? extends IPoint> points);
 
 	/**
 	 * Remove a line marker by its start and end points

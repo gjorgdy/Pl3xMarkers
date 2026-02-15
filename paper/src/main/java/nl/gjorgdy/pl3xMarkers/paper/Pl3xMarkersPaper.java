@@ -16,8 +16,8 @@ import java.util.UUID;
 @SuppressWarnings("unused") // Called by paper
 public final class Pl3xMarkersPaper extends JavaPlugin {
 
+    private final MinecartPathingRegistry minecartPathingRegistry = new MinecartPathingRegistry();
     private final HashMap<UUID, Boundary> playerBoundaries = new HashMap<>();
-
     private final JsonStorage storage = new JsonStorage();
 
     @Override
@@ -41,6 +41,7 @@ public final class Pl3xMarkersPaper extends JavaPlugin {
                 new BeaconListener(),
                 new EndGatewayListener(),
                 new EndPortalListener(),
+                new MinecartListener(minecartPathingRegistry),
                 new MovementListener(playerBoundaries),
                 new NetherPortalListener(),
                 new NodeListener(),

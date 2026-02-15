@@ -49,8 +49,8 @@ public class LineMarkerRepository extends JsonRepository<LineMarkerRepository.Da
 	}
 
 	@Override
-	public LineMarker createLineMarker(String worldIdentifier, List<Point> points) {
-		var lineMarker = new LineMarker(points);
+	public LineMarker createLineMarker(String worldIdentifier, List<? extends IPoint> points) {
+		var lineMarker = new LineMarker((List<Point>) points);
 		data.get(worldIdentifier).add(lineMarker);
 		return lineMarker;
 	}
