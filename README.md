@@ -14,6 +14,7 @@
 - Nether Portals
 - End Portals
 - End Gateways
+- Lightning strikes
 - Beacons
 - Signs
 
