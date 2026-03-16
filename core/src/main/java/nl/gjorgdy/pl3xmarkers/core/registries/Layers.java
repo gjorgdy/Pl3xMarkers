@@ -3,10 +3,7 @@ package nl.gjorgdy.pl3xmarkers.core.registries;
 import net.pl3x.map.core.world.World;
 import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.helpers.WorldHelpers;
-import nl.gjorgdy.pl3xmarkers.core.layers.EndGatewayIconMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.layers.EndPortalIconMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.layers.NetherPortalIconMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.layers.SignsIconMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.layers.*;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
@@ -44,6 +41,10 @@ public class Layers {
 			new LayerFactory(
 					world -> new SignsIconMarkerLayer(world, MarkersConfig.SIGN_MARKERS_PRIORITY),
 					world -> MarkersConfig.SIGN_MARKERS_ENABLED
+			),
+			new LayerFactory(
+					LightningMarkerLayer::new,
+					world -> MarkersConfig.LIGHTNING_MARKERS_ENABLED && WorldHelpers.isOverworld(world)
 			)
 	));
 
@@ -68,6 +69,7 @@ public class Layers {
 		public static String OPAC = "open_parties_and_claims";
 		public static String SIGNS = "signs";
 		public static String SHOPKEEPERS = "shopkeepers";
+		public static String LIGHTNING = "lightning";
 	}
 
 	public static class Labels {
@@ -79,6 +81,7 @@ public class Layers {
 		public static String OPAC = "Open Parties and Claims";
 		public static String SIGNS = "Signs";
 		public static String SHOPKEEPERS = "Shopkeepers";
+		public static String LIGHTNING = "Lightning Strikes";
 	}
 
 	public static class Tooltips {

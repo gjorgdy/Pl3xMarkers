@@ -3,6 +3,7 @@ package nl.gjorgdy.pl3xmarkers.core;
 import net.pl3x.map.core.Pl3xMap;
 import net.pl3x.map.core.markers.layer.Layer;
 import net.pl3x.map.core.world.World;
+import nl.gjorgdy.pl3xmarkers.core.layers.LightningMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.SignsIconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
@@ -135,6 +136,13 @@ public class Api {
 		return added ? new InteractionResult(InteractionResult.State.ADDED, "Beacon marker added") :
 		   InteractionResult.skip();
     }
+
+	public void showLightningIconMarker(String worldIdentifier, int x, int z) {
+		Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(Layers.Keys.LIGHTNING);
+		if (layer instanceof LightningMarkerLayer lightningMarkerLayer) {
+			lightningMarkerLayer.showMarker(x, z, MarkersConfig.LIGHTNING_MARKERS_LIFETIME);
+		}
+	}
 
     private boolean addIconMarker(String worldIdentifier, String layerKey, int x, int z) {
 		Layer layer = getWorld(worldIdentifier).getLayerRegistry().get(layerKey);

@@ -59,6 +59,15 @@ public class MarkersConfig extends AbstractConfig {
 	@Key("marker-settings.signs.fill_lines")
 	@Comment("Fill all 4 lines of a sign in a pop-up, if false, only the lines with text will be shown.")
 	public static boolean SIGN_MARKERS_FILL_LINES = true;
+	@Key("marker-settings.lightning.enabled")
+	@Comment("Enable lightning strike markers on the map")
+	public static boolean LIGHTNING_MARKERS_ENABLED = true;
+	@Key("marker-settings.lightning.priority")
+	@Comment("The priority for lightning strike markers, the lower the number the higher it is on the map")
+	public static int LIGHTNING_MARKERS_PRIORITY = 50;
+	@Key("marker-settings.lightning.lifetime")
+	@Comment("The lifetime of a lightning strike marker in seconds")
+	public static int LIGHTNING_MARKERS_LIFETIME = 3;
 
 	public static void reload() {
 		CONFIG.reload(Pl3xMarkersCore.getMainDir().resolve("config.yml"), MarkersConfig.class);

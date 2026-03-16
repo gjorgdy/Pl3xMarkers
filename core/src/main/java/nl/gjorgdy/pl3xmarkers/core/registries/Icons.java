@@ -12,7 +12,8 @@ public class Icons {
             new IconImageAddress("/assets/pl3xmarkers/icons/", Keys.END_PORTAL, "png"),
             new IconImageAddress("/assets/pl3xmarkers/icons/", Keys.NETHER_PORTAL, "png"),
             new IconImageAddress("/assets/pl3xmarkers/icons/", Keys.SIGN, "png"),
-            new IconImageAddress("/assets/pl3xmarkers/icons/", Keys.SHOPKEEPERS, "png")
+            new IconImageAddress("/assets/pl3xmarkers/icons/", Keys.SHOPKEEPERS, "png"),
+            new IconImageAddress("/assets/pl3xmarkers/icons/", Keys.LIGHTNING, "png")
     );
 
     public static class Keys {
@@ -22,6 +23,7 @@ public class Icons {
         public static final String NETHER_PORTAL = "nether_portal";
         public static final String SIGN = "sign";
         public static final String SHOPKEEPERS = "shop";
+        public static final String LIGHTNING = "lightning";
     }
 
 }
