@@ -9,6 +9,7 @@
     "EnderEyeItemMixin",
     "NetherPortalMixin",
     "PortalManagerMixin",
+    "ServerEntityManagerMixin",
     "ServerPlayerEntityMixin",
     "ServerWorldMixin",
     "SignBlockEntityMixin"
