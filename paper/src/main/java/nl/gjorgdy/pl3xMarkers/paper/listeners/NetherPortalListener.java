@@ -9,12 +9,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class NetherPortalListener implements Listener {
 
     @EventHandler
     public void onPortalTeleport(PlayerPortalEvent event) {
-        if (event.getFrom().getBlock().getType().asBlockType() == BlockType.NETHER_PORTAL) {
+        if (event.getCause() == PlayerTeleportEvent.TeleportCause.NETHER_PORTAL) {
             onNetherPortalTeleport(event.getFrom());
         }
     }
