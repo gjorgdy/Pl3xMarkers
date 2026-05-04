@@ -1,6 +1,6 @@
 package nl.gjorgdy.pl3xmarkers.fabric.compat;
 
-import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
+import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.IPoint;
 
 public record OpacPoint(int X, int Z) implements IPoint {
 

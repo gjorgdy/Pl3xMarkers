@@ -1,19 +1,21 @@
 package nl.gjorgdy.pl3xmarkers.core.layers.primitive;
 
+import net.pl3x.map.core.world.World;
 import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.IAreaMarker;
 import nl.gjorgdy.pl3xmarkers.core.helpers.ConvexHull;
 import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
 import nl.gjorgdy.pl3xmarkers.core.helpers.PolygonArea;
-import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IAreaMarker;
 import nl.gjorgdy.pl3xmarkers.core.markers.AreaMarkerBuilder;
-import net.pl3x.map.core.world.World;
 import nl.gjorgdy.pl3xmarkers.core.objects.Boundary;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Optional;
 
 public class AreaMarkerLayer extends MarkerLayer {
 
@@ -36,7 +38,9 @@ public class AreaMarkerLayer extends MarkerLayer {
 
     public void loadArea(IAreaMarker area) {
 		super.removeMarker(area.getKey());
-		if (boundaries != null) boundaries.remove(area.getKey());
+		if (boundaries != null) {
+			boundaries.remove(area.getKey());
+		}
 		var points = area.getPoints();
 		if (points == null || points.isEmpty()) {
 			return;

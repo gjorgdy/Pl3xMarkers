@@ -5,7 +5,7 @@ import net.pl3x.map.core.markers.marker.Polygon;
 import net.pl3x.map.core.markers.marker.Polyline;
 import net.pl3x.map.core.markers.option.Fill;
 import net.pl3x.map.core.markers.option.Stroke;
-import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
+import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.IPoint;
 
 import java.util.List;
 
@@ -20,6 +20,11 @@ public class AreaMarkerBuilder extends MarkerBuilder<Polygon> {
 		points.stream().map(IPoint::toPl3xPoint).forEach(line::addPoint);
         Polygon area = new Polygon(key, line);
         return new AreaMarkerBuilder(area);
+    }
+
+    public static int setAlpha(int color, int alpha) {
+        alpha = alpha & 0xFF; // Ensure alpha is in 0-255 range
+        return (color & 0x00FFFFFF) | (alpha << 24);
     }
 
     public AreaMarkerBuilder fill(int color) {
@@ -44,11 +49,6 @@ public class AreaMarkerBuilder extends MarkerBuilder<Polygon> {
 				.setEnabled(true)
         );
         return this;
-    }
-
-    public static int setAlpha(int color, int alpha) {
-        alpha = alpha & 0xFF; // Ensure alpha is in 0-255 range
-        return (color & 0x00FFFFFF) | (alpha << 24);
     }
 
 }

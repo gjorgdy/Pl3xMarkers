@@ -1,7 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.fabric.compat;
 
 import net.minecraft.util.math.ChunkPos;
-import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
+import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.IPoint;
 
 import java.util.List;
 

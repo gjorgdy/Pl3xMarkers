@@ -1,4 +1,4 @@
-package nl.gjorgdy.pl3xmarkers.core.interfaces.entities;
+package nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities;
 
 import net.pl3x.map.core.markers.Point;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +10,7 @@ public interface IPoint extends Comparable<IPoint> {
 	int getZ();
 
 	default double distance(@NotNull IPoint other) {
-		return Math.sqrt(Math.pow(getX() - other.getX(), 2) + Math.pow(getZ() - other.getZ(), 2));
+		return Math.sqrt(Math.pow(this.getX() - other.getX(), 2) + Math.pow(this.getZ() - other.getZ(), 2));
 	}
 
 	IPoint add(int dx, int dz);
@@ -23,7 +23,7 @@ public interface IPoint extends Comparable<IPoint> {
 
 	@Override
 	default int compareTo(@NotNull IPoint other) {
-		return (getX() - other.getX()) + (getZ() - other.getZ());
+		return (this.getX() - other.getX()) + (this.getZ() - other.getZ());
 	}
 
 }

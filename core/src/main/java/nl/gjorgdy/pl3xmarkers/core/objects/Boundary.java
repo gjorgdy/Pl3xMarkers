@@ -1,7 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.core.objects;
 
-import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IAreaMarker;
-import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
+import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.IAreaMarker;
+import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.IPoint;
 
 import java.util.List;
 
