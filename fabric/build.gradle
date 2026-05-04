@@ -11,6 +11,8 @@ base {
 
 repositories {
     mavenCentral()
+    // Fabric Maven is required to resolve yarn mappings and some Loom artifacts
+    maven { url = 'https://maven.fabricmc.net/' }
     exclusiveContent {
         forRepository {
             maven {
@@ -29,14 +31,13 @@ repositories {
 
 dependencies {
     minecraft libs.minecraft
-    mappings "${libs.yarn.mappings.get()}:v2"
 
-    modImplementation libs.fabric.loader
-    modImplementation libs.fabric.api
+    implementation libs.fabric.loader
+    implementation libs.fabric.api
 
-    modCompileOnly libs.pl3xmap
+    compileOnly libs.pl3xmap
 
-    modCompileOnly libs.openPartiesAndClaims
+    compileOnly libs.openPartiesAndClaims
 
     implementation project(':core')
     implementation project(':json')
@@ -58,11 +59,7 @@ compileJava {
     dependsOn(':core:shadowJar')
 }
 
-remapSourcesJar {
-    dependsOn(':core:shadowJar')
-}
-
-def targetJavaVersion = 21
+def targetJavaVersion = 25
 tasks.withType(JavaCompile).configureEach {
     it.options.encoding = "UTF-8"
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
@@ -78,11 +75,9 @@ java {
     withSourcesJar()
 }
 
-remapJar {
-    archiveClassifier.set('')
-}
-
 jar {
+    archiveClassifier.set('')
+    dependsOn(':core:shadowJar')
     from("LICENSE") {
         rename { "${it}_${project.archivesBaseName}"}
     }
