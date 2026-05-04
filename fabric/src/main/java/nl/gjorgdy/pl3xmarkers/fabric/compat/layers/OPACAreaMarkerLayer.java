@@ -1,7 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.fabric.compat.layers;
 
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.server.level.ServerLevel;
 import net.pl3x.map.core.world.World;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
@@ -49,7 +49,7 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
     }
 
 	public final MinecraftServer getServer() {
-		if (getWorld().getLevel() instanceof ServerWorld serverWorld) {
+		if (getWorld().getLevel() instanceof ServerLevel serverWorld) {
 			return serverWorld.getServer();
 		}
 		throw new IllegalStateException("World is not a server world");

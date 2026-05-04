@@ -2,18 +2,18 @@ package nl.gjorgdy.pl3xmarkers.fabric.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.SignBlockEntity;
-import net.minecraft.block.entity.SignText;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.filter.FilteredMessage;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.FilteredText;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.SignBlockEntity;
+import net.minecraft.world.level.block.entity.SignText;
+import net.minecraft.world.level.block.state.BlockState;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
 import nl.gjorgdy.pl3xmarkers.fabric.helpers.FeedbackHelper;
@@ -33,19 +33,19 @@ public abstract class SignBlockEntityMixin extends BlockEntity {
 	}
 
 	@Shadow
-	public abstract SignText getText(boolean front);
+	public abstract SignText getText(boolean isFrontText);
 
-	@WrapMethod(method = "tryChangeText")
-	private void onChangeText(PlayerEntity player, boolean front, List<FilteredMessage> messages, Operation<Void> original) {
-		if (isNotMarkerSign() || world == null) {
-			original.call(player, front, messages);
+	@WrapMethod(method = "updateSignText")
+	private void onChangeText(Player player, boolean frontText, List<FilteredText> lines, Operation<Void> original) {
+		if (isNotMarkerSign() || level == null) {
+			original.call(player, frontText, lines);
 			return;
 		}
 
 		var textBefore = getText(true).getMessages(false);
 		boolean wasEmpty = Arrays.stream(textBefore)
-								   .allMatch(text -> text.getLiteralString() == null || text.getLiteralString().isEmpty());
-		original.call(player, front, messages);
+				.allMatch(text -> text.tryCollapseToString() == null || text.tryCollapseToString().isEmpty());
+		original.call(player, frontText, lines);
 		var textAfter = getText(true).getMessages(false);
 
 		if (Arrays.equals(textBefore, textAfter)) {
@@ -56,21 +56,21 @@ public abstract class SignBlockEntityMixin extends BlockEntity {
 		InteractionResult result;
 		if (wasEmpty) {
 			result = Pl3xMarkersCore.api().addSignMarker(
-					world.getRegistryKey().getValue().toString(),
-					pos.getX(),
-					pos.getZ(),
+					level.dimension().identifier().toString(),
+					worldPosition.getX(),
+					worldPosition.getZ(),
 					getSignTextLines()
 			);
 		} else {
 			result = Pl3xMarkersCore.api().editSignMarker(
-					world.getRegistryKey().getValue().toString(),
-					pos.getX(),
-					pos.getZ(),
+					level.dimension().identifier().toString(),
+					worldPosition.getX(),
+					worldPosition.getZ(),
 					getSignTextLines()
 			);
 		}
 
-		if (player instanceof ServerPlayerEntity serverPlayer) {
+		if (player instanceof ServerPlayer serverPlayer) {
 			FeedbackHelper.sendFeedback(result, serverPlayer);
 		}
 	}
@@ -79,15 +79,15 @@ public abstract class SignBlockEntityMixin extends BlockEntity {
 	@Language("HTML")
 	private String[] getSignTextLines() {
 		return Arrays.stream(getText(true).getMessages(false))
-					   .map(Text::getString)
+				.map(Component::getString)
 					   .toArray(String[]::new);
 	}
 
 	@Unique
 	private boolean isNotMarkerSign() {
-		return world == null
-					   || !world.getBlockState(pos.down()).isOf(Blocks.LODESTONE)
-					   || !getCachedState().isIn(BlockTags.STANDING_SIGNS);
+		return level == null
+				|| !level.getBlockState(worldPosition.below()).is(Blocks.LODESTONE)
+				|| !getBlockState().is(BlockTags.STANDING_SIGNS);
 	}
 
 }

@@ -3,12 +3,12 @@ minecraft = "26.1.2"
 
 # https://fabricmc.net/develop/
 fabricLoader = "0.19.2"
-fabricApi = "0.147.0+26.1.2"
+fabricApi = "0.148.0+26.1.2"
 fabricLoom = "1.16-SNAPSHOT"
 
 pl3xmap = "26.1.2-545"
-openPartiesAndClaims = "7112770"
-shopkeepers = "2.25.0"
+openPartiesAndClaims = "7987266"
+shopkeepers = "2.26.1"
 
 paper = "26.1.2.build.+"
 
@@ -17,7 +17,7 @@ minotaur="2.+" # https://github.com/modrinth/minotaur
 run-paper="3.0.2" # https://github.com/jpenilla/run-task
 
 gson="2.13.2" # https://github.com/google/gson
-owasp_java_html_sanitizer = "20240325.1"
+owasp_java_html_sanitizer = "20260313.1"
 
 [plugins]
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }

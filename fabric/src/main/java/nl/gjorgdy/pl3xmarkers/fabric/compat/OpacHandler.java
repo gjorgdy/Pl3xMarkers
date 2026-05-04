@@ -1,8 +1,8 @@
 package nl.gjorgdy.pl3xmarkers.fabric.compat;
 
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.level.ChunkPos;
 import nl.gjorgdy.pl3xmarkers.fabric.Pl3xMarkersFabric;
 import nl.gjorgdy.pl3xmarkers.fabric.compat.layers.OPACAreaMarkerLayer;
 import xaero.pac.common.server.api.OpenPACServerAPI;
@@ -34,7 +34,7 @@ public class OpacHandler {
                 .getPlayerInfoStream()
                 .forEach(p -> {
 //                    Pl3xMarkersFabric.LOGGER.info("Reading claim data for {} in {}", p.getPlayerUsername(), worldIdentifier);
-                    var dimensionManager = p.getDimension(Identifier.of(worldIdentifier));
+                    var dimensionManager = p.getDimension(Identifier.parse(worldIdentifier));
                     if (dimensionManager == null) return;
                     dimensionManager.getStream().forEach(claim ->
                         claim.getStream().forEach(chunk -> chunks.add(

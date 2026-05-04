@@ -1,6 +1,6 @@
 package nl.gjorgdy.pl3xmarkers.fabric.compat;
 
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.Identifier;
 import nl.gjorgdy.pl3xmarkers.fabric.compat.layers.OPACAreaMarkerLayer;
 import org.jetbrains.annotations.NotNull;
 import xaero.pac.common.claims.player.api.IPlayerChunkClaimAPI;
@@ -19,7 +19,7 @@ public class OpacListener implements IClaimsManagerListenerAPI {
 
 	@Override
 	public void onChunkChange(@NotNull Identifier world, int x, int z, IPlayerChunkClaimAPI p) {
-		if (!world.equals(Identifier.of(markerLayer.worldIdentifier))) return;
+		if (!world.equals(Identifier.parse(markerLayer.worldIdentifier))) return;
 		if (p == null) {
 			// chunk unclaimed
 			markerLayer.removeMarker("OpacChunk:" + x + ":" + z);
