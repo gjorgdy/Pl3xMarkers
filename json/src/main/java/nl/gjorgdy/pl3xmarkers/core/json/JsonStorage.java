@@ -1,59 +1,49 @@
 package nl.gjorgdy.pl3xmarkers.core.json;
 
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
-import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.IStorage;
-import nl.gjorgdy.pl3xmarkers.core.json.repositories.AreaMarkerRepository;
-import nl.gjorgdy.pl3xmarkers.core.json.repositories.IconMarkerRepository;
-import nl.gjorgdy.pl3xmarkers.core.json.repositories.SignMarkerRepository;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.IStorage;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.IWorldRepository;
+import nl.gjorgdy.pl3xmarkers.core.json.repositories.WorldRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 
 public class JsonStorage implements IStorage {
 
-	private IconMarkerRepository iconMarkerRepository;
-	private SignMarkerRepository signMarkerRepository;
-	private AreaMarkerRepository areaMarkerRepository;
+	private String configPath;
+	private HashMap<String, WorldRepository> worldRepositories;
 	private boolean loaded = false;
 
 	private void load() {
 		// read files
-		String configPath = Pl3xMarkersCore.isBukkit() ? "plugins/Pl3xMarkers" : "config/pl3xmarkers";
+		configPath = Pl3xMarkersCore.isBukkit() ? "plugins/Pl3xMarkers" : "config/pl3xmarkers";
 		// migrate old data if needed
 		if (Pl3xMarkersCore.isBukkit()) {
 			migrate(Path.of("config/pl3xmarkers"), Path.of("plugins/Pl3xMarkers"));
 		}
-		// load repositories
-		iconMarkerRepository = new IconMarkerRepository(configPath + "/markers", "icons");
-		signMarkerRepository = new SignMarkerRepository(configPath + "/markers", "signs");
-		areaMarkerRepository = new AreaMarkerRepository(configPath + "/markers", "areas");
+		//
+		worldRepositories = new HashMap<>();
 		// mark as loaded
 		loaded = true;
 	}
 
-	@Override
-	public AreaMarkerRepository getAreaMarkerRepository() {
-		if (!loaded) {
-			load();
-		}
-		return areaMarkerRepository;
+	public String getConfigPath() {
+		return configPath;
 	}
 
 	@Override
-	public IconMarkerRepository getIconMarkerRepository() {
-		if (!loaded) {
-			load();
-		}
-		return iconMarkerRepository;
-	}
-
-	@Override
-	public SignMarkerRepository getSignMarkerRepository() {
-		if (!loaded) {
-			load();
-		}
-		return signMarkerRepository;
+	public IWorldRepository getWorldRepository(String worldIdentifier) {
+		return worldRepositories.computeIfAbsent(
+				worldIdentifier,
+				wi ->
+				{
+					var repo = new WorldRepository(this, wi);
+					worldRepositories.put(wi, repo);
+					return repo;
+				}
+		);
 	}
 
 	@Override
@@ -70,9 +60,7 @@ public class JsonStorage implements IStorage {
 			load();
 		}
 		// save files
-		iconMarkerRepository.write();
-		signMarkerRepository.write();
-		areaMarkerRepository.write();
+		worldRepositories.forEach((k, repo) -> repo.write());
 	}
 
 	private void migrate(Path oldPath, Path newPath) {

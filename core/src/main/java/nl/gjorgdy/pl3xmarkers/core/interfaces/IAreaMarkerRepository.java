@@ -1,21 +1,17 @@
 package nl.gjorgdy.pl3xmarkers.core.interfaces;
 
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IAreaMarker;
+import org.jspecify.annotations.Nullable;
 
-import java.util.Collection;
-
-public interface IAreaMarkerRepository<T extends IAreaMarker> {
-
-	@SuppressWarnings("Unused")
-	Collection<T> getAreas(String worldIdentifier);
+public interface IAreaMarkerRepository<T extends IAreaMarker> extends IMarkerRepository<T> {
 
 	@SuppressWarnings("Unused")
-	T getArea(String worldIdentifier, String name, int color);
+	@Nullable T get(String name, int color);
 
 	@SuppressWarnings("Unused")
-	T getOrCreateArea(String worldIdentifier, String name, int color);
+	T getOrCreate(String name, int color);
 
 	@SuppressWarnings("Unused")
-	boolean removeArea(String worldIdentifier, String name, int color);
+	boolean remove(String name, int color);
 
 }

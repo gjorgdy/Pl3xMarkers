@@ -1,8 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.core.json.serializers;
 
 import com.google.gson.*;
-import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.IPoint;
-import nl.gjorgdy.pl3xmarkers.core.json.entities.IconMarker;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
 import nl.gjorgdy.pl3xmarkers.core.json.entities.Point;
 
 import java.lang.reflect.Type;
@@ -12,8 +11,9 @@ public class PointSerializer implements JsonSerializer<IPoint>, JsonDeserializer
 	@Override
 	public JsonElement serialize(IPoint src, Type typeOfSrc, JsonSerializationContext context) {
 		var obj = new JsonArray();
-		obj.add(src.getX());
-		obj.add(src.getZ());
+		obj.add(src.x());
+		obj.add(src.y());
+		obj.add(src.z());
 		return obj;
 	}
 
@@ -21,11 +21,10 @@ public class PointSerializer implements JsonSerializer<IPoint>, JsonDeserializer
 	public IPoint deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 		var arr = json.getAsJsonArray();
 		int x = arr.get(0).getAsInt();
-		int z = arr.get(1).getAsInt();
+		int y = arr.get(1).getAsInt();
+		int z = arr.get(2).getAsInt();
 		if (typeOfT.equals(Point.class)) {
-			return new Point(x, z);
-		} else if (typeOfT.equals(IconMarker.class)) {
-			return new IconMarker(x, z);
+			return new Point(x, y, z);
 		}
 		throw new JsonParseException("Unsupported IPoint type: " + typeOfT.getTypeName());
 	}
