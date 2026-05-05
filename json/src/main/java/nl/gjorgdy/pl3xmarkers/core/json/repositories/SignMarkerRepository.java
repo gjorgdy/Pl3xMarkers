@@ -1,71 +1,47 @@
-package nl.gjorgdy.pl3xmarkers.core.json.repositories;
+﻿package nl.gjorgdy.pl3xmarkers.core.json.repositories;
 
-import com.google.gson.reflect.TypeToken;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.ISignMarkerRepository;
+import nl.gjorgdy.pl3xmarkers.core.json.entities.Point;
 import nl.gjorgdy.pl3xmarkers.core.json.entities.SignMarker;
 
-import java.util.Collection;
-import java.util.Set;
+public class SignMarkerRepository extends MarkerRepository<SignMarker> implements ISignMarkerRepository<SignMarker> {
 
-public class SignMarkerRepository extends BaseIconMarkerRepository<SignMarker> implements ISignMarkerRepository<SignMarker> {
-
-	public SignMarkerRepository(String folderPath, String fileName) {
-		super(folderPath, fileName, TypeToken.getParameterized(Data.class, SignMarker.class));
+	public SignMarkerRepository(WorldRepository worldRepository, String layerKey) {
+		super(worldRepository, layerKey, SignMarker.class);
 	}
 
 	@Override
-	public Collection<SignMarker> getMarkers(String worldIdentifier, String layerKey) {
-		var world = data.get(worldIdentifier);
-		if (world == null) {
-			return Set.of();
-		}
-		var layer = world.get(layerKey);
-		return layer != null ? layer : Set.of();
-	}
-
-	@Override
-	public SignMarker editMarker(String worldIdentifier, String layerKey, int x, int z, String[] text) {
-		var marker = getMarker(worldIdentifier, layerKey, x, z);
-		if (marker == null) {
-			marker = createMarker(worldIdentifier, layerKey, x, z, text);
-		}
-		else {
-			marker.setText(text);
-			markDirty();
-		}
+	public SignMarker create(int x, int y, int z, String[] text) {
+		var marker = new SignMarker(this, new Point(x, y, z), text);
+		data.add(marker);
+		markDirty();
 		return marker;
 	}
 
 	@Override
-	public SignMarker createMarker(String worldIdentifier, String layerKey, int x, int z, String[] text) {
-		var marker = new SignMarker(worldIdentifier, layerKey, x, z, text);
-		var added = data.add(marker);
-		if (added) {
+	public boolean edit(int x, int y, int z, String[] text) {
+		var marker = data.stream().filter(m -> m.getPosition().equals(new Point(x, y, z))).findFirst().orElse(null);
+		if (marker != null) {
+			marker.setText(text);
 			markDirty();
+			return true;
 		}
-		return added ? marker : null;
+		return false;
 	}
 
 	@Override
-	public boolean removeMarker(String worldIdentifier, String layerKey, int x, int z) {
-		return data.remove(worldIdentifier, layerKey, x, z);
+	public boolean editOrCreate(int x, int y, int z, String[] text) {
+		boolean edited = edit(x, y, z, text);
+		if (!edited) {
+			create(x, y, z, text);
+			markDirty();
+			return false;
+		}
+		return true;
 	}
 
-	private SignMarker getMarker(String worldIdentifier, String layerKey, int x, int z) {
-		var world = data.get(worldIdentifier);
-		if (world == null) {
-			return null;
-		}
-		var layer = world.get(layerKey);
-		if (layer == null) {
-			return null;
-		}
-		for (var marker : layer) {
-			if (marker.getX() == x && marker.getZ() == z) {
-				return marker;
-			}
-		}
-		return null;
+	@Override
+	public boolean remove(int x, int y, int z) {
+		return false;
 	}
-
 }

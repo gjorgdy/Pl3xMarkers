@@ -1,6 +1,6 @@
 package nl.gjorgdy.pl3xmarkers.core.helpers;
 
-import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
+import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.IPoint;
 
 import java.util.List;
 

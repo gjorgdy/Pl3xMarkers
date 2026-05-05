@@ -1,13 +1,14 @@
-package nl.gjorgdy.pl3xmarkers.core.json.entities;
+﻿package nl.gjorgdy.pl3xmarkers.core.json.entities;
 
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.ISignMarker;
+import nl.gjorgdy.pl3xmarkers.core.json.repositories.MarkerRepository;
 
-public class SignMarker extends IconMarker implements ISignMarker {
+public class SignMarker extends PointMarker implements ISignMarker {
 
-	protected String[] text;
+	private String[] text;
 
-	public SignMarker(String worldIdentifier, String layerKey, int x, int z, String[] text) {
-		super(worldIdentifier, layerKey, x, z);
+	public SignMarker(MarkerRepository<SignMarker> repository, Point point, String[] text) {
+		super(repository, point);
 		this.text = text;
 	}
 
@@ -19,6 +20,11 @@ public class SignMarker extends IconMarker implements ISignMarker {
 	@Override
 	public void setText(String[] text) {
 		this.text = text;
+		markDirty();
 	}
 
+	@Override
+	public String getKey() {
+		return super.getKey();
+	}
 }

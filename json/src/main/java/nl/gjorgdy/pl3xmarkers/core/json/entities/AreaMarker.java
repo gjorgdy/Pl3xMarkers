@@ -1,36 +1,27 @@
-package nl.gjorgdy.pl3xmarkers.core.json.entities;
+﻿package nl.gjorgdy.pl3xmarkers.core.json.entities;
 
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IAreaMarker;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
-import nl.gjorgdy.pl3xmarkers.core.json.repositories.AreaMarkerRepository;
+import nl.gjorgdy.pl3xmarkers.core.json.repositories.MarkerRepository;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
-public class AreaMarker implements IAreaMarker {
-
-	private transient AreaMarkerRepository repository;
-	private transient String world;
+public class AreaMarker extends Marker implements IAreaMarker {
 
 	private final String name;
 	private final int color;
 	private final Set<Point> points;
 
-	public AreaMarker(AreaMarkerRepository areaMarkerRepository, String worldIdentifier, String name, int color) {
-		this.repository = areaMarkerRepository;
-		this.world = worldIdentifier;
+	private IPoint minCorner;
+	private IPoint maxCorner;
+
+	public AreaMarker(MarkerRepository<AreaMarker> repository, String name, int color) {
+		super(repository);
 		this.name = name;
 		this.color = color;
-		this.points = new HashSet<>();
-	}
-
-	public void setContext(AreaMarkerRepository repository, String worldIdentifier) {
-		if (this.repository == null) this.repository = repository;
-		if (this.world == null) this.world = worldIdentifier;
-	}
-
-	@Override
-	public String getWorld() {
-		return world;
+		points = new HashSet<>();
 	}
 
 	@Override
@@ -50,51 +41,65 @@ public class AreaMarker implements IAreaMarker {
 
 	@Override
 	public IPoint getMinCorner() {
-		var minX = points.stream().map(Point::getX).min(Integer::compareTo);
-		var minZ = points.stream().map(Point::getZ).min(Integer::compareTo);
-		if (minX.isPresent() && minZ.isPresent()) {
-			return new Point(minX.get(), minZ.get());
-		}
-		return null;
+		return minCorner;
 	}
 
 	@Override
 	public IPoint getMaxCorner() {
-		var maxX = points.stream().map(Point::getX).max(Integer::compareTo);
-		var maxZ = points.stream().map(Point::getZ).max(Integer::compareTo);
-		if (maxX.isPresent() && maxZ.isPresent()) {
-			return new Point(maxX.get(), maxZ.get());
-		}
-		return null;
+		return maxCorner;
 	}
 
 	@Override
-	public boolean addPoint(int x, int z) {
-		var added = points.add(new Point(x, z));
-		repository.markDirty();
+	public boolean addPoint(int x, int y, int z) {
+		boolean added = points.add(new Point(x, y, z));
+		if (added) {
+			calculateOuterCorners();
+			markDirty();
+		}
 		return added;
 	}
 
 	@Override
-	public boolean removePoint(int x, int z) {
-		var removed = points.removeIf(p -> p.getX() == x && p.getZ() == z);
-		// If no points are left, remove the entire area marker
-		if (points.isEmpty()) {
-			removed = removed && repository.removeArea(this);
+	public boolean removePoint(int x, int y, int z) {
+		boolean removed = points.removeIf(point -> point.x() == x && point.y() == y && point.z() == z);
+		if (removed) {
+			calculateOuterCorners();
+			markDirty();
 		}
-		repository.markDirty();
 		return removed;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (o == null || getClass() != o.getClass()) return false;
-		AreaMarker that = (AreaMarker) o;
-		return color == that.color && Objects.equals(world, that.world) && Objects.equals(name, that.name) && Objects.equals(points, that.points);
+	private void calculateOuterCorners() {
+		int minX = Integer.MAX_VALUE;
+		int minY = Integer.MAX_VALUE;
+		int minZ = Integer.MAX_VALUE;
+		int maxX = Integer.MIN_VALUE;
+		int maxY = Integer.MIN_VALUE;
+		int maxZ = Integer.MIN_VALUE;
+
+		for (Point point : points) {
+			if (point.x() < minX) {
+				minX = point.x();
+			}
+			if (point.y() < minY) {
+				minY = point.y();
+			}
+			if (point.z() < minZ) {
+				minZ = point.z();
+			}
+			if (point.x() > maxX) {
+				maxX = point.x();
+			}
+			if (point.y() > maxY) {
+				maxY = point.y();
+			}
+			if (point.z() > maxZ) {
+				maxZ = point.z();
+			}
+		}
+
+		minCorner = new Point(minX, minY, minZ);
+		maxCorner = new Point(maxX, maxY, maxZ);
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(world, name, color, points);
-	}
 }

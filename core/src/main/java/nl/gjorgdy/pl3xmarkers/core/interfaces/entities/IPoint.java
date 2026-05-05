@@ -1,29 +1,60 @@
 package nl.gjorgdy.pl3xmarkers.core.interfaces.entities;
 
+import com.google.errorprone.annotations.CheckReturnValue;
 import net.pl3x.map.core.markers.Point;
 import org.jetbrains.annotations.NotNull;
 
 public interface IPoint extends Comparable<IPoint> {
 
-	int getX();
+	int x();
 
-	int getZ();
+	int y();
 
-	default double distance(@NotNull IPoint other) {
-		return Math.sqrt(Math.pow(this.getX() - other.getX(), 2) + Math.pow(this.getZ() - other.getZ(), 2));
-	}
+	int z();
 
-	IPoint add(int dx, int dz);
+	@CheckReturnValue
+	IPoint add(int dx, int dy, int dz);
 
-	IPoint set(int x, int z);
+	@CheckReturnValue
+	IPoint set(int x, int y, int z);
 
+	/**
+	 * Convert this point to a point as used by Pl3xMap. The y coordinate is ignored as the map is top down.
+	 *
+	 * @return Pl3xMap point with the same x and z coordinates as this point
+	 */
+	@CheckReturnValue
 	default Point toPl3xPoint() {
-		return new Point(getX(), getZ());
+		return new Point(x(), z());
 	}
 
+	/**
+	 * Get the distance of 2 points. The y coordinate is ignored as they are not important
+	 *
+	 * @param other the point to measure the distance to
+	 * @return the distance between the two points, calculated using the Pythagorean theorem, ignoring the y coordinate
+	 */
+	@CheckReturnValue
+	default double distance(@NotNull IPoint other) {
+		return Math.sqrt(Math.pow(x() - other.x(), 2) + Math.pow(z() - other.z(), 2));
+	}
+
+	/**
+	 * Compare this point to another point. The comparison is based on the sum of the differences in x and z
+	 * coordinates.
+	 * The y coordinate is ignored as they are not important
+	 *
+	 * @param other the object to be compared.
+	 * @return a negative integer, zero, or a positive integer as this point is less than, equal to, or greater than the
+	 * 		specified object.
+	 */
 	@Override
 	default int compareTo(@NotNull IPoint other) {
-		return (this.getX() - other.getX()) + (this.getZ() - other.getZ());
+		return (x() - other.x()) + (z() - other.z());
+	}
+
+	default String serialize() {
+		return x() + ":" + y() + ":" + z();
 	}
 
 }

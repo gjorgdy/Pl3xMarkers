@@ -1,6 +1,6 @@
-package nl.gjorgdy.pl3xmarkers.core.interfaces;
+package nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces;
 
-import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IIconMarker;
+import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.IIconMarker;
 
 import java.util.Collection;
 

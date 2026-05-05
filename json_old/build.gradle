@@ -1,0 +1,22 @@
+plugins {
+    id 'java'
+}
+
+base {
+    archivesName = "${rootProject.name}-${project.name}"
+    version = rootProject.version
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'com.google.code.gson:gson:2.10.1'
+
+    implementation project(':core')
+}
+
+compileJava {
+    dependsOn(':core:shadowJar')
+}
