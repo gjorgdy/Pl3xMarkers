@@ -2,6 +2,7 @@ package nl.gjorgdy.pl3xmarkers.core;
 
 import net.pl3x.map.core.Pl3xMap;
 import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.IStorage;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.api.IApi;
 
 import java.nio.file.Path;
 import java.util.concurrent.ExecutorService;
@@ -14,7 +15,7 @@ public class Pl3xMarkersCore {
 	private static final ExecutorService executor = new ThreadPoolExecutor(2, 8, 5L, TimeUnit.SECONDS,new LinkedBlockingQueue<>(1000));
     private static boolean IS_BUKKIT = false;
     private static IStorage STORAGE = null;
-    private static Api API = null;
+	private static IApi API = null;
     private static Pl3xMapHandler PL3X_MAP_HANDLER = null;
 	private static Runnable reloadConfig = MarkersConfig::reload;
 
@@ -42,7 +43,7 @@ public class Pl3xMarkersCore {
 		return isBukkit() ? Path.of("plugins/Pl3xMarkers") : Path.of("config/pl3xmarkers");
 	}
 
-    public static Api api() {
+	public static IApi api() {
         if (API == null) {
             API = new Api();
         }
