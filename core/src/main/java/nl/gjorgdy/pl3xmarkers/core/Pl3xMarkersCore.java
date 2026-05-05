@@ -1,7 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.core;
 
 import net.pl3x.map.core.Pl3xMap;
-import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.IStorage;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.IStorage;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.api.IApi;
 
 import java.nio.file.Path;

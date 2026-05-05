@@ -19,7 +19,7 @@ public class Api implements IApi {
 	}
 
 	@SuppressWarnings("unused")
-    private static World getWorld(String worldIdentifier) {
+	private static World getPl3xWorld(String worldIdentifier) {
         World world = Pl3xMap.api().getWorldRegistry().get(worldIdentifier);
 		if (world == null) {
 			throw new RuntimeException("World not found " + worldIdentifier);
@@ -28,7 +28,7 @@ public class Api implements IApi {
     }
 
 	@Override
-	public IWorldApi getWorldApi(String worldIdentifier) {
+	public IWorldApi getWorld(String worldIdentifier) {
 		return worldApis.get(worldIdentifier);
 	}
 
@@ -50,7 +50,7 @@ public class Api implements IApi {
 
 		@Override
 		public <T extends MarkerLayer> T getLayer(Class<T> layerClass, String layerKey) {
-			Layer layer = Api.getWorld(worldIdentifier).getLayerRegistry().get(layerKey);
+			Layer layer = Api.getPl3xWorld(worldIdentifier).getLayerRegistry().get(layerKey);
 			if (layerClass.isInstance(layer)) {
 				return layerClass.cast(layer);
 			}

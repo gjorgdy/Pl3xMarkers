@@ -1,39 +1,36 @@
 package nl.gjorgdy.pl3xmarkers.core.layers;
 
+import net.pl3x.map.core.world.World;
 import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
-import nl.gjorgdy.pl3xmarkers.core.registries.Icons;
-import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
 import nl.gjorgdy.pl3xmarkers.core.helpers.WorldHelpers;
-import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.markers.IconMarkerBuilder;
-import net.pl3x.map.core.markers.marker.Marker;
-import net.pl3x.map.core.world.World;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.ISimpleMarker;
+import nl.gjorgdy.pl3xmarkers.core.layers.primitive.SimpleMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.registries.Icons;
+import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.jetbrains.annotations.NotNull;
 
-public class NetherPortalIconMarkerLayer extends IconMarkerLayer {
+public class NetherPortalMarkerLayer extends SimpleMarkerLayer {
 
-    public NetherPortalIconMarkerLayer(@NotNull World world) {
+    public NetherPortalMarkerLayer(@NotNull World world) {
         super(Icons.Keys.NETHER_PORTAL, Layers.Keys.NETHER_PORTALS, Layers.Labels.NETHER_PORTALS, Layers.Tooltips.NETHER_PORTALS, world, MarkersConfig.NETHER_PORTAL_MARKERS_PRIORITY);
     }
 
     @Override
-    protected Marker<?> createIconMarker(int x, int z) {
-        // check if the portal is in the overworld or the nether
+    protected String createPopup(ISimpleMarker markerEntity) {
+        var pos = markerEntity.getPosition();
         String worldKey = getWorld().getKey();
         boolean isOverworld = WorldHelpers.isOverworld(worldKey);
-        // define the destination and button text
-        int relativeX = isOverworld ? x / 8 : x * 8;
-        int relativeZ = isOverworld ? z / 8 : z * 8;
-        // build the marker
-        return IconMarkerBuilder.newIconMarker(
-                        toMarkerKey(x, z),
-                        iconId,
-                        x, z
-                )
-                .centerIcon(16, 16)
-                .addPopup(HtmlHelper.TravelPopUp(tooltip, destinationKey(worldKey), relativeX, relativeZ, buttonText(worldKey)))
-                .build();
+        // Define the destination
+        int relativeX = isOverworld ? pos.x() / 8 : pos.x() * 8;
+        int relativeZ = isOverworld ? pos.z() / 8 : pos.z() * 8;
+        // Build the pop-up
+        return HtmlHelper.TravelPopUp(
+                createTooltip(markerEntity),
+                destinationKey(worldKey),
+                relativeX, relativeZ,
+                buttonText(worldKey)
+        );
     }
 
     private String buttonText(String worldKey) {

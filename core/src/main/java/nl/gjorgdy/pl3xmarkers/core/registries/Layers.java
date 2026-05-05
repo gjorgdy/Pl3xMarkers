@@ -5,7 +5,6 @@ import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.helpers.WorldHelpers;
 import nl.gjorgdy.pl3xmarkers.core.layers.*;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.layers.primitive.IconMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
 import org.intellij.lang.annotations.Language;
@@ -19,28 +18,28 @@ public class Layers {
 
 	private static final Set<LayerFactory> ALL = new HashSet<>(Set.of(
 			new LayerFactory(
-					world -> new IconMarkerLayer(Icons.Keys.BEACON, Keys.BEACONS, Labels.BEACONS, Tooltips.BEACONS, world, MarkersConfig.BEACON_MARKERS_PRIORITY),
-					world -> MarkersConfig.BEACON_MARKERS_ENABLED
+					BeaconMarkerLayer::new,
+					_ -> MarkersConfig.BEACON_MARKERS_ENABLED
 			),
 			new LayerFactory(
-					EndGatewayIconMarkerLayer::new,
+					EndGatewayMarkerLayer::new,
 					world -> MarkersConfig.END_GATEWAY_MARKERS_ENABLED && WorldHelpers.isEnd(world)
 			),
 			new LayerFactory(
-					EndPortalIconMarkerLayer::new,
+					EndPortalMarkerLayer::new,
 					world -> MarkersConfig.END_PORTAL_MARKERS_ENABLED && WorldHelpers.isOverworld(world)
 			),
 			new LayerFactory(
-					NetherPortalIconMarkerLayer::new,
+					NetherPortalMarkerLayer::new,
 					world -> MarkersConfig.NETHER_PORTAL_MARKERS_ENABLED && (WorldHelpers.isOverworld(world) || WorldHelpers.isNether(world))
 			),
 			new LayerFactory(
-					world -> new AreaMarkerLayer(Keys.AREAS, Labels.AREAS, world, MarkersConfig.AREA_MARKERS_PRIORITY),
-					world -> MarkersConfig.AREA_MARKERS_ENABLED
+					AreaMarkerLayer::new,
+					_ -> MarkersConfig.AREA_MARKERS_ENABLED
 			),
 			new LayerFactory(
-					world -> new SignsIconMarkerLayer(world, MarkersConfig.SIGN_MARKERS_PRIORITY),
-					world -> MarkersConfig.SIGN_MARKERS_ENABLED
+					SignsMarkerLayer::new,
+					_ -> MarkersConfig.SIGN_MARKERS_ENABLED
 			),
 			new LayerFactory(
 					LightningMarkerLayer::new,

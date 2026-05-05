@@ -5,7 +5,7 @@ import net.pl3x.map.core.markers.marker.Polygon;
 import net.pl3x.map.core.markers.marker.Polyline;
 import net.pl3x.map.core.markers.option.Fill;
 import net.pl3x.map.core.markers.option.Stroke;
-import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.IPoint;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
 
 import java.util.List;
 

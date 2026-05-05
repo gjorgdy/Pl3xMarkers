@@ -1,7 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.core.helpers;
 
 import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
-import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.IPoint;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,8 +25,11 @@ public class ConvexHull {
      * @return a line of external points
      */
     public static List<IPoint> calculate(List<IPoint> points) {
-        if (points.isEmpty()) return points;
-		else if (points.size() < 3) return minimalArea(points.getFirst());
+	    if (points.isEmpty()) {
+		    return points;
+	    } else if (points.size() < 3) {
+		    return minimalArea(points.getFirst());
+	    }
 
         // Sort points
         points.sort(null);
@@ -40,9 +43,9 @@ public class ConvexHull {
 
 	private static List<IPoint> cluster(List<IPoint> points) {
 		// Calculate center point
-		int centerX = points.stream().map(IPoint::getX).reduce(0, Integer::sum) / points.size();
-		int centerZ = points.stream().map(IPoint::getZ).reduce(0, Integer::sum) / points.size();
-		var center = points.getFirst().set(centerX, centerZ);
+		int centerX = points.stream().map(IPoint::x).reduce(0, Integer::sum) / points.size();
+		int centerZ = points.stream().map(IPoint::z).reduce(0, Integer::sum) / points.size();
+		var center = points.getFirst().set(centerX, 0, centerZ);
 		// Find the furthest point from center
 		var furthest = points.stream().max(Comparator.comparing(p -> p.distance(center))).orElse(points.getLast());
 		// Check if we are within radius
@@ -92,15 +95,15 @@ public class ConvexHull {
 
 	private static List<IPoint> minimalArea(IPoint center) {
 		return List.of(
-			center.add(0, -8),
-			center.add(8, 8),
-			center.add(-8, 8)
+				center.add(0, 0, -8),
+				center.add(8, 0, 8),
+				center.add(-8, 0, 8)
 		);
 	}
 
     // Cross product of AB and AC vectors: positive = left turn, negative = right turn
     private static long cross(IPoint a, IPoint b, IPoint c) {
-        return (long)(b.getX() - a.getX()) * (c.getZ() - a.getZ()) - (long)(b.getZ() - a.getZ()) * (c.getX() - a.getX());
+	    return (long) (b.x() - a.x()) * (c.z() - a.z()) - (long) (b.z() - a.z()) * (c.x() - a.x());
     }
 
 }

@@ -1,6 +1,6 @@
 package nl.gjorgdy.pl3xmarkers.core.helpers;
 
-import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.IPoint;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
 
 import java.util.List;
 
@@ -23,8 +23,8 @@ public abstract class PolygonArea {
 			IPoint current = points.get(i);
 			IPoint next = points.get((i + 1) % n);
 
-			sum += (long) current.getX() * next.getZ();
-			sum -= (long) current.getZ() * next.getX();
+			sum += (long) current.x() * next.z();
+			sum -= (long) current.z() * next.x();
 		}
 
 		return Math.abs(sum) / 2.0;

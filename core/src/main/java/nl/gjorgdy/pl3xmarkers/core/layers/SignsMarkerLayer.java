@@ -3,10 +3,12 @@ package nl.gjorgdy.pl3xmarkers.core.layers;
 import net.pl3x.map.core.world.World;
 import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
-import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.ISignMarker;
 import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.ISignMarkerRepository;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.ISignMarker;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.markers.IconMarkerBuilder;
+import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
 import nl.gjorgdy.pl3xmarkers.core.registries.Icons;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.intellij.lang.annotations.Language;
@@ -14,82 +16,57 @@ import org.intellij.lang.annotations.Language;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SignsIconMarkerLayer extends MarkerLayer {
+public class SignsMarkerLayer extends MarkerLayer {
 
 	public final String key = Layers.Keys.SIGNS;
 	public final String iconId = Icons.Keys.SIGN;
 
-	public SignsIconMarkerLayer(World world, int priority) {
-		super(Layers.Keys.SIGNS, Layers.Labels.SIGNS, world, priority);
+	public SignsMarkerLayer(World world) {
+		super(Layers.Keys.SIGNS, Layers.Labels.SIGNS, world, MarkersConfig.SIGN_MARKERS_PRIORITY);
 	}
 
 	@Override
 	public void load() {
-		Pl3xMarkersCore.storage()
-				.getSignMarkerRepository()
-				.getMarkers(getWorld().getKey(), key)
-				.forEach(this::addMarker);
+		getRepository().foreach(this::addMarker);
 	}
 
 	/**
-	 * Rename a marker
+	 * Set the text of a sign marker
 	 *
 	 * @param x    x coordinate of marker
+	 * @param y    y coordinate of marker
 	 * @param z    z coordinate of marker
-	 * @param text new name of the marker
+	 * @param text new text of the marker
 	 */
-	public boolean editMarker(int x, int z, @Language("HTML") String[] text) {
+	public InteractionResult set(int x, int y, int z, @Language("HTML") String[] text) {
 		if (text == null || text.length != 4) {
-			throw new IllegalArgumentException("text should be a String array with a size of 4");
+			return InteractionResult.failure("Text should be a String array with a size of 4");
 		}
 		boolean edited = false;
-		if (hasMarker(toMarkerKey(x, z))) {
-			removeMarker(x, z);
+		if (hasMarker(toMarkerKey(x, y, z))) {
+			super.removeMarker(toMarkerKey(x, y, z));
 			edited = true;
 		}
 		addMarker(
-				Pl3xMarkersCore.storage()
-						.getSignMarkerRepository()
-						.editMarker(getWorld().getKey(), key, x, z, text)
+				getRepository().editOrCreate(x, y, z, text)
 		);
-		return edited;
-	}
-
-	/**
-	 * Add and store a new marker
-	 *
-	 * @param x    x coordinate of marker
-	 * @param z    z coordinate of marker
-	 * @param text name of the marker
-	 */
-	public boolean createMarker(int x, int z, @Language("HTML") String[] text) {
-		if (text == null || text.length != 4) {
-			throw new IllegalArgumentException("text should be a String array with a size of 4");
-		}
-		var marker = Pl3xMarkersCore.storage()
-							 .getSignMarkerRepository()
-							 .createMarker(getWorld().getKey(), key, x, z, text);
-		if (marker != null) {
-			addMarker(marker);
-			return true;
-		}
-		return false;
+		return InteractionResult.added(edited ? "Edited sign marker" : "Added sign marker");
 	}
 
 	/**
 	 * Remove a marker
 	 *
 	 * @param x x coordinate of marker
+	 * @param y y coordinate of marker
 	 * @param z z coordinate of marker
 	 */
-	public boolean removeMarker(int x, int z) {
-		var removed = Pl3xMarkersCore.storage()
-							  .getSignMarkerRepository()
-							  .removeMarker(getWorld().getKey(), key, x, z);
+	public InteractionResult remove(int x, int y, int z) {
+		var removed = getRepository().remove(x, y, z);
 		if (removed) {
-			super.removeMarker(toMarkerKey(x, z));
+			super.removeMarker(toMarkerKey(x, y, z));
+			return InteractionResult.removed("Removed sign marker");
 		}
-		return removed;
+		return InteractionResult.skip();
 	}
 
 	protected <T extends ISignMarker> void addMarker(T markerEntity) {
@@ -116,13 +93,19 @@ public class SignsIconMarkerLayer extends MarkerLayer {
 		var marker = IconMarkerBuilder.newIconMarker(
 						markerEntity.getKey(),
 						iconId,
-						markerEntity.getLocation().getX(),
-						markerEntity.getLocation().getZ()
+						markerEntity.getPosition().x(),
+						markerEntity.getPosition().z()
 				)
 							 .centerIcon(16, 16)
 							 .addTooltip(tooltip)
 							 .build();
 		addMarker(marker);
+	}
+
+	private ISignMarkerRepository<?> getRepository() {
+		return Pl3xMarkersCore.storage()
+				.getWorldRepository(worldIdentifier)
+				.getSignMarkerRepository(getKey());
 	}
 
 }

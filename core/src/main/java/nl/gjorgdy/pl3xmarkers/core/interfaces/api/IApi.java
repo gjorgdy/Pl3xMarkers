@@ -4,7 +4,7 @@ import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
 
 public interface IApi {
 
-	IWorldApi getWorldApi(String worldIdentifier);
+	IWorldApi getWorld(String worldIdentifier);
 
 	void registerMarkerLayer(LayerFactory factory);
 

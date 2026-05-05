@@ -29,8 +29,8 @@ public class LightningMarkerLayer extends MarkerLayer {
 		// ignore
 	}
 
-	public void showMarker(int x, int z, int timeInSeconds) {
-		var marker = createIconMarker(x, z);
+	public void show(int x, int y, int z, int timeInSeconds) {
+		var marker = createIconMarker(x, y, z);
 		addMarker(marker);
 		executorService.schedule(
 				() -> removeMarker(marker.getKey()),
@@ -39,9 +39,9 @@ public class LightningMarkerLayer extends MarkerLayer {
 		);
 	}
 
-	private Marker<?> createIconMarker(int x, int z) {
+	private Marker<?> createIconMarker(int x, int y, int z) {
 		return IconMarkerBuilder.newIconMarker(
-						toMarkerKey(x, z),
+						toMarkerKey(x, y, z),
 						Icons.Keys.LIGHTNING,
 						x, z
 				)
