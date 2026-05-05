@@ -76,8 +76,6 @@ java {
 }
 
 jar {
-    archiveClassifier.set('')
-    dependsOn(':core:shadowJar')
     from("LICENSE") {
         rename { "${it}_${project.archivesBaseName}"}
     }

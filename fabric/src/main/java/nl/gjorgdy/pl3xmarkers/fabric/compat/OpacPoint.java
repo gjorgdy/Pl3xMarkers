@@ -1,26 +1,21 @@
 package nl.gjorgdy.pl3xmarkers.fabric.compat;
 
-import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.IPoint;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
 
-public record OpacPoint(int X, int Z) implements IPoint {
+public record OpacPoint(int x, int y, int z) implements IPoint {
 
-	@Override
-	public int getX() {
-		return X;
+	public static OpacPoint ofChunkPos(int x, int z) {
+		return new OpacPoint(x * 16, 0, z * 16);
 	}
 
 	@Override
-	public int getZ() {
-		return Z;
+	public IPoint add(int dx, int dy, int dz) {
+		return new OpacPoint(x + dx, 0, z + dz);
 	}
 
 	@Override
-	public IPoint add(int dx, int dz) {
-		return new OpacPoint(X + dx, Z + dz);
+	public IPoint set(int x, int y, int z) {
+		return new OpacPoint(x, 0, z);
 	}
 
-	@Override
-	public IPoint set(int x, int z) {
-		return new OpacPoint(x, z);
-	}
 }

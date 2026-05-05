@@ -19,10 +19,7 @@ public class FeedbackHelper {
 		}
 		// send message
 		if (Pl3xMarkersCore.areFeedbackMessagesEnabled()) {
-			player.sendOverlayMessage(
-					Component.nullToEmpty(result.message()).toFlatList(
-							Style.EMPTY.withColor(color(result.state()))).getFirst()
-			);
+			sendOverlayMessage(player, result.message(), color(result.state()));
 		}
 		// play sound
 		if (Pl3xMarkersCore.areFeedbackSoundsEnabled()) {
@@ -40,15 +37,19 @@ public class FeedbackHelper {
 		world.getEntitiesOfClass(ServerPlayer.class, box(pos)).forEach(player -> {
 			// send message
 			if (Pl3xMarkersCore.areFeedbackMessagesEnabled()) {
-				player.sendOverlayMessage(
-						Component.nullToEmpty(result.message()).toFlatList(Style.EMPTY.withColor(color)).getFirst()
-				);
+				sendOverlayMessage(player, result.message(), color);
 			}
 			// play sound
 			if (Pl3xMarkersCore.areFeedbackSoundsEnabled()) {
 				player.playSound(sound, 1.0F, 1.5F);
 			}
 		});
+	}
+
+	public static void sendOverlayMessage(ServerPlayer player, String message, int color) {
+		player.sendOverlayMessage(
+				Component.nullToEmpty(message).toFlatList(Style.EMPTY.withColor(color)).getFirst()
+		);
 	}
 
 	private static AABB box(BlockPos center) {

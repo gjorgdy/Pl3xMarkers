@@ -13,7 +13,10 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.portal.PortalShape;
 import net.minecraft.world.level.portal.TeleportTransition;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.layers.EndGatewayMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.layers.EndPortalMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
+import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.fabric.helpers.FeedbackHelper;
 import nl.gjorgdy.pl3xmarkers.fabric.helpers.PortalHelper;
 import nl.gjorgdy.pl3xmarkers.fabric.interfaces.NetherPortalInterface;
@@ -32,9 +35,9 @@ public class PortalProcessorMixin {
 
 	// On a player traveling through a nether portal, try to create a marker
 	@Inject(method = "getPortalDestination", at = @At("RETURN"))
-	public void onTick(ServerLevel world, Entity entity, CallbackInfoReturnable<TeleportTransition> cir) {
+	public void onTick(ServerLevel serverLevel, Entity entity, CallbackInfoReturnable<TeleportTransition> cir) {
 		// origin
-		tryCreateMarker(world, entryPosition, entity);
+		tryCreateMarker(serverLevel, entryPosition, entity);
 		// destination
 		tryCreateMarker(cir.getReturnValue().newLevel(), BlockPos.containing(cir.getReturnValue().position()), entity);
 	}
@@ -49,15 +52,17 @@ public class PortalProcessorMixin {
 			portal.pl3xMarkers$createMarker(world);
 		}
 		if (portalBlock.is(Blocks.END_GATEWAY)) {
-			result = Pl3xMarkersCore.api().addEndGatewayIconMarker(world.dimension().identifier().toString(),
-			                                                       pos.getX(), pos.getZ()
-			);
+			Pl3xMarkersCore.api()
+					.getWorld(world.dimension().identifier().toString())
+					.getLayer(EndGatewayMarkerLayer.class, Layers.Keys.END_GATEWAYS)
+					.add(pos.getX(), pos.getY(), pos.getZ());
 		}
 		if (portalBlock.is(Blocks.END_PORTAL)) {
 			pos = PortalHelper.getEndPortalCenter(world, pos);
-			result = Pl3xMarkersCore.api().addEndPortalIconMarker(world.dimension().identifier().toString(), pos.getX(),
-			                                                      pos.getZ()
-			);
+			Pl3xMarkersCore.api()
+					.getWorld(world.dimension().identifier().toString())
+					.getLayer(EndPortalMarkerLayer.class, Layers.Keys.END_PORTALS)
+					.add(pos.getX(), pos.getY(), pos.getZ());
 		}
 		if (entity instanceof ServerPlayer serverPlayer) {
 			FeedbackHelper.sendFeedback(result, serverPlayer);

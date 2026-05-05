@@ -15,7 +15,8 @@ import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.state.BlockState;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
-import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
+import nl.gjorgdy.pl3xmarkers.core.layers.SignsMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.fabric.helpers.FeedbackHelper;
 import org.intellij.lang.annotations.Language;
 import org.spongepowered.asm.mixin.Mixin;
@@ -43,8 +44,6 @@ public abstract class SignBlockEntityMixin extends BlockEntity {
 		}
 
 		var textBefore = getText(true).getMessages(false);
-		boolean wasEmpty = Arrays.stream(textBefore)
-				.allMatch(text -> text.tryCollapseToString() == null || text.tryCollapseToString().isEmpty());
 		original.call(player, frontText, lines);
 		var textAfter = getText(true).getMessages(false);
 
@@ -52,24 +51,15 @@ public abstract class SignBlockEntityMixin extends BlockEntity {
 			// no changes
 			return;
 		}
-
-		InteractionResult result;
-		if (wasEmpty) {
-			result = Pl3xMarkersCore.api().addSignMarker(
-					level.dimension().identifier().toString(),
-					worldPosition.getX(),
-					worldPosition.getZ(),
-					getSignTextLines()
-			);
-		} else {
-			result = Pl3xMarkersCore.api().editSignMarker(
-					level.dimension().identifier().toString(),
-					worldPosition.getX(),
-					worldPosition.getZ(),
-					getSignTextLines()
-			);
-		}
-
+		var result = Pl3xMarkersCore.api()
+				.getWorld(level.dimension().identifier().toString())
+				.getLayer(SignsMarkerLayer.class, Layers.Keys.SIGNS)
+				.set(
+						worldPosition.getX(),
+						worldPosition.getY(),
+						worldPosition.getZ(),
+						getSignTextLines()
+				);
 		if (player instanceof ServerPlayer serverPlayer) {
 			FeedbackHelper.sendFeedback(result, serverPlayer);
 		}
@@ -80,7 +70,7 @@ public abstract class SignBlockEntityMixin extends BlockEntity {
 	private String[] getSignTextLines() {
 		return Arrays.stream(getText(true).getMessages(false))
 				.map(Component::getString)
-					   .toArray(String[]::new);
+				.toArray(String[]::new);
 	}
 
 	@Unique

@@ -1,14 +1,16 @@
 package nl.gjorgdy.pl3xmarkers.fabric.mixin;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.objects.Boundary;
+import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
+import nl.gjorgdy.pl3xmarkers.fabric.helpers.FeedbackHelper;
 import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -17,6 +19,8 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(ServerPlayer.class)
 public abstract class ServerPlayerMixin extends Player {
 
+	@Unique
+	private final ServerPlayer player = (ServerPlayer) (Object) this;
 	@Unique
 	private Boundary boundary = null;
 
@@ -37,26 +41,34 @@ public abstract class ServerPlayerMixin extends Player {
 		}
 
 		var pos = blockPosition();
-		var worldKey = level().dimension().identifier().toString();
+		var worldIdentifier = level().dimension().identifier().toString();
 
 		if (boundary != null && boundary.contains(pos.getX(), pos.getZ())) {
 			return;
 		}
 
-		Pl3xMarkersCore.api().getAreaBoundary(worldKey, pos.getX(), pos.getZ()).ifPresentOrElse(
+		Pl3xMarkersCore.api()
+				.getWorld(worldIdentifier)
+				.getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS)
+				.getContaining(pos.getX(), pos.getZ())
+				.ifPresentOrElse(
 				boundary ->
 				{
 					this.boundary = boundary;
-					sendOverlayMessage(Component.literal("[+] " + boundary.areaMarker().getName())
-							                   .withColor(boundary.areaMarker().getColor())
+					FeedbackHelper.sendOverlayMessage(
+							player,
+							"[+] " + boundary.areaMarker().getName(),
+							boundary.areaMarker().getColor()
 					);
 				},
 				() -> {
 					if (boundary == null) {
 						return;
 					}
-					sendOverlayMessage(Component.literal("[-] " + boundary.areaMarker().getName())
-							                   .withColor(boundary.areaMarker().getColor())
+					FeedbackHelper.sendOverlayMessage(
+							player,
+							"[-] " + boundary.areaMarker().getName(),
+							boundary.areaMarker().getColor()
 					);
 					boundary = null;
 				}

@@ -17,14 +17,14 @@ public record OpacChunk(ChunkPos pos, String playerName, String name, int color)
 
 	public List<IPoint> getCorners() {
 		return List.of(
-			// NorthWest
-				new OpacPoint(pos().x() * 16, pos().z() * 16),
-			// NorthEast
-				new OpacPoint((pos().x() + 1) * 16, pos().z() * 16),
-			// SouthEast
-				new OpacPoint((pos().x() + 1) * 16, (pos().z() + 1) * 16),
-			// SouthWest
-				new OpacPoint(pos().x() * 16, (pos().z() + 1) * 16)
+				// northwest
+				OpacPoint.ofChunkPos(pos().x(), pos().z()),
+				// northeast
+				OpacPoint.ofChunkPos(pos().x() + 1, pos().z()),
+				// southeast
+				OpacPoint.ofChunkPos(pos().x() + 1, pos().z() + 1),
+				// southwest
+				OpacPoint.ofChunkPos(pos().x(), pos().z() + 1)
 		);
 	}
 

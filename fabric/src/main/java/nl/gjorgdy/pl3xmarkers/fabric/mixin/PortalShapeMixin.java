@@ -6,6 +6,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.portal.PortalShape;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.layers.NetherPortalMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.fabric.helpers.FeedbackHelper;
 import nl.gjorgdy.pl3xmarkers.fabric.helpers.PortalHelper;
 import nl.gjorgdy.pl3xmarkers.fabric.interfaces.NetherPortalInterface;
@@ -34,10 +36,10 @@ public class PortalShapeMixin implements NetherPortalInterface {
     private int width;
 
     @Inject(method = "findEmptyPortalShape", at = @At("RETURN"))
-    private static void onNewPortal(LevelAccessor world, BlockPos pos, Direction.Axis firstCheckedAxis, CallbackInfoReturnable<Optional<PortalShape>> cir) {
+    private static void onNewPortal(LevelAccessor level, BlockPos pos, Direction.Axis preferredAxis, CallbackInfoReturnable<Optional<PortalShape>> cir) {
         cir.getReturnValue().ifPresent(netherPortal -> {
             if (netherPortal instanceof NetherPortalInterface np) {
-                np.pl3xMarkers$createMarker((Level) world);
+                np.pl3xMarkers$createMarker((Level) level);
             }
         });
     }
@@ -45,9 +47,10 @@ public class PortalShapeMixin implements NetherPortalInterface {
     @Override
     public void pl3xMarkers$createMarker(Level world) {
         var center = PortalHelper.getNetherPortalCenter(bottomLeft, axis, width);
-        var result = Pl3xMarkersCore.api().addNetherPortalIconMarker(world.dimension().identifier().toString(),
-                                                                     center.getX(), center.getZ()
-        );
+        var result = Pl3xMarkersCore.api()
+                .getWorld(world.dimension().identifier().toString())
+                .getLayer(NetherPortalMarkerLayer.class, Layers.Keys.NETHER_PORTALS)
+                .add(center.getX(), center.getY(), center.getZ());
 		FeedbackHelper.sendFeedback(result, world, center);
 	}
 
