@@ -117,7 +117,7 @@ public abstract class SimpleMarkerLayer extends MarkerLayer {
      */
     public InteractionResult remove(int x, int y, int z) {
         boolean removed = removeInternal(x, y, z);
-        return removed ? InteractionResult.added("Removed " + tooltip + " marker") : InteractionResult.skip();
+        return removed ? InteractionResult.removed("Removed " + tooltip + " marker") : InteractionResult.skip();
     }
 
     private void updateMarker(ISimpleMarker markerEntity) {
