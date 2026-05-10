@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-    // Pl3xmap Marker
+    // Pl3xmap
     compileOnly libs.pl3xmap
     // https://mvnrepository.com/artifact/com.googlecode.owasp-java-html-sanitizer/owasp-java-html-sanitizer
     implementation libs.owaspJavaHtmlSanitizer
