@@ -29,12 +29,12 @@ public class LightningMarkerLayer extends MarkerLayer {
 		// ignore
 	}
 
-	public void show(int x, int y, int z, int timeInSeconds) {
+	public void show(int x, int y, int z) {
 		var marker = createIconMarker(x, y, z);
 		addMarker(marker);
 		executorService.schedule(
 				() -> removeMarker(marker.getKey()),
-				timeInSeconds,
+				MarkersConfig.LIGHTNING_MARKERS_LIFETIME,
 				TimeUnit.SECONDS
 		);
 	}

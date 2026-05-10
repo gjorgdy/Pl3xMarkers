@@ -1,4 +1,4 @@
-﻿package nl.gjorgdy.pl3xmarkers.core.json.repositories;
+package nl.gjorgdy.pl3xmarkers.core.json.repositories;
 
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IAreaMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.ISignMarkerRepository;
@@ -15,13 +15,17 @@ public class WorldRepository implements IWorldRepository {
 
 	public final String worldIdentifier;
 	private final JsonStorage storage;
-	private HashMap<String, SimpleMarkerRepository> simpleMarkerRepositories;
-	private HashMap<String, SignMarkerRepository> signMarkerRepositories;
-	private HashMap<String, AreaMarkerRepository> areaMarkerRepositories;
+	private final HashMap<String, SimpleMarkerRepository> simpleMarkerRepositories;
+	private final HashMap<String, SignMarkerRepository> signMarkerRepositories;
+	private final HashMap<String, AreaMarkerRepository> areaMarkerRepositories;
 
 	public WorldRepository(JsonStorage storage, String worldIdentifier) {
 		this.worldIdentifier = worldIdentifier;
 		this.storage = storage;
+
+		simpleMarkerRepositories = new HashMap<>();
+		signMarkerRepositories = new HashMap<>();
+		areaMarkerRepositories = new HashMap<>();
 	}
 
 	public JsonStorage getStorage() {
@@ -30,46 +34,37 @@ public class WorldRepository implements IWorldRepository {
 
 	@Override
 	public IAreaMarkerRepository<? extends IAreaMarker> getAreaMarkerRepository(String layerKey) {
-		return areaMarkerRepositories.computeIfAbsent(
-				layerKey,
-				key ->
-				{
-					var repo = new AreaMarkerRepository(this, layerKey);
-					areaMarkerRepositories.put(layerKey, repo);
-					return repo;
-				}
-		);
+		if (areaMarkerRepositories.containsKey(layerKey)) {
+			return areaMarkerRepositories.get(layerKey);
+		}
+		var repo = new AreaMarkerRepository(this, layerKey);
+		areaMarkerRepositories.put(layerKey, repo);
+		return repo;
 	}
 
 	@Override
 	public ISimpleMarkerRepository<? extends ISimpleMarker> getSimpleMarkerRepository(String layerKey) {
-		return simpleMarkerRepositories.computeIfAbsent(
-				layerKey,
-				key ->
-				{
-					var repo = new SimpleMarkerRepository(this, layerKey);
-					simpleMarkerRepositories.put(layerKey, repo);
-					return repo;
-				}
-		);
+		if (simpleMarkerRepositories.containsKey(layerKey)) {
+			return simpleMarkerRepositories.get(layerKey);
+		}
+		var repo = new SimpleMarkerRepository(this, layerKey);
+		simpleMarkerRepositories.put(layerKey, repo);
+		return repo;
 	}
 
 	@Override
 	public ISignMarkerRepository<? extends ISignMarker> getSignMarkerRepository(String layerKey) {
-		return signMarkerRepositories.computeIfAbsent(
-				layerKey,
-				key ->
-				{
-					var repo = new SignMarkerRepository(this, layerKey);
-					signMarkerRepositories.put(layerKey, repo);
-					return repo;
-				}
-		);
+		if (signMarkerRepositories.containsKey(layerKey)) {
+			return signMarkerRepositories.get(layerKey);
+		}
+		var repo = new SignMarkerRepository(this, layerKey);
+		signMarkerRepositories.put(layerKey, repo);
+		return repo;
 	}
 
 	public void write() {
-		simpleMarkerRepositories.values().forEach(SimpleMarkerRepository::write);
-		signMarkerRepositories.values().forEach(SignMarkerRepository::write);
-		areaMarkerRepositories.values().forEach(AreaMarkerRepository::write);
+		simpleMarkerRepositories.values().forEach(MarkerRepository::write);
+		signMarkerRepositories.values().forEach(MarkerRepository::write);
+		areaMarkerRepositories.values().forEach(MarkerRepository::write);
 	}
 }

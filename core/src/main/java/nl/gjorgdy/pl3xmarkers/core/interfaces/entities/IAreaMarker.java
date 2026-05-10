@@ -30,6 +30,13 @@ public interface IAreaMarker extends IMarker {
 	Collection<? extends IPoint> getPoints();
 
 	/**
+	 * Check if this area has points
+	 *
+	 * @return true, if it has no points
+	 */
+	boolean isEmpty();
+
+	/**
 	 * Get a point of the lowest x and z coordinates of this area
 	 *
 	 * @return the minimum outer corner with y 0

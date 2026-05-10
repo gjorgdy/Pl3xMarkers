@@ -1,4 +1,4 @@
-﻿package nl.gjorgdy.pl3xmarkers.core.json.repositories;
+package nl.gjorgdy.pl3xmarkers.core.json.repositories;
 
 import nl.gjorgdy.pl3xmarkers.core.interfaces.ISimpleMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.json.entities.Point;

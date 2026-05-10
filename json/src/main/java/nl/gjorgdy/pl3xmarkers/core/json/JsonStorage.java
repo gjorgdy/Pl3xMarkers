@@ -12,8 +12,8 @@ import java.util.HashMap;
 
 public class JsonStorage implements IStorage {
 
+	private final HashMap<String, WorldRepository> worldRepositories = new HashMap<>();
 	private String configPath;
-	private HashMap<String, WorldRepository> worldRepositories;
 	private boolean loaded = false;
 
 	private void load() {
@@ -23,27 +23,25 @@ public class JsonStorage implements IStorage {
 		if (Pl3xMarkersCore.isBukkit()) {
 			migrate(Path.of("config/pl3xmarkers"), Path.of("plugins/Pl3xMarkers"));
 		}
-		//
-		worldRepositories = new HashMap<>();
 		// mark as loaded
 		loaded = true;
 	}
 
 	public String getConfigPath() {
+		if (!loaded) {
+			load();
+		}
 		return configPath;
 	}
 
 	@Override
 	public IWorldRepository getWorldRepository(String worldIdentifier) {
-		return worldRepositories.computeIfAbsent(
-				worldIdentifier,
-				wi ->
-				{
-					var repo = new WorldRepository(this, wi);
-					worldRepositories.put(wi, repo);
-					return repo;
-				}
-		);
+		if (worldRepositories.containsKey(worldIdentifier)) {
+			return worldRepositories.get(worldIdentifier);
+		}
+		var repo = new WorldRepository(this, worldIdentifier);
+		worldRepositories.put(worldIdentifier, repo);
+		return repo;
 	}
 
 	@Override

@@ -1,4 +1,4 @@
-﻿package nl.gjorgdy.pl3xmarkers.core.interfaces.api;
+package nl.gjorgdy.pl3xmarkers.core.interfaces.api;
 
 import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
 

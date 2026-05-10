@@ -83,6 +83,9 @@ public class AreaMarkerLayer extends MarkerLayer {
 	    var area = getRepository().getOrCreate(label, color);
 	    if (area.addPoint(x, y, z)) {
 			Pl3xMarkersCore.runParallel(() -> loadArea(area));
+		    if (area.getPoints().size() == 1) {
+			    return InteractionResult.added("Created area: " + label);
+		    }
 		    return InteractionResult.added("Added point to area: " + label);
         }
 	    return InteractionResult.failure("Could not add point to area: " + label);
@@ -95,13 +98,14 @@ public class AreaMarkerLayer extends MarkerLayer {
 	    var area = getRepository().get(label, color);
 	    if (area != null && area.removePoint(x, y, z)) {
 			Pl3xMarkersCore.runParallel(() -> loadArea(area));
-		    if (area.getPoints().isEmpty()) {
+		    if (area.isEmpty()) {
+			    super.removeMarker(area.getKey());
 			    getRepository().remove(label, color);
 			    return InteractionResult.removed("Removed area: " + label);
 		    }
 		    return InteractionResult.removed("Removed point from area: " + label);
         }
-	    return InteractionResult.failure("Could not remove point from area: " + label);
+	    return InteractionResult.skip();
     }
 
 	public Optional<Boundary> getContaining(int x, int z) {

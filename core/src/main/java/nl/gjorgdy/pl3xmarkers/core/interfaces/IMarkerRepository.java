@@ -1,4 +1,4 @@
-﻿package nl.gjorgdy.pl3xmarkers.core.interfaces;
+package nl.gjorgdy.pl3xmarkers.core.interfaces;
 
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IMarker;
 

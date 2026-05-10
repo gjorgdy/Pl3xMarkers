@@ -1,4 +1,4 @@
-﻿package nl.gjorgdy.pl3xmarkers.core.interfaces.entities;
+package nl.gjorgdy.pl3xmarkers.core.interfaces.entities;
 
 import org.jspecify.annotations.Nullable;
 

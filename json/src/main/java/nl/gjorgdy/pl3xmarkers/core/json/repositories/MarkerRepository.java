@@ -6,7 +6,6 @@ import com.google.gson.reflect.TypeToken;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.json.entities.Marker;
 import nl.gjorgdy.pl3xmarkers.core.json.entities.Point;
-import nl.gjorgdy.pl3xmarkers.core.json.entities.SignMarker;
 import nl.gjorgdy.pl3xmarkers.core.json.serializers.PointSerializer;
 
 import java.io.*;
@@ -33,13 +32,20 @@ public abstract class MarkerRepository<T extends Marker> implements IMarkerRepos
 		gson = new GsonBuilder()
 				.setPrettyPrinting()
 				.registerTypeAdapter(Point.class, new PointSerializer())
-				.registerTypeAdapter(SignMarker.class, new PointSerializer())
 				.create();
-		folderPath = worldRepository.getStorage().getConfigPath() + "/" + worldRepository.worldIdentifier;
+		folderPath = worldRepository.getStorage().getConfigPath() + "/" + formatWorldIdentifier(
+				worldRepository.worldIdentifier);
 		filePath = folderPath + "/" + layerKey + ".json";
 		markerClass = TypeToken.getParameterized(HashSet.class, clazz);
 		data = new HashSet<>();
 		read();
+	}
+
+	public String formatWorldIdentifier(String worldIdentifier) {
+		if (worldIdentifier.contains(":")) {
+			return worldIdentifier.split(":")[1];
+		}
+		return worldIdentifier;
 	}
 
 	@Override
@@ -57,6 +63,11 @@ public abstract class MarkerRepository<T extends Marker> implements IMarkerRepos
 	 */
 	final public void markDirty() {
 		dirty.set(true);
+	}
+
+	private boolean fileExists() {
+		var file = new File(filePath);
+		return file.exists();
 	}
 
 	private boolean invalidFile() throws IOException {
@@ -96,16 +107,20 @@ public abstract class MarkerRepository<T extends Marker> implements IMarkerRepos
 			return;
 		}
 		try {
-			if (invalidFile()) {
+			if (!fileExists()) {
 				return;
 			}
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
 			//noinspection unchecked
-			data = (HashSet<T>) gson.fromJson(bufferedReader, markerClass);
+			HashSet<T> data = (HashSet<T>) gson.fromJson(bufferedReader, markerClass);
+			if (data == null) {
+				return;
+			}
 			assert data instanceof HashSet<T>;
 			data.forEach(marker -> marker.SetContext(this));
+			this.data = data;
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			System.out.println(e.getMessage() + "[" + filePath + "]");
 		}
 	}
 

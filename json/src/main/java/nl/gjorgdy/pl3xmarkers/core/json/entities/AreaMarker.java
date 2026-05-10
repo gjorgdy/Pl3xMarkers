@@ -12,16 +12,15 @@ public class AreaMarker extends Marker implements IAreaMarker {
 
 	private final String name;
 	private final int color;
-	private final Set<Point> points;
+	private final Set<Point> points = new HashSet<>();
 
-	private IPoint minCorner;
-	private IPoint maxCorner;
+	private transient Point minCorner;
+	private transient Point maxCorner;
 
 	public AreaMarker(MarkerRepository<AreaMarker> repository, String name, int color) {
 		super(repository);
 		this.name = name;
 		this.color = color;
-		points = new HashSet<>();
 	}
 
 	@Override
@@ -40,12 +39,23 @@ public class AreaMarker extends Marker implements IAreaMarker {
 	}
 
 	@Override
+	public boolean isEmpty() {
+		return points.isEmpty();
+	}
+
+	@Override
 	public IPoint getMinCorner() {
+		if (minCorner == null) {
+			calculateOuterCorners();
+		}
 		return minCorner;
 	}
 
 	@Override
 	public IPoint getMaxCorner() {
+		if (maxCorner == null) {
+			calculateOuterCorners();
+		}
 		return maxCorner;
 	}
 
@@ -70,6 +80,12 @@ public class AreaMarker extends Marker implements IAreaMarker {
 	}
 
 	private void calculateOuterCorners() {
+		if (points.isEmpty()) {
+			minCorner = null;
+			maxCorner = null;
+			return;
+		}
+		
 		int minX = Integer.MAX_VALUE;
 		int minY = Integer.MAX_VALUE;
 		int minZ = Integer.MAX_VALUE;

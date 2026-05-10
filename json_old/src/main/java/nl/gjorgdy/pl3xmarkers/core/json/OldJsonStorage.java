@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class JsonStorage implements IStorage {
+public class OldJsonStorage implements IStorage {
 
 	private IconMarkerRepository iconMarkerRepository;
 	private SignMarkerRepository signMarkerRepository;
