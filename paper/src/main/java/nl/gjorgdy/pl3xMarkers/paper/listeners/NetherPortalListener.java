@@ -17,7 +17,6 @@ public class NetherPortalListener implements Listener {
 
     @EventHandler
     public void onPortalTeleport(PlayerPortalEvent event) {
-        System.out.println("PlayerPortalEvent: " + event.getCause());
         if (event.getCause() == PlayerTeleportEvent.TeleportCause.NETHER_PORTAL) {
             onNetherPortalTeleport(event.getFrom());
         }
