@@ -4,7 +4,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.objects.Boundary;
+import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -22,7 +24,9 @@ public class MovementListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
-		if (!MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED) return;
+		if (!MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED) {
+			return;
+		}
 
 		var player = event.getPlayer();
 	   	var boundary = playerBoundaries.get(player.getUniqueId());
@@ -30,13 +34,18 @@ public class MovementListener implements Listener {
 		if (boundary != null && boundary.contains(
 				event.getTo().getBlockX(),
 				event.getTo().getBlockZ()
-		)) return;
+		)) {
+			return;
+		}
 
-		Pl3xMarkersCore.api().getAreaBoundary(
-				event.getTo().getWorld().getName(),
-				event.getTo().getBlockX(),
-				event.getTo().getBlockZ()
-		).ifPresentOrElse(b ->
+		Pl3xMarkersCore.api()
+				.getWorld(event.getTo().getWorld().getName())
+				.getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS)
+				.getContaining(
+						event.getTo().getBlockX(),
+						event.getTo().getBlockZ()
+				)
+				.ifPresentOrElse(b ->
 		{
 			player.sendActionBar(
 				Component.text("[+] " + b.areaMarker().getName())

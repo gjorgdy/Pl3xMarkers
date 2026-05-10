@@ -48,7 +48,9 @@ public class ShopkeepersListener implements Listener {
 
 	@Nullable
 	private ShopkeepersMarkerLayer getLayer(String worldIdentifier) {
-		return Pl3xMarkersCore.api().getMarkerLayer(worldIdentifier, Layers.Keys.SHOPKEEPERS, ShopkeepersMarkerLayer.class);
+		return Pl3xMarkersCore.api()
+				.getWorld(worldIdentifier)
+				.getLayer(ShopkeepersMarkerLayer.class, Layers.Keys.SHOPKEEPERS);
 	}
 
 }

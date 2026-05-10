@@ -3,6 +3,8 @@ package nl.gjorgdy.pl3xMarkers.paper.listeners;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import nl.gjorgdy.pl3xMarkers.paper.helpers.FeedbackHelper;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.bukkit.Location;
 import org.bukkit.block.Banner;
 import org.bukkit.block.BlockType;
@@ -45,14 +47,19 @@ public class NodeListener implements Listener {
      */
     private void onPlaceNode(Banner banner, Player player) {
         var name = banner.customName();
-        if (name == null) return;
-        var result = Pl3xMarkersCore.api().addAreaPoint(
-                banner.getLocation().getWorld().getName(),
-                PlainTextComponentSerializer.plainText().serialize(name),
-                banner.getBaseColor().getColor().asRGB(),
-                banner.getLocation().getBlockX(),
-                banner.getLocation().getBlockZ()
-        );
+        if (name == null) {
+            return;
+        }
+        var result = Pl3xMarkersCore.api()
+                .getWorld(banner.getLocation().getWorld().getName())
+                .getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS)
+                .addPoint(
+                        PlainTextComponentSerializer.plainText().serialize(name),
+                        banner.getBaseColor().getColor().asRGB(),
+                        banner.getLocation().getBlockX(),
+                        banner.getLocation().getBlockY(),
+                        banner.getLocation().getBlockZ()
+                );
 		FeedbackHelper.sendFeedback(result, player);
     }
 
@@ -62,14 +69,19 @@ public class NodeListener implements Listener {
      */
     private void onBreakNode(Banner banner, Player player) {
         var name = banner.customName();
-        if (name == null) return;
-        var result = Pl3xMarkersCore.api().removeAreaPoint(
-                banner.getLocation().getWorld().getName(),
-                PlainTextComponentSerializer.plainText().serialize(name),
-                banner.getBaseColor().getColor().asRGB(),
-                banner.getLocation().getBlockX(),
-                banner.getLocation().getBlockZ()
-        );
+        if (name == null) {
+            return;
+        }
+        var result = Pl3xMarkersCore.api()
+                .getWorld(banner.getLocation().getWorld().getName())
+                .getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS)
+                .removePoint(
+                        PlainTextComponentSerializer.plainText().serialize(name),
+                        banner.getBaseColor().getColor().asRGB(),
+                        banner.getLocation().getBlockX(),
+                        banner.getLocation().getBlockY(),
+                        banner.getLocation().getBlockZ()
+                );
 		FeedbackHelper.sendFeedback(result, player);
     }
 
