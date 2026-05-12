@@ -71,7 +71,7 @@ public class AreaMarker extends Marker implements IAreaMarker {
 
 	@Override
 	public boolean removePoint(int x, int y, int z) {
-		boolean removed = points.removeIf(point -> point.x() == x && point.y() == y && point.z() == z);
+		boolean removed = points.removeIf(point -> point.equals(x, y, z));
 		if (removed) {
 			calculateOuterCorners();
 			markDirty();

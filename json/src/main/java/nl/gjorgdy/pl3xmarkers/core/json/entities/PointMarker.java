@@ -6,7 +6,7 @@ import nl.gjorgdy.pl3xmarkers.core.json.repositories.MarkerRepository;
 
 public abstract class PointMarker extends Marker implements IPointMarker {
 
-	private final Point pos;
+	private Point pos;
 
 	public PointMarker(MarkerRepository<? extends PointMarker> repository, Point point) {
 		super(repository);
@@ -16,5 +16,9 @@ public abstract class PointMarker extends Marker implements IPointMarker {
 	@Override
 	public IPoint getPosition() {
 		return pos;
+	}
+
+	public void setPosition(Point point) {
+		pos = point;
 	}
 }

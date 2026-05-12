@@ -35,6 +35,9 @@ public class SimpleMarkerRepository extends MarkerRepository<SimpleMarker> imple
 		var marker = get(x, y, z);
 		if (marker == null) {
 			marker = create(x, y, z);
+		} else if (marker.getPosition().y() == Integer.MIN_VALUE) {
+			marker.setPosition(new Point(x, y, z));
+			markDirty();
 		}
 		return marker;
 	}
