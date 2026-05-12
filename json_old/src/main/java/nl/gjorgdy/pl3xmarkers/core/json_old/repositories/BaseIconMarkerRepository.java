@@ -1,8 +1,8 @@
-package nl.gjorgdy.pl3xmarkers.core.json.repositories;
+package nl.gjorgdy.pl3xmarkers.core.json_old.repositories;
 
 import com.google.gson.reflect.TypeToken;
-import nl.gjorgdy.pl3xmarkers.core.json.entities.IconMarker;
-import nl.gjorgdy.pl3xmarkers.core.json.interfaces.IJsonRepositoryData;
+import nl.gjorgdy.pl3xmarkers.core.json_old.entities.IconMarker;
+import nl.gjorgdy.pl3xmarkers.core.json_old.interfaces.IJsonRepositoryData;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,17 +18,20 @@ public class BaseIconMarkerRepository<T extends IconMarker> extends JsonReposito
 	public static class Data<T extends IconMarker> extends HashMap<String, WorldData<T>> implements IJsonRepositoryData {
 
 		public boolean add(T iconMarker) {
-			return this
-						   .getOrCreate(iconMarker.getWorld())
+			return getOrCreate(iconMarker.getWorld())
 						   .getOrCreate(iconMarker.getLayer())
 						   .add(iconMarker);
 		}
 
 		public boolean remove(String worldIdentifier, String layerKey, int x, int z) {
-			var worldData = this.get(worldIdentifier);
-			if (worldData == null) return false;
+			var worldData = get(worldIdentifier);
+			if (worldData == null) {
+				return false;
+			}
 			var layerData = worldData.get(layerKey);
-			if (layerData == null) return false;
+			if (layerData == null) {
+				return false;
+			}
 			return layerData.removeIf(m -> m.getX() == x && m.getZ() == z);
 		}
 
@@ -39,7 +42,7 @@ public class BaseIconMarkerRepository<T extends IconMarker> extends JsonReposito
 
 		@Override
 		public void setContext(JsonRepository<?> jsonRepository) {
-			this.forEach((worldIdentifier, world) -> world.setContext(worldIdentifier));
+			forEach((worldIdentifier, world) -> world.setContext(worldIdentifier));
 		}
 
 		public WorldData<T> getOrCreate(String key) {
@@ -70,7 +73,7 @@ public class BaseIconMarkerRepository<T extends IconMarker> extends JsonReposito
 		}
 
 		public void setContext(String worldIdentifier) {
-			this.forEach((layerKey, layer) -> layer.setContext(worldIdentifier, layerKey));
+			forEach((layerKey, layer) -> layer.setContext(worldIdentifier, layerKey));
 		}
 
 	}
@@ -78,7 +81,7 @@ public class BaseIconMarkerRepository<T extends IconMarker> extends JsonReposito
 	public static class LayerData<T extends IconMarker> extends HashSet<T> {
 
 		public void setContext(String worldIdentifier, String layerKey) {
-			this.forEach(m -> m.setContext(worldIdentifier, layerKey));
+			forEach(m -> m.setContext(worldIdentifier, layerKey));
 		}
 
 	}

@@ -4,6 +4,7 @@ import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IStorage;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IWorldRepository;
 import nl.gjorgdy.pl3xmarkers.core.json.repositories.WorldRepository;
+import nl.gjorgdy.pl3xmarkers.core.json_old.OldJsonStorage;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,6 +17,8 @@ public class JsonStorage implements IStorage {
 	private String configPath;
 	private boolean loaded = false;
 
+	private OldJsonStorage oldJsonStorage;
+
 	private void load() {
 		// read files
 		configPath = Pl3xMarkersCore.isBukkit() ? "plugins/Pl3xMarkers" : "config/pl3xmarkers";
@@ -25,6 +28,13 @@ public class JsonStorage implements IStorage {
 		}
 		// mark as loaded
 		loaded = true;
+	}
+
+	public OldJsonStorage oldJsonStorage() {
+		if (oldJsonStorage == null) {
+			oldJsonStorage = new OldJsonStorage();
+		}
+		return oldJsonStorage;
 	}
 
 	public String getConfigPath() {

@@ -1,10 +1,10 @@
-package nl.gjorgdy.pl3xmarkers.core.json;
+package nl.gjorgdy.pl3xmarkers.core.json_old;
 
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.IStorage;
-import nl.gjorgdy.pl3xmarkers.core.json.repositories.AreaMarkerRepository;
-import nl.gjorgdy.pl3xmarkers.core.json.repositories.IconMarkerRepository;
-import nl.gjorgdy.pl3xmarkers.core.json.repositories.SignMarkerRepository;
+import nl.gjorgdy.pl3xmarkers.core.json_old.repositories.AreaMarkerRepository;
+import nl.gjorgdy.pl3xmarkers.core.json_old.repositories.IconMarkerRepository;
+import nl.gjorgdy.pl3xmarkers.core.json_old.repositories.SignMarkerRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;

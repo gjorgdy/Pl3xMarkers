@@ -8,6 +8,13 @@ public class SimpleMarkerRepository extends MarkerRepository<SimpleMarker> imple
 
 	public SimpleMarkerRepository(WorldRepository worldRepository, String layerKey) {
 		super(worldRepository, layerKey, SimpleMarker.class);
+		// STORAGE MIGRATION
+		worldRepository.getStorage().oldJsonStorage()
+				.getIconMarkerRepository()
+				.getIconMarkers(worldRepository.worldIdentifier, layerKey)
+				.forEach(oldMarker -> create(oldMarker.getX(), Integer.MIN_VALUE, oldMarker.getZ()));
+		write();
+		// STORAGE MIGRATION
 	}
 
 	@Override

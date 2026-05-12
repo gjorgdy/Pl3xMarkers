@@ -1,8 +1,8 @@
-package nl.gjorgdy.pl3xmarkers.core.json.repositories;
+package nl.gjorgdy.pl3xmarkers.core.json_old.repositories;
 
 import com.google.gson.reflect.TypeToken;
 import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.ISignMarkerRepository;
-import nl.gjorgdy.pl3xmarkers.core.json.entities.SignMarker;
+import nl.gjorgdy.pl3xmarkers.core.json_old.entities.SignMarker;
 
 import java.util.Collection;
 import java.util.Set;

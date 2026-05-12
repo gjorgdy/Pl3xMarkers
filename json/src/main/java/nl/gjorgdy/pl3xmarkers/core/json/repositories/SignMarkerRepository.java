@@ -8,6 +8,15 @@ public class SignMarkerRepository extends MarkerRepository<SignMarker> implement
 
 	public SignMarkerRepository(WorldRepository worldRepository, String layerKey) {
 		super(worldRepository, layerKey, SignMarker.class);
+		// STORAGE MIGRATION
+		worldRepository.getStorage().oldJsonStorage()
+				.getSignMarkerRepository()
+				.getMarkers(worldRepository.worldIdentifier, layerKey)
+				.forEach(oldMarker -> create(oldMarker.getX(), Integer.MIN_VALUE, oldMarker.getZ(),
+				                             oldMarker.getText()
+				));
+		write();
+		// STORAGE MIGRATION
 	}
 
 	@Override

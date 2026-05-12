@@ -71,30 +71,37 @@ public abstract class MarkerRepository<T extends Marker> implements IMarkerRepos
 	}
 
 	private boolean invalidFile() throws IOException {
-		// make sure parent directories exist
+		// Ensure the folder exists and is a directory
 		var folder = new File(folderPath);
-		var madeFolders = folder.mkdirs();
-		// Create file if it doesn't exist
-		var file = new File(filePath);
-		if (file.exists()) {
-			return false;
+		if ((!folder.exists() && !folder.mkdirs()) || !folder.isDirectory()) {
+			return true; // could not create folders -> invalid
 		}
-		var madeFile = file.createNewFile();
-		return !madeFolders || !madeFile;
+		// Ensure the file exists and is a file
+		var file = new File(filePath);
+		if (!file.exists()) {
+			// make sure parent exists (defensive)
+			var parent = file.getParentFile();
+			if (parent != null && !parent.exists()) {
+				if (!parent.mkdirs()) {
+					return true;
+				}
+			}
+			return !file.createNewFile();
+		}
+		return !file.isFile();
 	}
 
 	final public void write() {
 		if (!dirty.get()) {
 			return;
 		}
-		try (Writer writer = new FileWriter(filePath, false)) {
-			if (invalidFile()) {
+		try {
+			if (invalidFile() || data == null || data.isEmpty()) {
 				return;
 			}
-			if (data == null || data.isEmpty()) {
-				return;
+			try (Writer writer = new FileWriter(filePath, false)) {
+				gson.toJson(data, writer);
 			}
-			gson.toJson(data, writer);
 			dirty.set(false);
 		} catch (IOException e) {
 			System.out.println(e.getMessage());

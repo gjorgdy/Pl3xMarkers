@@ -1,8 +1,8 @@
-package nl.gjorgdy.pl3xmarkers.core.json.entities;
+package nl.gjorgdy.pl3xmarkers.core.json_old.entities;
 
 import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.IAreaMarker;
 import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.IPoint;
-import nl.gjorgdy.pl3xmarkers.core.json.repositories.AreaMarkerRepository;
+import nl.gjorgdy.pl3xmarkers.core.json_old.repositories.AreaMarkerRepository;
 
 import java.util.Collection;
 import java.util.HashSet;

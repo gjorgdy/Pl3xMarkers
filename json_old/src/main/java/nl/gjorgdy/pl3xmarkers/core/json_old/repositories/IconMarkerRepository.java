@@ -1,8 +1,8 @@
-package nl.gjorgdy.pl3xmarkers.core.json.repositories;
+package nl.gjorgdy.pl3xmarkers.core.json_old.repositories;
 
 import com.google.gson.reflect.TypeToken;
 import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.IIconMarkerRepository;
-import nl.gjorgdy.pl3xmarkers.core.json.entities.IconMarker;
+import nl.gjorgdy.pl3xmarkers.core.json_old.entities.IconMarker;
 
 import java.util.Collection;
 import java.util.Set;

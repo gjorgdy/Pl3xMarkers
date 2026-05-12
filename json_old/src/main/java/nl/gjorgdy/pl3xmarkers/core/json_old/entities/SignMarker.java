@@ -1,4 +1,4 @@
-package nl.gjorgdy.pl3xmarkers.core.json.entities;
+package nl.gjorgdy.pl3xmarkers.core.json_old.entities;
 
 import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities.ISignMarker;
 

@@ -1,9 +1,9 @@
-package nl.gjorgdy.pl3xmarkers.core.json.repositories;
+package nl.gjorgdy.pl3xmarkers.core.json_old.repositories;
 
 import com.google.gson.reflect.TypeToken;
 import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.IAreaMarkerRepository;
-import nl.gjorgdy.pl3xmarkers.core.json.entities.AreaMarker;
-import nl.gjorgdy.pl3xmarkers.core.json.interfaces.IJsonRepositoryData;
+import nl.gjorgdy.pl3xmarkers.core.json_old.entities.AreaMarker;
+import nl.gjorgdy.pl3xmarkers.core.json_old.interfaces.IJsonRepositoryData;
 
 import java.util.Collection;
 import java.util.HashMap;
