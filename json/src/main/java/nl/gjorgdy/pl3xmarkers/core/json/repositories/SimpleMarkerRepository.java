@@ -27,7 +27,7 @@ public class SimpleMarkerRepository extends MarkerRepository<SimpleMarker> imple
 
 	@Override
 	public SimpleMarker get(int x, int y, int z) {
-		return data.stream().filter(marker -> marker.getPosition().equals(new Point(x, y, z))).findFirst().orElse(null);
+		return data.stream().filter(marker -> marker.getPosition().equals(x, y, z)).findFirst().orElse(null);
 	}
 
 	@Override

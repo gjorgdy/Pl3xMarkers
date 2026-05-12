@@ -57,4 +57,20 @@ public interface IPoint extends Comparable<IPoint> {
 		return x() + ":" + y() + ":" + z();
 	}
 
+	/**
+	 * Compare this point to another point.
+	 * The y coordinate is ignored if either this points or the supplied y is equal to {@code Integer.MIN_VALUE}
+	 *
+	 * @param x x-coordinate to compare to
+	 * @param y y-coordinate to compare to
+	 * @param z z-coordinate to compare to
+	 * @return {@code true} if the x and z coordinates are equal and the y coordinates are either equal or one of them
+	 * 		is {@code Integer.MIN_VALUE}, {@code false} otherwise
+	 */
+	default boolean equals(int x, int y, int z) {
+		return x() == x
+				&& (y() == y || y() == Integer.MIN_VALUE || y == Integer.MIN_VALUE)
+				&& z() == z;
+	}
+
 }

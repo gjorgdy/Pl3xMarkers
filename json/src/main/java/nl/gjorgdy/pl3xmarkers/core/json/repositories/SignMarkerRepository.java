@@ -29,7 +29,7 @@ public class SignMarkerRepository extends MarkerRepository<SignMarker> implement
 
 	@Override
 	public SignMarker edit(int x, int y, int z, String[] text) {
-		var marker = data.stream().filter(m -> m.getPosition().equals(new Point(x, y, z))).findFirst().orElse(null);
+		var marker = data.stream().filter(m -> m.getPosition().equals(x, y, z)).findFirst().orElse(null);
 		if (marker != null) {
 			marker.setText(text);
 			markDirty();
