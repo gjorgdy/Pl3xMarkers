@@ -1,7 +1,9 @@
-﻿Live Lightning Strike markers
+﻿26.1.2 And New Storage System
 ---
 
-- Added a lightning strike marker on the web map which appears for 3 seconds where a lightning strike occurs in the
-  world.
-    - This works for natural lightning strikes and those caused by players using a Channeling trident and other mods
-      or plugins.
+- Updated the mod to 26.1.2
+- Rewrote a large portion of the mod to use a cleaner storage system.
+    - This storage system is definitely experimental in implementation, but the file structure shouldn't change anymore
+      towards 1.0
+    - As of now, there is no automatic migration if you're coming from an older version, this will come in the beta
+      release
