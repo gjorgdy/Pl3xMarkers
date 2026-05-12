@@ -24,7 +24,7 @@ public class MovementListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
-		if (!MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED) {
+		if (!MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED || !MarkersConfig.AREA_MARKERS_ENABLED) {
 			return;
 		}
 

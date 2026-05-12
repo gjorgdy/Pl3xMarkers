@@ -36,7 +36,7 @@ public abstract class ServerPlayerMixin extends Player {
 	protected void applyInput() {
 		super.applyInput();
 
-		if (!MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED) {
+		if (!MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED || !MarkersConfig.AREA_MARKERS_ENABLED) {
 			return;
 		}
 
