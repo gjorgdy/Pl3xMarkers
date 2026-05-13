@@ -76,6 +76,7 @@ public abstract class JsonRepository<T extends IJsonRepositoryData> {
 				//noinspection unchecked
 				data = (T) jsonData;
 			}
+			bufferedReader.close();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}

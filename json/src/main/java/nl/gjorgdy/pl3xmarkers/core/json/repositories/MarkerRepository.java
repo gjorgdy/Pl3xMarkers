@@ -126,6 +126,7 @@ public abstract class MarkerRepository<T extends Marker> implements IMarkerRepos
 			assert data instanceof HashSet<T>;
 			data.forEach(marker -> marker.SetContext(this));
 			this.data = data;
+			bufferedReader.close();
 		} catch (IOException e) {
 			System.out.println(e.getMessage() + "[" + filePath + "]");
 		}

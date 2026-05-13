@@ -17,9 +17,11 @@ public class OldJsonStorage implements IStorage {
 	private AreaMarkerRepository areaMarkerRepository;
 	private boolean loaded = false;
 
+	private String configPath;
+
 	private void load() {
 		// read files
-		String configPath = Pl3xMarkersCore.isBukkit() ? "plugins/Pl3xMarkers" : "config/pl3xmarkers";
+		configPath = Pl3xMarkersCore.isBukkit() ? "plugins/Pl3xMarkers" : "config/pl3xmarkers";
 		// migrate old data if needed
 		if (Pl3xMarkersCore.isBukkit()) {
 			migrate(Path.of("config/pl3xmarkers"), Path.of("plugins/Pl3xMarkers"));
@@ -30,6 +32,27 @@ public class OldJsonStorage implements IStorage {
 		areaMarkerRepository = new AreaMarkerRepository(configPath + "/markers", "areas");
 		// mark as loaded
 		loaded = true;
+	}
+
+	public boolean folderExists() {
+		if (!loaded) {
+			load();
+		}
+		return Files.exists(Path.of(configPath + "/markers"));
+	}
+
+	public void rename() {
+		if (!loaded) {
+			load();
+		}
+		try {
+			Files.move(
+					Path.of(configPath + "/markers"),
+					Path.of(configPath + "/markers_" + System.currentTimeMillis())
+			);
+		} catch (IOException e) {
+			throw new RuntimeException("Failed to rename old storage", e);
+		}
 	}
 
 	@Override

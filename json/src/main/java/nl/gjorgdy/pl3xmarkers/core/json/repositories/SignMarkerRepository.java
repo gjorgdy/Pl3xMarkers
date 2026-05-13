@@ -1,5 +1,6 @@
 package nl.gjorgdy.pl3xmarkers.core.json.repositories;
 
+import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.IStorage;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.ISignMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.json.entities.Point;
 import nl.gjorgdy.pl3xmarkers.core.json.entities.SignMarker;
@@ -8,15 +9,16 @@ public class SignMarkerRepository extends MarkerRepository<SignMarker> implement
 
 	public SignMarkerRepository(WorldRepository worldRepository, String layerKey) {
 		super(worldRepository, layerKey, SignMarker.class);
-		// STORAGE MIGRATION
-		worldRepository.getStorage().oldJsonStorage()
-				.getSignMarkerRepository()
-				.getMarkers(worldRepository.worldIdentifier, layerKey)
-				.forEach(oldMarker -> create(oldMarker.getX(), Integer.MIN_VALUE, oldMarker.getZ(),
+	}
+
+	public void migrate(IStorage oldJsonStorage) {
+		oldJsonStorage.getSignMarkerRepository()
+				.getMarkers(worldIdentifier, layerKey)
+				.forEach(oldMarker -> create(oldMarker.getLocation().getX(), Integer.MIN_VALUE,
+				                             oldMarker.getLocation().getZ(),
 				                             oldMarker.getText()
 				));
 		write();
-		// STORAGE MIGRATION
 	}
 
 	@Override

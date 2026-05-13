@@ -6,9 +6,6 @@ import nl.gjorgdy.pl3xmarkers.core.interfaces.IWorldRepository;
 import nl.gjorgdy.pl3xmarkers.core.json.repositories.WorldRepository;
 import nl.gjorgdy.pl3xmarkers.core.json_old.OldJsonStorage;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.HashMap;
 
 public class JsonStorage implements IStorage {
@@ -22,10 +19,6 @@ public class JsonStorage implements IStorage {
 	private void load() {
 		// read files
 		configPath = Pl3xMarkersCore.isBukkit() ? "plugins/Pl3xMarkers" : "config/pl3xmarkers";
-		// migrate old data if needed
-		if (Pl3xMarkersCore.isBukkit()) {
-			migrate(Path.of("config/pl3xmarkers"), Path.of("plugins/Pl3xMarkers"));
-		}
 		// mark as loaded
 		loaded = true;
 	}
@@ -56,14 +49,10 @@ public class JsonStorage implements IStorage {
 
 	@Override
 	public void close() {
-		writeInternal();
+		write();
 	}
 
 	public void write() {
-		writeInternal();
-	}
-
-	private void writeInternal() {
 		if (!loaded) {
 			load();
 		}
@@ -71,19 +60,8 @@ public class JsonStorage implements IStorage {
 		worldRepositories.forEach((k, repo) -> repo.write());
 	}
 
-	private void migrate(Path oldPath, Path newPath) {
-		try (var files = Files.list(oldPath)) {
-			if (!Files.exists(newPath)) {
-				Files.createDirectories(newPath);
-			}
-			files.forEach(oldFile -> {
-				try {
-					Files.move(oldFile, newPath.resolve(oldFile.getFileName()));
-				} catch (Exception ignored) {
-				}
-			});
-			Files.delete(oldPath);
-		} catch (IOException ignored) {
-		}
+	public void migrate(nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.IStorage oldJsonStorage) {
+		worldRepositories.values().forEach(repo -> repo.migrate(oldJsonStorage));
+		write();
 	}
 }

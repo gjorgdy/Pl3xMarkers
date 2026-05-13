@@ -1,5 +1,6 @@
 package nl.gjorgdy.pl3xmarkers.core.json.repositories;
 
+import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.IStorage;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.ISimpleMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.json.entities.Point;
 import nl.gjorgdy.pl3xmarkers.core.json.entities.SimpleMarker;
@@ -8,13 +9,14 @@ public class SimpleMarkerRepository extends MarkerRepository<SimpleMarker> imple
 
 	public SimpleMarkerRepository(WorldRepository worldRepository, String layerKey) {
 		super(worldRepository, layerKey, SimpleMarker.class);
-		// STORAGE MIGRATION
-		worldRepository.getStorage().oldJsonStorage()
-				.getIconMarkerRepository()
-				.getIconMarkers(worldRepository.worldIdentifier, layerKey)
-				.forEach(oldMarker -> create(oldMarker.getX(), Integer.MIN_VALUE, oldMarker.getZ()));
-		write();
-		// STORAGE MIGRATION
+	}
+
+	public void migrate(IStorage oldJsonStorage) {
+		oldJsonStorage.getIconMarkerRepository()
+				.getIconMarkers(worldIdentifier, layerKey)
+				.forEach(oldMarker -> create(oldMarker.getLocation().getX(), Integer.MIN_VALUE,
+				                             oldMarker.getLocation().getZ()
+				));
 	}
 
 	@Override

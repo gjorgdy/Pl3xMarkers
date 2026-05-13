@@ -87,4 +87,8 @@ public class Pl3xMarkersCore {
         executor.shutdown();
     }
 
+	public static void reloadMarkers() {
+		pl3xHandler().reload();
+	}
+
 }

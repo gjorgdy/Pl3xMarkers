@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.json.JsonStorage;
+import nl.gjorgdy.pl3xmarkers.core.json_old.OldJsonStorage;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.fabric.compat.layers.OPACAreaMarkerLayer;
 import org.slf4j.Logger;
@@ -13,7 +14,8 @@ import org.slf4j.LoggerFactory;
 @SuppressWarnings("unused") // Called by fabric
 public class Pl3xMarkersFabric implements DedicatedServerModInitializer {
 
-    public static Logger LOGGER = LoggerFactory.getLogger(Pl3xMarkersCore.class);
+	public static Logger LOGGER = LoggerFactory.getLogger(Pl3xMarkersCore.class);
+	private JsonStorage storage;
 
 	public static boolean isOpacInstalled() {
 		return FabricLoader.getInstance().isModLoaded("openpartiesandclaims");
@@ -30,7 +32,7 @@ public class Pl3xMarkersFabric implements DedicatedServerModInitializer {
 			Layers.register(OPACAreaMarkerLayer::new, unused -> isOpacEnabled());
 		}
 		// initialize core
-		var storage = new JsonStorage();
+	    storage = new JsonStorage();
 		Pl3xMarkersCore.onInitialize(false, storage, FabricMarkersConfig::reload);
         // register events
 		ServerLifecycleEvents.AFTER_SAVE.register(
@@ -42,6 +44,18 @@ public class Pl3xMarkersFabric implements DedicatedServerModInitializer {
         ServerLifecycleEvents.SERVER_STOPPED.register(
             unused -> Pl3xMarkersCore.onDisable()
         );
+	    ServerLifecycleEvents.SERVER_STARTED.register(
+			    unused -> {
+				    var oldStorage = new OldJsonStorage();
+				    if (oldStorage.folderExists()) {
+					    LOGGER.info("Migrating data from old storage...");
+					    storage.migrate(oldStorage);
+					    oldStorage.rename();
+					    Pl3xMarkersCore.reloadMarkers();
+					    LOGGER.info("Migration complete!");
+				    }
+			    }
+	    );
     }
 
 }
