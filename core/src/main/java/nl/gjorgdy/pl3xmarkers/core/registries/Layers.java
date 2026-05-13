@@ -27,7 +27,7 @@ public class Layers {
 			),
 			new LayerFactory(
 					EndPortalMarkerLayer::new,
-					world -> MarkersConfig.END_PORTAL_MARKERS_ENABLED && (WorldHelpers.isOverworld(world) || WorldHelpers.isEnd(world))
+					world -> MarkersConfig.END_PORTAL_MARKERS_ENABLED && WorldHelpers.isOverworld(world)
 			),
 			new LayerFactory(
 					NetherPortalMarkerLayer::new,
