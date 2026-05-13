@@ -52,17 +52,23 @@ public class PortalProcessorMixin {
 			portal.pl3xMarkers$createMarker(world);
 		}
 		if (portalBlock.is(Blocks.END_GATEWAY)) {
-			Pl3xMarkersCore.api()
+			var markerLayer = Pl3xMarkersCore.api()
 					.getWorld(world.dimension().identifier().toString())
-					.getLayer(EndGatewayMarkerLayer.class, Layers.Keys.END_GATEWAYS)
-					.add(pos.getX(), pos.getY(), pos.getZ());
+					.getLayer(EndGatewayMarkerLayer.class, Layers.Keys.END_GATEWAYS);
+			if (markerLayer == null) {
+				return;
+			}
+			markerLayer.add(pos.getX(), pos.getY(), pos.getZ());
 		}
 		if (portalBlock.is(Blocks.END_PORTAL)) {
 			pos = PortalHelper.getEndPortalCenter(world, pos);
-			Pl3xMarkersCore.api()
+			var markerLayer = Pl3xMarkersCore.api()
 					.getWorld(world.dimension().identifier().toString())
-					.getLayer(EndPortalMarkerLayer.class, Layers.Keys.END_PORTALS)
-					.add(pos.getX(), pos.getY(), pos.getZ());
+					.getLayer(EndPortalMarkerLayer.class, Layers.Keys.END_PORTALS);
+			if (markerLayer == null) {
+				return;
+			}
+			markerLayer.add(pos.getX(), pos.getY(), pos.getZ());
 		}
 		if (entity instanceof ServerPlayer serverPlayer) {
 			FeedbackHelper.sendFeedback(result, serverPlayer);

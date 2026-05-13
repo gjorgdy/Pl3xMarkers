@@ -73,24 +73,30 @@ public abstract class MarkerRepository<T extends Marker> implements IMarkerRepos
 	private boolean invalidFile() throws IOException {
 		// make sure parent directories exist
 		var folder = new File(folderPath);
-		var madeFolders = folder.mkdirs();
+		if (!folder.exists()) {
+			folder.mkdirs();
+		}
 		// Create file if it doesn't exist
 		var file = new File(filePath);
-		if (file.exists()) {
-			return false;
+		if (!file.exists()) {
+			file.createNewFile();
 		}
-		var madeFile = file.createNewFile();
-		return !madeFolders || !madeFile;
+		return !folder.exists() || !file.exists();
 	}
 
 	final public void write() {
 		if (!dirty.get()) {
 			return;
 		}
-		try (Writer writer = new FileWriter(filePath, false)) {
+		try {
 			if (invalidFile()) {
 				return;
 			}
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			return;
+		}
+		try (Writer writer = new FileWriter(filePath, false)) {
 			if (data == null || data.isEmpty()) {
 				return;
 			}
