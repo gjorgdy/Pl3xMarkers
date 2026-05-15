@@ -81,9 +81,3 @@ A: Pl3xMarkers listens to Pl3xMap's reload, so you can reload using `/pl3xmap re
 The Pl3xMarkers mod started out as Helix Markers, for my server; [Helix Survival](https://play.hexasis.eu/)
 
 You can check its webmap at [https://map.hexasis.eu/](https://map.hexasis.eu/?world=minecraft-overworld&renderer=vintage_story&zoom=2&x=842&z=1412)
-
-## !! Warning !!
-
-Pl3xMarkers is still an experimental mod, while there are no risks to your world by using it. You might have to reset your markers when updating the mod.
-
-For portals and beacons this just means they should be used and activated. Where for areas you need to replace the banners to re-register the points.
