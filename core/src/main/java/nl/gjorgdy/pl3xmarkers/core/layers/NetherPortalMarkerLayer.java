@@ -33,6 +33,14 @@ public class NetherPortalMarkerLayer extends SimpleMarkerLayer {
         );
     }
 
+    @Override
+    protected String createPermanentTooltip(ISimpleMarker markerEntity) {
+        if (markerEntity.getName() != null) {
+            return createTooltip(markerEntity);
+        }
+        return null;
+    }
+
     private String buttonText(String worldKey) {
         return WorldHelpers.isOverworld(worldKey) ? "Go to Nether" : "Go to Overworld";
     }

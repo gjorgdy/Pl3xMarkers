@@ -126,7 +126,7 @@ public abstract class SimpleMarkerLayer extends MarkerLayer {
         addMarker(markerEntity);
     }
 
-    private void addMarker(ISimpleMarker markerEntity) {
+    final protected void addMarker(ISimpleMarker markerEntity) {
         var pos = markerEntity.getPosition();
         var icon = IconMarkerBuilder.newIconMarker(
                         toMarkerKey(pos.x(), pos.y(), pos.z()), iconId, pos.x(), pos.z()
@@ -138,11 +138,20 @@ public abstract class SimpleMarkerLayer extends MarkerLayer {
         } else {
             icon.addTooltip(createTooltip(markerEntity));
         }
+        @Language("HTML") var permanentTooltip = createPermanentTooltip(markerEntity);
+        if (permanentTooltip != null) {
+            icon.addPermanentBottomTooltip(permanentTooltip);
+        }
         super.addMarker(icon.build());
     }
 
     @Language("HTML")
     protected String createPopup(ISimpleMarker markerEntity) {
+        return null;
+    }
+
+    @Language("HTML")
+    protected String createPermanentTooltip(ISimpleMarker markerEntity) {
         return null;
     }
 
