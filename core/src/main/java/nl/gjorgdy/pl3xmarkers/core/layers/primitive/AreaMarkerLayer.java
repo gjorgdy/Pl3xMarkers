@@ -47,10 +47,7 @@ public class AreaMarkerLayer extends MarkerLayer {
 		}
         var orderedPoints = ConvexHull.calculate(new ArrayList<>(area.getPoints()));
 		var popupBuilder = new StringBuilder();
-		popupBuilder
-				.append("<b>")
-				.append(HtmlHelper.sanitize(area.getName()))
-				.append("</b>");
+		popupBuilder.append(HtmlHelper.sanitize(area.getName()));
 		if (MarkersConfig.AREA_MARKERS_SHOW_SIZE) {
 			var polygonArea = PolygonArea.calculate(orderedPoints);
 			var areaFormatted = new DecimalFormat("#.#").format(polygonArea);
@@ -66,13 +63,16 @@ public class AreaMarkerLayer extends MarkerLayer {
 			);
 		}
 		if (!orderedPoints.isEmpty()) {
-			super.addMarker(
-				AreaMarkerBuilder
+			var markerBuilder = AreaMarkerBuilder
 					.newAreaMarker(area.getKey(), orderedPoints)
 					.fill(area.getColor())
-					.stroke(area.getColor())
-						.addPopup(popupBuilder.toString())
-			);
+					.stroke(area.getColor());
+			if (MarkersConfig.AREA_MARKERS_MARKERS_ALWAYS_SHOW_NAME) {
+				markerBuilder.addPermanentTooltip(popupBuilder.toString());
+			} else {
+				markerBuilder.addPopup(popupBuilder.toString());
+			}
+			super.addMarker(markerBuilder);
 		}
     }
 

@@ -17,6 +17,9 @@ public class MarkersConfig extends AbstractConfig {
 	@Key("marker-settings.areas.enabled")
 	@Comment("Enable player made areas on the map")
 	public static boolean AREA_MARKERS_ENABLED = true;
+	@Key("marker-settings.areas.always-show-name")
+	@Comment("Always show the name of areas on the map")
+	public static boolean AREA_MARKERS_MARKERS_ALWAYS_SHOW_NAME = true;
 	@Key("marker-settings.areas.show-area-size")
 	@Comment("Show the area size in square blocks in the pop-up")
 	public static boolean AREA_MARKERS_SHOW_SIZE = false;
