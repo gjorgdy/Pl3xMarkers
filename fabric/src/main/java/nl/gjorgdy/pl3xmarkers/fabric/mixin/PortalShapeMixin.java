@@ -47,10 +47,13 @@ public class PortalShapeMixin implements NetherPortalInterface {
     @Override
     public void pl3xMarkers$createMarker(Level world) {
         var center = PortalHelper.getNetherPortalCenter(bottomLeft, axis, width);
-        var result = Pl3xMarkersCore.api()
+        var markerLayer = Pl3xMarkersCore.api()
                 .getWorld(world.dimension().identifier().toString())
-                .getLayer(NetherPortalMarkerLayer.class, Layers.Keys.NETHER_PORTALS)
-                .add(center.getX(), center.getY(), center.getZ());
+                .getLayer(NetherPortalMarkerLayer.class, Layers.Keys.NETHER_PORTALS);
+        if (markerLayer == null) {
+            return;
+        }
+        var result = markerLayer.add(center.getX(), center.getY(), center.getZ());
 		FeedbackHelper.sendFeedback(result, world, center);
 	}
 

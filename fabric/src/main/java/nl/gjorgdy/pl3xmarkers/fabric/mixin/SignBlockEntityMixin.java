@@ -51,15 +51,18 @@ public abstract class SignBlockEntityMixin extends BlockEntity {
 			// no changes
 			return;
 		}
-		var result = Pl3xMarkersCore.api()
+		var markerLayer = Pl3xMarkersCore.api()
 				.getWorld(level.dimension().identifier().toString())
-				.getLayer(SignsMarkerLayer.class, Layers.Keys.SIGNS)
-				.set(
-						worldPosition.getX(),
-						worldPosition.getY(),
-						worldPosition.getZ(),
-						getSignTextLines()
-				);
+				.getLayer(SignsMarkerLayer.class, Layers.Keys.SIGNS);
+		if (markerLayer == null) {
+			return;
+		}
+		var result = markerLayer.set(
+				worldPosition.getX(),
+				worldPosition.getY(),
+				worldPosition.getZ(),
+				getSignTextLines()
+		);
 		if (player instanceof ServerPlayer serverPlayer) {
 			FeedbackHelper.sendFeedback(result, serverPlayer);
 		}

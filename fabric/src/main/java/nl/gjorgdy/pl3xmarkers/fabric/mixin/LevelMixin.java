@@ -27,18 +27,24 @@ public class LevelMixin {
         var currentBlockState = level.getBlockState(pos);
 
         if (currentBlockState.is(Blocks.NETHER_PORTAL) && !blockState.is(Blocks.NETHER_PORTAL)) {
-            var result = Pl3xMarkersCore.api()
+            var markerLayer = Pl3xMarkersCore.api()
                     .getWorld(level.dimension().identifier().toString())
-                    .getLayer(NetherPortalMarkerLayer.class, Layers.Keys.NETHER_PORTALS)
-                    .remove(pos.getX(), pos.getY(), pos.getZ());
+                    .getLayer(NetherPortalMarkerLayer.class, Layers.Keys.NETHER_PORTALS);
+            if (markerLayer == null) {
+                return;
+            }
+            var result = markerLayer.remove(pos.getX(), pos.getY(), pos.getZ());
             FeedbackHelper.sendFeedback(result, level, pos);
         }
 
         if (currentBlockState.is(BlockTags.STANDING_SIGNS) && !blockState.is(BlockTags.STANDING_SIGNS)) {
-            var result = Pl3xMarkersCore.api()
+            var markerLayer = Pl3xMarkersCore.api()
                     .getWorld(level.dimension().identifier().toString())
-                    .getLayer(SignsMarkerLayer.class, Layers.Keys.SIGNS)
-                    .remove(pos.getX(), pos.getY(), pos.getZ());
+                    .getLayer(SignsMarkerLayer.class, Layers.Keys.SIGNS);
+            if (markerLayer == null) {
+                return;
+            }
+            var result = markerLayer.remove(pos.getX(), pos.getY(), pos.getZ());
             FeedbackHelper.sendFeedback(result, level, pos);
         }
     }

@@ -31,6 +31,9 @@ public class BeaconBlockEntityMixin implements BeaconBlockEntityInterface {
 	        var markerLayer = Pl3xMarkersCore.api()
 			        .getWorld(level.dimension().identifier().toString())
 			        .getLayer(BeaconMarkerLayer.class, Layers.Keys.BEACONS);
+	        if (markerLayer == null) {
+		        return;
+	        }
 	        var result = cir.getReturnValue() > 0
 			        ? markerLayer.add(blockPos.getX(), blockPos.getY(), blockPos.getZ())
 			        : markerLayer.remove(blockPos.getX(), blockPos.getY(), blockPos.getZ());

@@ -47,9 +47,13 @@ public abstract class ServerPlayerMixin extends Player {
 			return;
 		}
 
-		Pl3xMarkersCore.api()
+		var markerLayer = Pl3xMarkersCore.api()
 				.getWorld(worldIdentifier)
-				.getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS)
+				.getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS);
+		if (markerLayer == null) {
+			return;
+		}
+		markerLayer
 				.getContaining(pos.getX(), pos.getZ())
 				.ifPresentOrElse(
 				boundary ->

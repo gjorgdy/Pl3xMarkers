@@ -19,10 +19,13 @@ public class EnderEyeItemMixin {
 
     @Inject(method = "useOn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;globalLevelEvent(ILnet/minecraft/core/BlockPos;I)V"))
     public void onUseOnBlock(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir, @Local(name = "blockPos") BlockPos blockPos) {
-        var result = Pl3xMarkersCore.api()
+        var markerLayer = Pl3xMarkersCore.api()
                 .getWorld(context.getLevel().dimension().identifier().toString())
-                .getLayer(EndPortalMarkerLayer.class, Layers.Keys.END_PORTALS)
-                .add(blockPos.getX() + 1, blockPos.getY(), blockPos.getZ() + 1);
+                .getLayer(EndPortalMarkerLayer.class, Layers.Keys.END_PORTALS);
+        if (markerLayer == null) {
+            return;
+        }
+        var result = markerLayer.add(blockPos.getX() + 1, blockPos.getY(), blockPos.getZ() + 1);
         FeedbackHelper.sendFeedback(result, context.getLevel(), blockPos);
     }
 

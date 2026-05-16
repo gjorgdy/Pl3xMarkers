@@ -7,6 +7,7 @@ import nl.gjorgdy.pl3xmarkers.core.interfaces.api.IApi;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.api.IWorldApi;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.objects.LayerFactory;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 
@@ -49,6 +50,7 @@ public class Api implements IApi {
 	private record WorldApi(String worldIdentifier) implements IWorldApi {
 
 		@Override
+		@Nullable
 		public <T extends MarkerLayer> T getLayer(Class<T> layerClass, String layerKey) {
 			Layer layer = Api.getPl3xWorld(worldIdentifier).getLayerRegistry().get(layerKey);
 			if (layerClass.isInstance(layer)) {

@@ -35,13 +35,16 @@ public class BlockMixin {
 		    if (name == null) {
 			    return;
 		    }
-		    var result = Pl3xMarkersCore.api()
+		    var markerLayer = Pl3xMarkersCore.api()
 				    .getWorld(level.dimension().identifier().toString())
-				    .getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS)
-				    .addPoint(
-						    name, banner.getBaseColor().getTextureDiffuseColor(),
-						    pos.getX(), pos.getY(), pos.getZ()
-				    );
+				    .getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS);
+		    if (markerLayer == null) {
+			    return;
+		    }
+		    var result = markerLayer.addPoint(
+				    name, banner.getBaseColor().getTextureDiffuseColor(),
+				    pos.getX(), pos.getY(), pos.getZ()
+		    );
 		    if (by instanceof ServerPlayer player) {
 				FeedbackHelper.sendFeedback(result, player);
 			}
