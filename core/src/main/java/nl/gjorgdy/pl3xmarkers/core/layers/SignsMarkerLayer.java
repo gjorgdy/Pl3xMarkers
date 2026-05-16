@@ -76,6 +76,8 @@ public class SignsMarkerLayer extends MarkerLayer {
 			for (int i = 0; i < 4; i++) {
 				if (i < text.length) {
 					sanitizedText.add(HtmlHelper.sanitize(text[i]));
+				} else {
+					sanitizedText.add(" ");
 				}
 			}
 		} else {
@@ -95,7 +97,7 @@ public class SignsMarkerLayer extends MarkerLayer {
 						markerEntity.getPosition().z()
 				)
 				.centerIcon(16, 16);
-		if (MarkersConfig.SIGN_MARKERS_ALWAYS_SHOW) {
+		if (MarkersConfig.SIGN_MARKERS_ALWAYS_SHOW_TEXT) {
 			markerBuilder.addPermanentBottomTooltip(tooltip);
 		} else {
 			markerBuilder.addTooltip(tooltip);
