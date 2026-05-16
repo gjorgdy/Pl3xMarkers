@@ -1,11 +1,14 @@
 package nl.gjorgdy.pl3xmarkers.fabric.helpers;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.protocol.game.ClientboundSoundEntityPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
@@ -23,33 +26,42 @@ public class FeedbackHelper {
 		}
 		// play sound
 		if (Pl3xMarkersCore.areFeedbackSoundsEnabled()) {
-			player.playSound(sound(result.state()), 1.0F, 1.0F);
+			playDirectSound(player, sound(result.state()), SoundSource.UI, 1.0F, 1.5F);
 		}
 	}
 
-	public static void sendFeedback(InteractionResult result, Level world, BlockPos pos) {
+	public static void sendFeedback(InteractionResult result, Level level, BlockPos pos) {
 		if (result.state() == InteractionResult.State.SKIP) {
 			return;
 		}
 		var color = color(result.state());
 		var sound = sound(result.state());
 		// send message
-		world.getEntitiesOfClass(ServerPlayer.class, box(pos)).forEach(player -> {
+		level.getEntitiesOfClass(ServerPlayer.class, box(pos)).forEach(player -> {
 			// send message
 			if (Pl3xMarkersCore.areFeedbackMessagesEnabled()) {
 				sendOverlayMessage(player, result.message(), color);
 			}
-			// play sound
-			if (Pl3xMarkersCore.areFeedbackSoundsEnabled()) {
-				player.playSound(sound, 1.0F, 1.5F);
-			}
 		});
+		level.playSound(null, pos, sound, SoundSource.UI, 1.0F, 1.5F);
 	}
 
 	public static void sendOverlayMessage(ServerPlayer player, String message, int color) {
 		player.sendOverlayMessage(
 				Component.nullToEmpty(message).toFlatList(Style.EMPTY.withColor(color)).getFirst()
 		);
+	}
+
+	private static void playDirectSound(ServerPlayer player, SoundEvent soundEvent, SoundSource soundCategory, float volume, float pitch) {
+		ClientboundSoundEntityPacket packet = new ClientboundSoundEntityPacket(
+				BuiltInRegistries.SOUND_EVENT.wrapAsHolder(soundEvent),
+				soundCategory,
+				player, // The entity "emitting" the sound (can be the player themselves)
+				volume,
+				pitch,
+				player.getRandom().nextLong() // Seed
+		);
+		player.connection.send(packet);
 	}
 
 	private static AABB box(BlockPos center) {
