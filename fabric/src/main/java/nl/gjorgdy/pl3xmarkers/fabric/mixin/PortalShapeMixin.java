@@ -57,4 +57,9 @@ public class PortalShapeMixin implements NetherPortalInterface {
 		FeedbackHelper.sendFeedback(result, world, center);
 	}
 
+    @Override
+    public BlockPos pl3xMarkers$getPortalCenter() {
+        return PortalHelper.getNetherPortalCenter(bottomLeft, axis, width);
+    }
+
 }

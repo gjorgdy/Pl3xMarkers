@@ -4,6 +4,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.pl3x.map.core.world.World;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IMarker;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.markers.AreaMarkerBuilder;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
@@ -17,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class OPACAreaMarkerLayer extends MarkerLayer {
+public class OPACAreaMarkerLayer extends MarkerLayer<IMarker> {
 
 	private HashMap<String, OpacClaim> claims;
 
@@ -45,6 +46,11 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
 		// register listener for claim changes
 		OpacHandler.registerListener(getServer(), this);
     }
+
+	@Override
+	public void loadMarker(IMarker markerEntity) {
+		// ignore
+	}
 
 	private OpacClaim getOrCreateClaim(String playerName, @Language("HTML") String name, int color) {
 		return claims.computeIfAbsent(playerName, _ -> new OpacClaim(name, color));

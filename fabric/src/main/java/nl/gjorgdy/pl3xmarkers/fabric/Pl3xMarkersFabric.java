@@ -2,11 +2,13 @@ package nl.gjorgdy.pl3xmarkers.fabric;
 
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.player.BlockEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.json.JsonStorage;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.fabric.compat.layers.OPACAreaMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.fabric.listeners.UseItemOnListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +45,7 @@ public class Pl3xMarkersFabric implements DedicatedServerModInitializer {
         ServerLifecycleEvents.SERVER_STOPPED.register(
             unused -> Pl3xMarkersCore.onDisable()
         );
+	    BlockEvents.USE_ITEM_ON.register(new UseItemOnListener());
     }
 
 }
