@@ -38,7 +38,7 @@ public class OldJsonStorage implements IStorage {
 		if (!loaded) {
 			load();
 		}
-		return Files.exists(Path.of(configPath + "/markers"));
+		return Files.exists(Path.of(configPath + "/markers/"));
 	}
 
 	public void rename() {

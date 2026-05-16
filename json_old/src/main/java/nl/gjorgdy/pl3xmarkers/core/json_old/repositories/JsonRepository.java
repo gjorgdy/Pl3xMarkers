@@ -46,16 +46,8 @@ public abstract class JsonRepository<T extends IJsonRepositoryData> {
 	}
 
 	private boolean invalidFile() throws IOException {
-		// make sure parent directories exist
-		var folder = new File(folderPath);
-		var madeFolders = folder.mkdirs();
-		// create file if it doesn't exist
 		var file = new File(filePath);
-		if (file.exists()) {
-			return false;
-		}
-		var madeFile = file.createNewFile();
-		return !madeFolders || !madeFile;
+		return !file.exists();
 	}
 
 	final public void write() {}
