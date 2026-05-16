@@ -81,21 +81,7 @@ public class OldJsonStorage implements IStorage {
 
 	@Override
 	public void close() {
-		writeInternal();
-	}
-
-	public void write() {
-		writeInternal();
-	}
-
-	private void writeInternal() {
-		if (!loaded) {
-			load();
-		}
-		// save files
-		iconMarkerRepository.write();
-		signMarkerRepository.write();
-		areaMarkerRepository.write();
+		// deprecated, so should not write
 	}
 
 	private void migrate(Path oldPath, Path newPath) {

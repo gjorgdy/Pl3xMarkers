@@ -25,6 +25,7 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
 			var server = getServer();
 			while (!OpacHandler.isOpacLoaded(server)) {
 				try {
+					//noinspection BusyWait
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					return;

@@ -38,10 +38,13 @@ public class MovementListener implements Listener {
 			return;
 		}
 
-		Pl3xMarkersCore.api()
+		var markerLayer = Pl3xMarkersCore.api()
 				.getWorld(event.getTo().getWorld().getName())
-				.getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS)
-				.getContaining(
+				.getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS);
+		if (markerLayer == null) {
+			return;
+		}
+		markerLayer.getContaining(
 						event.getTo().getBlockX(),
 						event.getTo().getBlockZ()
 				)

@@ -16,10 +16,13 @@ public class BeaconListener implements Listener {
         var block = event.getBeacon();
         var world = block.getWorld();
         var blockPos = block.getLocation().getBlock();
-        var result = Pl3xMarkersCore.api()
+        var markerLayer = Pl3xMarkersCore.api()
                 .getWorld(world.getName())
-                .getLayer(BeaconMarkerLayer.class, Layers.Keys.BEACONS)
-                .add(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+                .getLayer(BeaconMarkerLayer.class, Layers.Keys.BEACONS);
+        if (markerLayer == null) {
+            return;
+        }
+        var result = markerLayer.add(blockPos.getX(), blockPos.getY(), blockPos.getZ());
 		FeedbackHelper.sendFeedback(result, block.getLocation());
     }
 
@@ -31,10 +34,13 @@ public class BeaconListener implements Listener {
         var block = event.getBlock();
         var world = block.getWorld();
         var blockPos = block.getLocation().getBlock();
-        var result = Pl3xMarkersCore.api()
+        var markerLayer = Pl3xMarkersCore.api()
                 .getWorld(world.getName())
-                .getLayer(BeaconMarkerLayer.class, Layers.Keys.BEACONS)
-                .remove(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+                .getLayer(BeaconMarkerLayer.class, Layers.Keys.BEACONS);
+        if (markerLayer == null) {
+            return;
+        }
+        var result = markerLayer.remove(blockPos.getX(), blockPos.getY(), blockPos.getZ());
 		FeedbackHelper.sendFeedback(result, block.getLocation());
     }
 

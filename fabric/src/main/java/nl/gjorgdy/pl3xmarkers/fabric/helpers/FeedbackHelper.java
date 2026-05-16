@@ -26,7 +26,7 @@ public class FeedbackHelper {
 		}
 		// play sound
 		if (Pl3xMarkersCore.areFeedbackSoundsEnabled()) {
-			playDirectSound(player, sound(result.state()), SoundSource.UI, 1.0F, 1.5F);
+			playDirectSound(player, sound(result.state()));
 		}
 	}
 
@@ -52,13 +52,13 @@ public class FeedbackHelper {
 		);
 	}
 
-	private static void playDirectSound(ServerPlayer player, SoundEvent soundEvent, SoundSource soundCategory, float volume, float pitch) {
+	private static void playDirectSound(ServerPlayer player, SoundEvent soundEvent) {
 		ClientboundSoundEntityPacket packet = new ClientboundSoundEntityPacket(
 				BuiltInRegistries.SOUND_EVENT.wrapAsHolder(soundEvent),
-				soundCategory,
+				SoundSource.UI,
 				player, // The entity "emitting" the sound (can be the player themselves)
-				volume,
-				pitch,
+				(float) 1.0,
+				(float) 1.5,
 				player.getRandom().nextLong() // Seed
 		);
 		player.connection.send(packet);

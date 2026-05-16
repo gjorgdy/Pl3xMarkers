@@ -16,10 +16,13 @@ public class EndPortalListener implements Listener {
     public void onPortalTeleport(PlayerPortalEvent event) {
         if (event.getFrom().getBlock().getType().asBlockType() == BlockType.END_PORTAL) {
             var center = PortalHelper.getEndPortalCenter(event.getFrom());
-            var result = Pl3xMarkersCore.api()
+            var markerLayer = Pl3xMarkersCore.api()
                     .getWorld(center.getWorld().getName())
-                    .getLayer(EndPortalMarkerLayer.class, Layers.Keys.END_PORTALS)
-                    .add(center.getBlockX(), center.getBlockY(), center.getBlockZ());
+                    .getLayer(EndPortalMarkerLayer.class, Layers.Keys.END_PORTALS);
+            if (markerLayer == null) {
+                return;
+            }
+            var result = markerLayer.add(center.getBlockX(), center.getBlockY(), center.getBlockZ());
 			FeedbackHelper.sendFeedback(result, event.getPlayer());
         }
     }

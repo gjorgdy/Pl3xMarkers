@@ -14,12 +14,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 
-public class NodeListener implements Listener {
+public class AreaListener implements Listener {
 
     @EventHandler
     public void onPlaceBlock(BlockPlaceEvent event) {
         if (event.getBlock().getState() instanceof Banner banner && isLodestoneBelow(banner.getLocation())) {
-            onPlaceNode(banner, event.getPlayer());
+            onPlaceAreaPoint(banner, event.getPlayer());
         }
     }
 
@@ -28,11 +28,11 @@ public class NodeListener implements Listener {
         if (event.getBlock().getType().asBlockType() == BlockType.LODESTONE) {
             var blockUp = event.getBlock().getLocation().clone().add(0, 1, 0).getBlock();
             if (blockUp.getState() instanceof Banner banner) {
-                onBreakNode(banner, event.getPlayer());
+                onBreakAreaPoint(banner, event.getPlayer());
             }
         }
         else if (event.getBlock().getState() instanceof Banner banner && isLodestoneBelow(banner.getLocation())) {
-            onBreakNode(banner, event.getPlayer());
+            onBreakAreaPoint(banner, event.getPlayer());
         }
     }
 
@@ -45,21 +45,24 @@ public class NodeListener implements Listener {
      * Called when a banner is placed on a lodestone
      * @param banner The banner that was placed
      */
-    private void onPlaceNode(Banner banner, Player player) {
+    private void onPlaceAreaPoint(Banner banner, Player player) {
         var name = banner.customName();
         if (name == null) {
             return;
         }
-        var result = Pl3xMarkersCore.api()
+        var markerLayer = Pl3xMarkersCore.api()
                 .getWorld(banner.getLocation().getWorld().getName())
-                .getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS)
-                .addPoint(
-                        PlainTextComponentSerializer.plainText().serialize(name),
-                        banner.getBaseColor().getColor().asRGB(),
-                        banner.getLocation().getBlockX(),
-                        banner.getLocation().getBlockY(),
-                        banner.getLocation().getBlockZ()
-                );
+                .getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS);
+        if (markerLayer == null) {
+            return;
+        }
+        var result = markerLayer.addPoint(
+                PlainTextComponentSerializer.plainText().serialize(name),
+                banner.getBaseColor().getColor().asRGB(),
+                banner.getLocation().getBlockX(),
+                banner.getLocation().getBlockY(),
+                banner.getLocation().getBlockZ()
+        );
 		FeedbackHelper.sendFeedback(result, player);
     }
 
@@ -67,21 +70,24 @@ public class NodeListener implements Listener {
      * Called when a banner is broken on a lodestone
      * @param banner The banner that was broken
      */
-    private void onBreakNode(Banner banner, Player player) {
+    private void onBreakAreaPoint(Banner banner, Player player) {
         var name = banner.customName();
         if (name == null) {
             return;
         }
-        var result = Pl3xMarkersCore.api()
+        var markerLayer = Pl3xMarkersCore.api()
                 .getWorld(banner.getLocation().getWorld().getName())
-                .getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS)
-                .removePoint(
-                        PlainTextComponentSerializer.plainText().serialize(name),
-                        banner.getBaseColor().getColor().asRGB(),
-                        banner.getLocation().getBlockX(),
-                        banner.getLocation().getBlockY(),
-                        banner.getLocation().getBlockZ()
-                );
+                .getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS);
+        if (markerLayer == null) {
+            return;
+        }
+        var result = markerLayer.removePoint(
+                PlainTextComponentSerializer.plainText().serialize(name),
+                banner.getBaseColor().getColor().asRGB(),
+                banner.getLocation().getBlockX(),
+                banner.getLocation().getBlockY(),
+                banner.getLocation().getBlockZ()
+        );
 		FeedbackHelper.sendFeedback(result, player);
     }
 

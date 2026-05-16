@@ -49,19 +49,25 @@ public class NetherPortalListener implements Listener {
 
     private void onNetherPortalBreak(Location location) {
         var center = PortalHelper.getNetherPortalCenter(location);
-        var result = Pl3xMarkersCore.api()
+        var markerLayer = Pl3xMarkersCore.api()
                 .getWorld(location.getWorld().getName())
-                .getLayer(NetherPortalMarkerLayer.class, Layers.Keys.NETHER_PORTALS)
-                .remove(center.getBlockX(), center.getBlockY(), center.getBlockZ());
+                .getLayer(NetherPortalMarkerLayer.class, Layers.Keys.NETHER_PORTALS);
+        if (markerLayer == null) {
+            return;
+        }
+        var result = markerLayer.remove(center.getBlockX(), center.getBlockY(), center.getBlockZ());
 		FeedbackHelper.sendFeedback(result, center);
     }
 
     private void onNetherPortalTeleport(Location location) {
         var center = PortalHelper.getNetherPortalCenter(location);
-        var result = Pl3xMarkersCore.api()
+        var markerLayer = Pl3xMarkersCore.api()
                 .getWorld(location.getWorld().getName())
-                .getLayer(NetherPortalMarkerLayer.class, Layers.Keys.NETHER_PORTALS)
-                .add(center.getBlockX(), center.getBlockY(), center.getBlockZ());
+                .getLayer(NetherPortalMarkerLayer.class, Layers.Keys.NETHER_PORTALS);
+        if (markerLayer == null) {
+            return;
+        }
+        var result = markerLayer.add(center.getBlockX(), center.getBlockY(), center.getBlockZ());
         FeedbackHelper.sendFeedback(result, location);
     }
 

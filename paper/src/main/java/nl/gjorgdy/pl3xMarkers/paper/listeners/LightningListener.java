@@ -11,14 +11,17 @@ public class LightningListener implements Listener {
 
 	@EventHandler
 	public void onLightningStrike(LightningStrikeEvent event) {
-		Pl3xMarkersCore.api()
+		var markerLayer = Pl3xMarkersCore.api()
 				.getWorld(event.getLightning().getWorld().getName())
-				.getLayer(LightningMarkerLayer.class, Layers.Keys.LIGHTNING)
-				.show(
-						(int) event.getLightning().getX(),
-						(int) event.getLightning().getY(),
-						(int) event.getLightning().getZ()
-				);
+				.getLayer(LightningMarkerLayer.class, Layers.Keys.LIGHTNING);
+		if (markerLayer == null) {
+			return;
+		}
+		markerLayer.show(
+				(int) event.getLightning().getX(),
+				(int) event.getLightning().getY(),
+				(int) event.getLightning().getZ()
+		);
 	}
 
 }

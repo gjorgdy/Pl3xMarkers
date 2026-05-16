@@ -55,10 +55,13 @@ public class BlockMixin {
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player, CallbackInfoReturnable<BlockState> cir) {
         // beacon markers
         if (state.is(Blocks.BEACON)) {
-	        var result = Pl3xMarkersCore.api()
+	        var markerLayer = Pl3xMarkersCore.api()
 			        .getWorld(level.dimension().identifier().toString())
-			        .getLayer(BeaconMarkerLayer.class, Layers.Keys.BEACONS)
-			        .remove(pos.getX(), pos.getY(), pos.getZ());
+			        .getLayer(BeaconMarkerLayer.class, Layers.Keys.BEACONS);
+	        if (markerLayer == null) {
+		        return;
+	        }
+	        var result = markerLayer.remove(pos.getX(), pos.getY(), pos.getZ());
 	        if (player instanceof ServerPlayer serverPlayer) {
 		        FeedbackHelper.sendFeedback(result, serverPlayer);
 	        }
@@ -74,13 +77,16 @@ public class BlockMixin {
 	            if (name == null) {
 		            return;
 	            }
-	            var result = Pl3xMarkersCore.api()
+	            var markerLayer = Pl3xMarkersCore.api()
 			            .getWorld(level.dimension().identifier().toString())
-			            .getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS)
-			            .removePoint(
-					            name, banner.getBaseColor().getTextureDiffuseColor(),
-					            pos.getX(), pos.getY(), pos.getZ()
-			            );
+			            .getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS);
+	            if (markerLayer == null) {
+		            return;
+	            }
+	            var result = markerLayer.removePoint(
+			            name, banner.getBaseColor().getTextureDiffuseColor(),
+			            pos.getX(), pos.getY(), pos.getZ()
+	            );
 				if (player instanceof ServerPlayer serverPlayer) {
 					FeedbackHelper.sendFeedback(result, serverPlayer);
 				}

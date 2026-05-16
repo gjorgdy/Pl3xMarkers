@@ -21,7 +21,7 @@ public class SignListener implements Listener {
 
 	@EventHandler
 	public void onSignChange(SignChangeEvent event) {
-		// early return if the block is a wall sign
+		// Early return if the block is a wall sign
 		if (!(event.getBlock().getBlockData() instanceof Sign)) {
 			return;
 		}
@@ -33,24 +33,30 @@ public class SignListener implements Listener {
 												 .toArray(String[]::new);
 			InteractionResult result;
 			if (Arrays.stream(text).allMatch(String::isBlank)) {
-				result = Pl3xMarkersCore.api()
+				var markerLayer = Pl3xMarkersCore.api()
 						.getWorld(world.getName())
-						.getLayer(SignsMarkerLayer.class, Layers.Keys.SIGNS)
-						.remove(
-								location.getBlockX(),
-								location.getBlockY(),
-								location.getBlockZ()
-						);
+						.getLayer(SignsMarkerLayer.class, Layers.Keys.SIGNS);
+				if (markerLayer == null) {
+					return;
+				}
+				result = markerLayer.remove(
+						location.getBlockX(),
+						location.getBlockY(),
+						location.getBlockZ()
+				);
 			} else {
-				result = Pl3xMarkersCore.api()
+				var markerLayer = Pl3xMarkersCore.api()
 						.getWorld(world.getName())
-						.getLayer(SignsMarkerLayer.class, Layers.Keys.SIGNS)
-						.set(
-								location.getBlockX(),
-								location.getBlockY(),
-								location.getBlockZ(),
-								text
-						);
+						.getLayer(SignsMarkerLayer.class, Layers.Keys.SIGNS);
+				if (markerLayer == null) {
+					return;
+				}
+				result = markerLayer.set(
+						location.getBlockX(),
+						location.getBlockY(),
+						location.getBlockZ(),
+						text
+				);
 			}
 			FeedbackHelper.sendFeedback(result, event.getPlayer());
 		}
@@ -62,14 +68,17 @@ public class SignListener implements Listener {
 			var world = event.getBlock().getWorld();
 			var location = event.getBlock().getLocation();
 			if (world.getBlockAt(location.add(0, -1, 0)).getType().asBlockType() == BlockType.LODESTONE) {
-				var result = Pl3xMarkersCore.api()
+				var markerLayer = Pl3xMarkersCore.api()
 						.getWorld(world.getName())
-						.getLayer(SignsMarkerLayer.class, Layers.Keys.SIGNS)
-						.remove(
-								location.getBlockX(),
-								location.getBlockY(),
-								location.getBlockZ()
-						);
+						.getLayer(SignsMarkerLayer.class, Layers.Keys.SIGNS);
+				if (markerLayer == null) {
+					return;
+				}
+				var result = markerLayer.remove(
+						location.getBlockX(),
+						location.getBlockY(),
+						location.getBlockZ()
+				);
 				FeedbackHelper.sendFeedback(result, event.getPlayer());
 			}
 		}
@@ -80,14 +89,17 @@ public class SignListener implements Listener {
 		if (event.getBlock().getBlockData() instanceof Sign) {
 			var world = event.getBlock().getWorld();
 			var location = event.getBlock().getLocation();
-			var result = Pl3xMarkersCore.api()
+			var markerLayer = Pl3xMarkersCore.api()
 					.getWorld(world.getName())
-					.getLayer(SignsMarkerLayer.class, Layers.Keys.SIGNS)
-					.remove(
-							location.getBlockX(),
-							location.getBlockY(),
-							location.getBlockZ()
-					);
+					.getLayer(SignsMarkerLayer.class, Layers.Keys.SIGNS);
+			if (markerLayer == null) {
+				return;
+			}
+			var result = markerLayer.remove(
+					location.getBlockX(),
+					location.getBlockY(),
+					location.getBlockZ()
+			);
 			FeedbackHelper.sendFeedback(result, location);
 		}
 	}

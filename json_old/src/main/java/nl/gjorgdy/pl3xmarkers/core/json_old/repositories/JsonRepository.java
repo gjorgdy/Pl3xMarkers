@@ -17,7 +17,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public abstract class JsonRepository<T extends IJsonRepositoryData> {
 
 	private final Gson gson;
-	private final String folderPath;
 	private final String filePath;
 	private final TypeToken<?> markerClass;
 
@@ -31,7 +30,6 @@ public abstract class JsonRepository<T extends IJsonRepositoryData> {
 						.registerTypeAdapter(Point.class, new PointSerializer())
 						.registerTypeAdapter(IconMarker.class, new PointSerializer())
 						.create();
-		this.folderPath = folderPath;
 		filePath = folderPath + "/" + fileName + ".json";
 		data = defaultData;
 		markerClass = typeToken;
@@ -49,8 +47,6 @@ public abstract class JsonRepository<T extends IJsonRepositoryData> {
 		var file = new File(filePath);
 		return !file.exists();
 	}
-
-	final public void write() {}
 
 	final public void read() {
 		// only read if not dirty

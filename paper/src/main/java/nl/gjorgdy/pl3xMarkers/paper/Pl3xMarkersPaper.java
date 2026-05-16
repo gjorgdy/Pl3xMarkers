@@ -44,7 +44,7 @@ public final class Pl3xMarkersPaper extends JavaPlugin {
                 new LightningListener(),
                 new MovementListener(playerBoundaries),
                 new NetherPortalListener(),
-                new NodeListener(),
+                new AreaListener(),
                 new SaveListener(storage, this),
                 new SignListener()
         );
