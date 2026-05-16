@@ -12,6 +12,10 @@ public class PaperMarkersConfig extends AbstractConfig {
 	@Comment("Enable Shopkeepers markers on the map")
 	public static boolean SHOPKEEPERS_MARKERS_ENABLED = true;
 
+	@Key("marker-settings.shopkeepers.always-show-name")
+	@Comment("Always show the name of Shopkeepers markers on the map")
+	public static boolean SHOPKEEPERS_ALWAYS_SHOW_NAME = true;
+
 	@Key("marker-settings.shopkeepers.priority")
 	@Comment("The priority for Shopkeepers markers, the lower the number the higher it is on the map")
 	public static int SHOPKEEPERS_MARKERS_PRIORITY = 40;
