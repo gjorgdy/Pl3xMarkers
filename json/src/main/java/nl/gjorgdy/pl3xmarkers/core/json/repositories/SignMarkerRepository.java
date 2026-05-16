@@ -54,6 +54,10 @@ public class SignMarkerRepository extends MarkerRepository<SignMarker> implement
 
 	@Override
 	public boolean remove(int x, int y, int z) {
-		return false;
+		var removed = data.removeIf(marker -> marker.getPosition().equals(x, y, z));
+		if (removed) {
+			markDirty();
+		}
+		return removed;
 	}
 }
