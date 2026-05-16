@@ -74,9 +74,7 @@ public class SignsMarkerLayer extends MarkerLayer {
 		var text = markerEntity.getText();
 		if (MarkersConfig.SIGN_MARKERS_FILL_LINES) {
 			for (int i = 0; i < 4; i++) {
-				if (i >= text.length) {
-					sanitizedText.add("⠀");
-				} else {
+				if (i < text.length) {
 					sanitizedText.add(HtmlHelper.sanitize(text[i]));
 				}
 			}
@@ -90,16 +88,19 @@ public class SignsMarkerLayer extends MarkerLayer {
 		}
 		// Create tooltip by joining lines with <br> after sanitizing to prevent HTML injection
 		@Language("HTML") var tooltip = String.join("<br>", sanitizedText);
-		var marker = IconMarkerBuilder.newIconMarker(
+		var markerBuilder = IconMarkerBuilder.newIconMarker(
 						markerEntity.getKey(),
 						iconId,
 						markerEntity.getPosition().x(),
 						markerEntity.getPosition().z()
 				)
-							 .centerIcon(16, 16)
-							 .addTooltip(tooltip)
-							 .build();
-		addMarker(marker);
+				.centerIcon(16, 16);
+		if (MarkersConfig.SIGN_MARKERS_ALWAYS_SHOW) {
+			markerBuilder.addPermanentBottomTooltip(tooltip);
+		} else {
+			markerBuilder.addTooltip(tooltip);
+		}
+		addMarker(markerBuilder.build());
 	}
 
 	private ISignMarkerRepository<?> getRepository() {

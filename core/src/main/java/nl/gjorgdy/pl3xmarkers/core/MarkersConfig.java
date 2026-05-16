@@ -53,6 +53,9 @@ public class MarkersConfig extends AbstractConfig {
 	@Key("marker-settings.signs.enabled")
 	@Comment("Enable sign markers on the map")
 	public static boolean SIGN_MARKERS_ENABLED = true;
+	@Key("marker-settings.signs.always-show")
+	@Comment("Always show the text of sign markers on the map")
+	public static boolean SIGN_MARKERS_ALWAYS_SHOW = true;
 	@Key("marker-settings.signs.priority")
 	@Comment("The priority for sign markers, the lower the number the higher it is on the map")
 	public static int SIGN_MARKERS_PRIORITY = 50;
