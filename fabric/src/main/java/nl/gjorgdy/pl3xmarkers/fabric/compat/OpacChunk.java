@@ -28,4 +28,14 @@ public record OpacChunk(ChunkPos pos, String playerName, String name, int color)
 		);
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj instanceof OpacChunk other) {
+			return this.pos.equals(other.pos);
+		}
+		return false;
+	}
 }

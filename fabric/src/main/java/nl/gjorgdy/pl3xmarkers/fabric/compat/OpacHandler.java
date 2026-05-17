@@ -33,9 +33,10 @@ public class OpacHandler {
                 .getServerClaimsManager()
                 .getPlayerInfoStream()
                 .forEach(p -> {
-//                    Pl3xMarkersFabric.LOGGER.info("Reading claim data for {} in {}", p.getPlayerUsername(), worldIdentifier);
                     var dimensionManager = p.getDimension(Identifier.parse(worldIdentifier));
-                    if (dimensionManager == null) return;
+	                if (dimensionManager == null) {
+		                return;
+	                }
                     dimensionManager.getStream().forEach(claim ->
                         claim.getStream().forEach(chunk -> chunks.add(
                             new OpacChunk(chunk, p.getPlayerUsername(), p.getClaimsName(), p.getClaimsColor())
@@ -50,7 +51,9 @@ public class OpacHandler {
 							 .getServerClaimsManager()
 							 .getPlayerInfo(uuid);
 		var pdc = playerInfo.getDimension(world);
-		if (pdc == null) return new ArrayList<>();
+		if (pdc == null) {
+			return new ArrayList<>();
+		}
 		return pdc.getStream().flatMap(claim ->
 				claim.getStream().map(chunk ->
 				  new OpacChunk(chunk, playerInfo.getPlayerUsername(), playerInfo.getClaimsName(), playerInfo.getClaimsColor()

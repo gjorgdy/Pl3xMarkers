@@ -10,17 +10,23 @@ import nl.gjorgdy.pl3xmarkers.core.markers.MarkerBuilder;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.fabric.FabricMarkersConfig;
 import nl.gjorgdy.pl3xmarkers.fabric.compat.OpacChunk;
+import nl.gjorgdy.pl3xmarkers.fabric.compat.OpacClaim;
 import nl.gjorgdy.pl3xmarkers.fabric.compat.OpacHandler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+
 public class OPACAreaMarkerLayer extends MarkerLayer {
 
-    public OPACAreaMarkerLayer(@NotNull World world) {
+	private HashMap<String, OpacClaim> claims;
+
+	public OPACAreaMarkerLayer(@NotNull World world) {
         super(Layers.Keys.OPAC, Layers.Labels.OPAC, world, FabricMarkersConfig.OPAC_MARKERS_PRIORITY);
     }
 
     @Override
     public void load() {
+	    claims = new HashMap<>();
 		Pl3xMarkersCore.runParallel(() -> {
 			var server = getServer();
 			while (!OpacHandler.isOpacLoaded(server)) {
@@ -33,13 +39,20 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
 			}
 			OpacHandler.load(server, worldIdentifier)
 				.forEach(this::addChunk);
+			claims.forEach((_, claim) -> claim.chunks.forEach(chunk -> addMarker(createAreaMarker(chunk))));
 		});
 		// register listener for claim changes
 		OpacHandler.registerListener(getServer(), this);
     }
 
+	private OpacClaim getOrCreateClaim(String name, int color) {
+		String key = OpacClaim.createKey(name, color);
+		return claims.computeIfAbsent(key, _ -> new OpacClaim(name, color));
+	}
+
 	public void addChunk(OpacChunk chunk) {
-		addMarker(createAreaMarker(chunk));
+		var claim = getOrCreateClaim(chunk.name(), chunk.color());
+		claim.addChunk(chunk);
 	}
 
     private MarkerBuilder<?> createAreaMarker(OpacChunk chunk) {
