@@ -62,7 +62,8 @@ public class WorldRepository implements IWorldRepository {
 		signMarkerRepositories.put(layerKey, repo);
 		return repo;
 	}
-
+	
+	@Deprecated
 	public void migrate(IStorage oldJsonStorage) {
 		simpleMarkerRepositories.values().forEach(repo -> repo.migrate(oldJsonStorage));
 		signMarkerRepositories.values().forEach(repo -> repo.migrate(oldJsonStorage));

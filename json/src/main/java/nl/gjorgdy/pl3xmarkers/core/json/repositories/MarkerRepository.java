@@ -3,6 +3,7 @@ package nl.gjorgdy.pl3xmarkers.core.json.repositories;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.IStorage;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.json.entities.Marker;
 import nl.gjorgdy.pl3xmarkers.core.json.entities.Point;
@@ -40,6 +41,9 @@ public abstract class MarkerRepository<T extends Marker> implements IMarkerRepos
 		data = new HashSet<>();
 		read();
 	}
+
+	@Deprecated
+	abstract public void migrate(IStorage oldJsonStorage);
 
 	public String formatWorldIdentifier(String worldIdentifier) {
 		if (worldIdentifier.contains(":")) {

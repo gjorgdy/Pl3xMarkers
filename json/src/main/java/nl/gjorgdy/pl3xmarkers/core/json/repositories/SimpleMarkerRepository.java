@@ -11,6 +11,7 @@ public class SimpleMarkerRepository extends MarkerRepository<SimpleMarker> imple
 		super(worldRepository, layerKey, SimpleMarker.class);
 	}
 
+	@Override
 	public void migrate(IStorage oldJsonStorage) {
 		oldJsonStorage.getIconMarkerRepository()
 				.getIconMarkers(worldIdentifier, layerKey)

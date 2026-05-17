@@ -22,6 +22,7 @@ public class AreaMarkerRepository extends MarkerRepository<AreaMarker> implement
 		// STORAGE MIGRATION
 	}
 
+	@Override
 	public void migrate(IStorage oldJsonStorage) {
 		oldJsonStorage.getAreaMarkerRepository()
 				.getAreas(worldIdentifier)

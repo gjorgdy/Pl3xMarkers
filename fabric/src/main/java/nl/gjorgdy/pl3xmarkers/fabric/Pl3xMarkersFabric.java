@@ -32,7 +32,7 @@ public class Pl3xMarkersFabric implements DedicatedServerModInitializer {
 			Layers.register(OPACAreaMarkerLayer::new, unused -> isOpacEnabled());
 		}
 		// initialize core
-	    storage = new JsonStorage();
+	    storage = new JsonStorage("config/pl3xmarkers");
 		Pl3xMarkersCore.onInitialize(false, storage, FabricMarkersConfig::reload);
         // register events
 		ServerLifecycleEvents.AFTER_SAVE.register(
@@ -44,6 +44,7 @@ public class Pl3xMarkersFabric implements DedicatedServerModInitializer {
         ServerLifecycleEvents.SERVER_STOPPED.register(
             unused -> Pl3xMarkersCore.onDisable()
         );
+	    // MIGRATION LOGIC - TO BE REMOVED BEFORE RELEASE
 	    ServerLifecycleEvents.SERVER_STARTED.register(
 			    unused -> {
 				    var oldStorage = new OldJsonStorage();
@@ -56,6 +57,7 @@ public class Pl3xMarkersFabric implements DedicatedServerModInitializer {
 				    }
 			    }
 	    );
+	    // MIGRATION LOGIC - TO BE REMOVED BEFORE RELEASE
     }
 
 }

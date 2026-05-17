@@ -1,6 +1,5 @@
 package nl.gjorgdy.pl3xmarkers.core.json;
 
-import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IStorage;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IWorldRepository;
 import nl.gjorgdy.pl3xmarkers.core.json.repositories.WorldRepository;
@@ -11,18 +10,16 @@ import java.util.HashMap;
 public class JsonStorage implements IStorage {
 
 	private final HashMap<String, WorldRepository> worldRepositories = new HashMap<>();
-	private String configPath;
-	private boolean loaded = false;
+	private final String configPath;
 
+	@Deprecated
 	private OldJsonStorage oldJsonStorage;
 
-	private void load() {
-		// read files
-		configPath = Pl3xMarkersCore.isBukkit() ? "plugins/Pl3xMarkers" : "config/pl3xmarkers";
-		// mark as loaded
-		loaded = true;
+	public JsonStorage(String configPath) {
+		this.configPath = configPath;
 	}
 
+	@Deprecated
 	public OldJsonStorage oldJsonStorage() {
 		if (oldJsonStorage == null) {
 			oldJsonStorage = new OldJsonStorage();
@@ -31,9 +28,6 @@ public class JsonStorage implements IStorage {
 	}
 
 	public String getConfigPath() {
-		if (!loaded) {
-			load();
-		}
 		return configPath;
 	}
 
@@ -53,13 +47,10 @@ public class JsonStorage implements IStorage {
 	}
 
 	public void write() {
-		if (!loaded) {
-			load();
-		}
-		// save files
 		worldRepositories.forEach((k, repo) -> repo.write());
 	}
 
+	@Deprecated
 	public void migrate(nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.IStorage oldJsonStorage) {
 		worldRepositories.values().forEach(repo -> repo.migrate(oldJsonStorage));
 		write();

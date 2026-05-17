@@ -18,7 +18,7 @@ public final class Pl3xMarkersPaper extends JavaPlugin {
 
     private final HashMap<UUID, Boundary> playerBoundaries = new HashMap<>();
 
-    private final JsonStorage storage = new JsonStorage();
+    private final JsonStorage storage = new JsonStorage("plugins/Pl3xMarkers");
 
     @Override
     public void onLoad() {

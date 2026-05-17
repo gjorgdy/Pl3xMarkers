@@ -25,6 +25,7 @@ public class SaveListener implements Listener {
 		storage.write();
 	}
 
+	// MIGRATION LOGIC - TO BE REMOVED BEFORE RELEASE
 	@EventHandler
 	public void onServerLoad(ServerLoadEvent event) {
 		var oldStorage = new OldJsonStorage();
@@ -36,5 +37,6 @@ public class SaveListener implements Listener {
 			plugin.getLogger().info("Migration complete!");
 		}
 	}
+	// MIGRATION LOGIC - TO BE REMOVED BEFORE RELEASE
 
 }

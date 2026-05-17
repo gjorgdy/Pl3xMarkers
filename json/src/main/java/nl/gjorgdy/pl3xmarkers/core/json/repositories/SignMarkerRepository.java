@@ -11,6 +11,7 @@ public class SignMarkerRepository extends MarkerRepository<SignMarker> implement
 		super(worldRepository, layerKey, SignMarker.class);
 	}
 
+	@Override
 	public void migrate(IStorage oldJsonStorage) {
 		oldJsonStorage.getSignMarkerRepository()
 				.getMarkers(worldIdentifier, layerKey)
