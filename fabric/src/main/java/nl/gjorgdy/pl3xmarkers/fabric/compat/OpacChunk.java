@@ -28,13 +28,27 @@ public record OpacChunk(ChunkPos pos, String playerName, String name, int color)
 		);
 	}
 
+	public List<OpacEdge> getEdges() {
+		var corners = getCorners();
+		return List.of(
+				// north
+				new OpacEdge(corners.get(0), corners.get(1)),
+				// east
+				new OpacEdge(corners.get(1), corners.get(2)),
+				// south
+				new OpacEdge(corners.get(2), corners.get(3)),
+				// west
+				new OpacEdge(corners.get(3), corners.get(0))
+		);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		}
 		if (obj instanceof OpacChunk other) {
-			return this.pos.equals(other.pos);
+			return pos.equals(other.pos);
 		}
 		return false;
 	}

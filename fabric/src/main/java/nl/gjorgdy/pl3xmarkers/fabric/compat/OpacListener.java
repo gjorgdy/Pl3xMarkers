@@ -11,7 +11,7 @@ public class OpacListener implements IClaimsManagerListenerAPI {
 	private final OPACAreaMarkerLayer markerLayer;
 
 	public OpacListener(OPACAreaMarkerLayer opacAreaMarkerLayer) {
-		this.markerLayer = opacAreaMarkerLayer;
+		markerLayer = opacAreaMarkerLayer;
 	}
 
 	@Override
@@ -19,13 +19,15 @@ public class OpacListener implements IClaimsManagerListenerAPI {
 
 	@Override
 	public void onChunkChange(@NotNull Identifier world, int x, int z, IPlayerChunkClaimAPI p) {
-		if (!world.equals(Identifier.parse(markerLayer.worldIdentifier))) return;
+		if (!world.equals(Identifier.parse(markerLayer.worldIdentifier))) {
+			return;
+		}
 		if (p == null) {
 			// chunk unclaimed
-			markerLayer.removeMarker("OpacChunk:" + x + ":" + z);
+			markerLayer.removeChunk(x, z, true);
 		} else {
 			// chunk claimed
-			markerLayer.addChunk(OpacHandler.getChunk(markerLayer.getServer(), p.getPlayerId(), x, z));
+			markerLayer.addChunk(OpacHandler.getChunk(markerLayer.getServer(), p.getPlayerId(), x, z), true);
 		}
 	}
 
