@@ -1,7 +1,7 @@
-﻿Bug Fixes
+﻿Permanent Tooltips and Cleaner Claims
 ---
 
-- Fixed sign markers not being removed correctly when the sign is removed from the world.
-- Fixed migration happening on every startup creating a lot of folders.
-- Fixed a crash caused by disabling some of the marker layers.
-- Fixed feedback sounds not playing on Fabric.
+- Added a new look for tooltips, which are always visible and look more like vanilla map markers.
+    - This is a config option per marker type, so you can disable it if you prefer the old style.
+- Added logic to OPAC claims to merge connected chunks into single visible claims.
+    - At this moment in time chunks creating hollow areas are shown as an 'outer' and 'inner' claim. 
