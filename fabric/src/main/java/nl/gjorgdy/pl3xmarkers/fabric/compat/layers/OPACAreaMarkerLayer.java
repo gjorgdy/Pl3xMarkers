@@ -77,11 +77,15 @@ public class OPACAreaMarkerLayer extends MarkerLayer {
 		getMarkers().removeIf(m -> m.getKey().startsWith(claim.key + ":"));
 		var counter = new AtomicInteger(0);
 		claim.getPolygons().forEach(polygon -> {
-			var marker = AreaMarkerBuilder.newAreaMarker(claim.key + ":" + counter.addAndGet(1), polygon)
+			var markerBuilder = AreaMarkerBuilder.newAreaMarker(claim.key + ":" + counter.addAndGet(1), polygon)
 					.fill(claim.color)
-					.stroke(claim.color)
-					.addPopup(claim.name);
-			addMarker(marker);
+					.stroke(claim.color);
+			if (FabricMarkersConfig.OPAC_MARKERS_ALWAYS_SHOW_NAME) {
+				markerBuilder.addPermanentTooltip(claim.name);
+			} else {
+				markerBuilder.addPopup(claim.name);
+			}
+			addMarker(markerBuilder.build());
 		});
 	}
 
