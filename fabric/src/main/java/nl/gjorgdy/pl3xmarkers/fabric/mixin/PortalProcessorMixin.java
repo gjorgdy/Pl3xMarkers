@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.portal.PortalShape;
 import net.minecraft.world.level.portal.TeleportTransition;
+import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.layers.EndGatewayMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.EndPortalMarkerLayer;
@@ -36,9 +37,15 @@ public class PortalProcessorMixin {
 	// On a player traveling through a nether portal, try to create a marker
 	@Inject(method = "getPortalDestination", at = @At("RETURN"))
 	public void onTick(ServerLevel serverLevel, Entity entity, CallbackInfoReturnable<TeleportTransition> cir) {
+		if (portalsDisabled()) {
+			return;
+		}
 		// origin
 		tryCreateMarker(serverLevel, entryPosition, entity);
 		// destination
+		if (cir.getReturnValue() == null) {
+			return;
+		}
 		tryCreateMarker(cir.getReturnValue().newLevel(), BlockPos.containing(cir.getReturnValue().position()), entity);
 	}
 
@@ -73,6 +80,11 @@ public class PortalProcessorMixin {
 		if (entity instanceof ServerPlayer serverPlayer) {
 			FeedbackHelper.sendFeedback(result, serverPlayer);
 		}
+	}
+
+	@Unique
+	private boolean portalsDisabled() {
+		return !(MarkersConfig.NETHER_PORTAL_MARKERS_ENABLED || MarkersConfig.END_GATEWAY_MARKERS_ENABLED || MarkersConfig.END_PORTAL_MARKERS_ENABLED);
 	}
 
 }
