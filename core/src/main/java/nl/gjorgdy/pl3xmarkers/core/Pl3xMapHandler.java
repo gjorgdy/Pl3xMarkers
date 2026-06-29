@@ -21,13 +21,14 @@ import java.io.InputStream;
 public class Pl3xMapHandler implements EventListener {
 
     public void reload() {
-        Pl3xMap.api().getWorldRegistry().forEach(world -> {
+        Pl3xMap.api().getWorldRegistry().forEach(world ->
             world.getLayerRegistry().forEach(layer -> {
                 if (layer instanceof MarkerLayer markerLayer) {
                     markerLayer.load();
                 }
-            });
-        });
+            })
+        );
+        Pl3xMarkersCore.reload();
     }
 
     public void registerMarkerLayer(LayerFactory factory) {
@@ -65,15 +66,14 @@ public class Pl3xMapHandler implements EventListener {
     @EventHandler
     @SuppressWarnings("unused") // event is used by pl3xmap
     public void onEnable(Pl3xMapEnabledEvent event) {
-		Pl3xMarkersCore.reloadConfig();
         Icons.ALL.forEach(address -> {
             try {
                 registerIconImage(address);
             } catch (IOException e) {
                 System.out.println("Failed to register icon: " + address);
-//                Pl3xMarkersCore.LOGGER.error("Failed to register icon", e);
             }
         });
+        Pl3xMarkersCore.reload();
     }
 
     private void registerIconImage(IconImageAddress address) throws IOException {

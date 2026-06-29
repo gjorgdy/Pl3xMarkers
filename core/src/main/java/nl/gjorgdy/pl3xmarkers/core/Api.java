@@ -16,21 +16,12 @@ public class Api implements IApi {
 	private final HashMap<String, IWorldApi> worldApis = new HashMap<>();
 
 	Api() {
-		Pl3xMap.api().getWorldRegistry().forEach(world -> worldApis.put(world.getKey(), new WorldApi(world.getKey())));
+		Pl3xMap.api().getWorldRegistry().forEach(world -> worldApis.put(world.getKey(), new WorldApi(world)));
 	}
-
-	@SuppressWarnings("unused")
-	private static World getPl3xWorld(String worldIdentifier) {
-        World world = Pl3xMap.api().getWorldRegistry().get(worldIdentifier);
-		if (world == null) {
-			throw new RuntimeException("World not found " + worldIdentifier);
-		}
-        return world;
-    }
 
 	@Override
 	public IWorldApi getWorld(String worldIdentifier) {
-		return worldApis.get(worldIdentifier);
+		return worldApis.computeIfAbsent(worldIdentifier, WorldApi::new);
 	}
 
 	@Override
@@ -47,12 +38,29 @@ public class Api implements IApi {
         Pl3xMarkersCore.pl3xHandler().registerIconImage(path, filename, filetype);
     }
 
-	private record WorldApi(String worldIdentifier) implements IWorldApi {
+	private class WorldApi implements IWorldApi {
+
+		private final String worldIdentifier;
+		private final World pl3xWorld;
+
+		private WorldApi(World pl3xWorld) {
+			this.pl3xWorld = pl3xWorld;
+			worldIdentifier = pl3xWorld.getKey();
+		}
+
+		private WorldApi(String worldIdentifier) {
+			pl3xWorld = Pl3xMap.api().getWorldRegistry().get(worldIdentifier);
+			this.worldIdentifier = worldIdentifier;
+		}
 
 		@Override
 		@Nullable
 		public <T extends MarkerLayer> T getLayer(Class<T> layerClass, String layerKey) {
-			Layer layer = Api.getPl3xWorld(worldIdentifier).getLayerRegistry().get(layerKey);
+			if (pl3xWorld == null) {
+				worldApis.remove(worldIdentifier);
+				return null;
+			}
+			Layer layer = pl3xWorld.getLayerRegistry().get(layerKey);
 			if (layerClass.isInstance(layer)) {
 				return layerClass.cast(layer);
 			}

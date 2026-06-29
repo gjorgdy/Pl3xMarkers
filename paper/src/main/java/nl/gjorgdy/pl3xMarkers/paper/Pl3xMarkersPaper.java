@@ -23,7 +23,7 @@ public final class Pl3xMarkersPaper extends JavaPlugin {
     @Override
     public void onLoad() {
         // Plugin startup logic
-        Pl3xMarkersCore.onInitialize(true, storage, PaperMarkersConfig::reload);
+        Pl3xMarkersCore.onInitialize(true, storage, msg -> getLogger().info(msg), PaperMarkersConfig::reload);
         super.onLoad();
     }
 

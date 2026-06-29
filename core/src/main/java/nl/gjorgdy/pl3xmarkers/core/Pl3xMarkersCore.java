@@ -1,6 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.core;
 
 import net.pl3x.map.core.Pl3xMap;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.ILogger;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IStorage;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.api.IApi;
 
@@ -15,16 +16,25 @@ public class Pl3xMarkersCore {
 	private static final ExecutorService executor = new ThreadPoolExecutor(2, 8, 5L, TimeUnit.SECONDS,new LinkedBlockingQueue<>(1000));
     private static boolean IS_BUKKIT = false;
     private static IStorage STORAGE = null;
+	private static ILogger LOGGER = null;
 	private static IApi API = null;
     private static Pl3xMapHandler PL3X_MAP_HANDLER = null;
-	private static Runnable reloadConfig = MarkersConfig::reload;
+	private static Runnable RELOAD_CONFIG = MarkersConfig::reload;
+
+	public static void print(String msg) {
+		if (LOGGER != null) {
+			LOGGER.print("[INFO] " + msg);
+		}
+	}
 
 	public static boolean isBukkit() {
         return IS_BUKKIT;
     }
 
-	public static void reloadConfig() {
-		reloadConfig.run();
+	public static void reload() {
+		RELOAD_CONFIG.run();
+		API = new Api();
+		print("Loaded config and markers");
 	}
 
 	public static boolean isFeedbackDisabled() {
@@ -68,15 +78,12 @@ public class Pl3xMarkersCore {
 		executor.execute(task);
 	}
 
-	public static void onInitialize(boolean isBukkit, IStorage storage, Runnable reloadConfig) {
-		Pl3xMarkersCore.reloadConfig = reloadConfig;
-		onInitialize(isBukkit, storage);
-	}
-
-    public static void onInitialize(boolean isBukkit, IStorage storage) {
+	public static void onInitialize(boolean isBukkit, IStorage storage, ILogger logger, Runnable reloadConfig) {
+		Pl3xMarkersCore.RELOAD_CONFIG = reloadConfig;
+		LOGGER = logger;
 		STORAGE = storage;
-        IS_BUKKIT = isBukkit;
-    }
+		IS_BUKKIT = isBukkit;
+	}
 
     public static void onStarted() {
         Pl3xMap.api().getEventRegistry().register(Pl3xMarkersCore.pl3xHandler());

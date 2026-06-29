@@ -33,7 +33,7 @@ public class Pl3xMarkersFabric implements DedicatedServerModInitializer {
 		}
 		// initialize core
 	    storage = new JsonStorage("config/pl3xmarkers");
-		Pl3xMarkersCore.onInitialize(false, storage, FabricMarkersConfig::reload);
+	    Pl3xMarkersCore.onInitialize(false, storage, string -> LOGGER.info(string), FabricMarkersConfig::reload);
         // register events
 		ServerLifecycleEvents.AFTER_SAVE.register(
 			(server, flush, force) -> storage.write()
