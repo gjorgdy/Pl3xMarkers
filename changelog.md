@@ -1,4 +1,4 @@
-﻿Portal Destination Error
+﻿World Handling
 ---
 
-- Fixed a crash occurring when going through a portal with an invalid destination.
+- Fixed a bug in world handling causing error spam in the console
