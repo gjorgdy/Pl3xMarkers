@@ -1,6 +1,5 @@
 package nl.gjorgdy.pl3xmarkers.core.json.repositories;
 
-import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.IStorage;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IAreaMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.json.entities.AreaMarker;
 
@@ -8,30 +7,6 @@ public class AreaMarkerRepository extends MarkerRepository<AreaMarker> implement
 
 	public AreaMarkerRepository(WorldRepository worldRepository, String layerKey) {
 		super(worldRepository, layerKey, AreaMarker.class);
-		// STORAGE MIGRATION
-		worldRepository.getStorage().oldJsonStorage()
-				.getAreaMarkerRepository()
-				.getAreas(worldRepository.worldIdentifier)
-				.forEach(oldArea -> {
-					var area = getOrCreate(oldArea.getName(), oldArea.getColor());
-					oldArea.getPoints().forEach(point ->
-							                            area.addPoint(point.getX(), Integer.MIN_VALUE, point.getZ())
-					);
-				});
-		write();
-		// STORAGE MIGRATION
-	}
-
-	@Override
-	public void migrate(IStorage oldJsonStorage) {
-		oldJsonStorage.getAreaMarkerRepository()
-				.getAreas(worldIdentifier)
-				.forEach(oldArea -> {
-					var area = getOrCreate(oldArea.getName(), oldArea.getColor());
-					oldArea.getPoints().forEach(point ->
-							                            area.addPoint(point.getX(), Integer.MIN_VALUE, point.getZ())
-					);
-				});
 	}
 
 	@Override

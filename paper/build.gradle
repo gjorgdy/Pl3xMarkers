@@ -33,7 +33,6 @@ dependencies {
 
     implementation project(':core')
     implementation project(':json')
-    implementation project(':json_old')
 }
 
 compileJava {

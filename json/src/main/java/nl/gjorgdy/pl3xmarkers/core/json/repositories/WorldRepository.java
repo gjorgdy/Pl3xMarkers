@@ -1,6 +1,5 @@
 package nl.gjorgdy.pl3xmarkers.core.json.repositories;
 
-import nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.IStorage;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IAreaMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.ISignMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.ISimpleMarkerRepository;
@@ -61,13 +60,6 @@ public class WorldRepository implements IWorldRepository {
 		var repo = new SignMarkerRepository(this, layerKey);
 		signMarkerRepositories.put(layerKey, repo);
 		return repo;
-	}
-	
-	@Deprecated
-	public void migrate(IStorage oldJsonStorage) {
-		simpleMarkerRepositories.values().forEach(repo -> repo.migrate(oldJsonStorage));
-		signMarkerRepositories.values().forEach(repo -> repo.migrate(oldJsonStorage));
-		areaMarkerRepositories.values().forEach(repo -> repo.migrate(oldJsonStorage));
 	}
 
 	public void write() {

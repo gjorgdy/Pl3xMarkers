@@ -1,9 +1,0 @@
-package nl.gjorgdy.pl3xmarkers.core.deprecated.interfaces.entities;
-
-public interface ISignMarker extends IIconMarker {
-
-	String[] getText();
-
-	void setText(String[] name);
-
-}

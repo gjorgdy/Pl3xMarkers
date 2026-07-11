@@ -5,7 +5,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.json.JsonStorage;
-import nl.gjorgdy.pl3xmarkers.core.json_old.OldJsonStorage;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.fabric.compat.layers.OPACAreaMarkerLayer;
 import org.slf4j.Logger;
@@ -44,20 +43,6 @@ public class Pl3xMarkersFabric implements DedicatedServerModInitializer {
         ServerLifecycleEvents.SERVER_STOPPED.register(
             unused -> Pl3xMarkersCore.onDisable()
         );
-	    // MIGRATION LOGIC - TO BE REMOVED BEFORE RELEASE
-	    ServerLifecycleEvents.SERVER_STARTED.register(
-			    unused -> {
-				    var oldStorage = new OldJsonStorage();
-				    if (oldStorage.folderExists()) {
-					    LOGGER.info("Migrating data from old storage...");
-					    storage.migrate(oldStorage);
-					    oldStorage.rename();
-					    Pl3xMarkersCore.reloadMarkers();
-					    LOGGER.info("Migration complete!");
-				    }
-			    }
-	    );
-	    // MIGRATION LOGIC - TO BE REMOVED BEFORE RELEASE
     }
 
 }
