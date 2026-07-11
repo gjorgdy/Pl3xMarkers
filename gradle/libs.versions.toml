@@ -1,16 +1,16 @@
 [versions]
-minecraft = "26.1.2"
+minecraft = "26.2"
 
 # https://fabricmc.net/develop/
-fabricLoader = "0.19.2"
-fabricApi = "0.148.0+26.1.2"
-fabricLoom = "1.16-SNAPSHOT"
+fabricLoader = "0.19.3"
+fabricApi = "0.154.2+26.2"
+fabricLoom = "1.15-SNAPSHOT"
 
-pl3xmap = "26.1.2-545"
-openPartiesAndClaims = "7987266"
-shopkeepers = "2.26.1"
+pl3xmap = "26.2-551"
+openPartiesAndClaims = "fabric-26.2-0.27.7"
+shopkeepers = "2.27.0"
 
-paper = "26.1.2.build.+"
+paper = "26.2.build.+"
 
 shadow = "9.3.0"
 minotaur="2.+" # https://github.com/modrinth/minotaur
@@ -33,7 +33,7 @@ fabric-api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.r
 
 paper-api = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
 
-openPartiesAndClaims = { group = "curse.maven", name = "open-parties-and-claims-636608", version.ref = "openPartiesAndClaims" }
+openPartiesAndClaims = { group = "maven.modrinth", name = "open-parties-and-claims", version.ref = "openPartiesAndClaims" }
 shopkeepers = { group = "com.nisovin.shopkeepers", name = "ShopkeepersAPI", version.ref = "shopkeepers" }
 
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
