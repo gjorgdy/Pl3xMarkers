@@ -44,7 +44,7 @@ public class MarkerBuilder<T extends Marker<T>> {
     }
 
     @SuppressWarnings({ "unused", "UnusedReturnValue" })
-    public MarkerBuilder<T> addPermanentTooltip(@Language("HTML") String content) {
+    public MarkerBuilder<T> addPermanentCenteredTooltip(@Language("HTML") String content) {
         options.setTooltip(
                 new Tooltip(content)
                         .setPermanent(true)

@@ -16,9 +16,9 @@ public class EndPortalMarkerLayer extends SimpleMarkerLayer {
     }
 
     @Override
-    protected String createPopup(ISimpleMarker markerEntity) {
+    protected String createPopup(ISimpleMarker object) {
         return HtmlHelper.TravelPopUp(
-                createTooltip(markerEntity),
+                createTooltip(object),
                 destinationKey(getWorld().getKey()),
                 100, 0,
                 "Go to The End"

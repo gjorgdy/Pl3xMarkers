@@ -40,6 +40,31 @@ public interface IPoint extends Comparable<IPoint> {
 	}
 
 	/**
+	 * Get the distance of 2 points. The y coordinate is ignored as they are not important
+	 *
+	 * @param x the x-coordinate of the other point
+	 * @param z the z-coordinate of the other point
+	 * @return the distance between the two points, calculated using the Pythagorean theorem, ignoring the y coordinate
+	 */
+	@CheckReturnValue
+	default double distance(int x, int z) {
+		return Math.sqrt(Math.pow(x() - x, 2) + Math.pow(z() - z, 2));
+	}
+
+	/**
+	 * Get the distance of 2 points.
+	 *
+	 * @param x the x-coordinate of the other point
+	 * @param y the y-coordinate of the other point
+	 * @param z the z-coordinate of the other point
+	 * @return the distance between the two points, calculated using the Pythagorean theorem, ignoring the y coordinate
+	 */
+	@CheckReturnValue
+	default double distance(int x, int y, int z) {
+		return Math.sqrt(Math.pow(x() - x, 2) + Math.pow(y() - y, 2) + Math.pow(z() - z, 2));
+	}
+
+	/**
 	 * Compare this point to another point. The comparison is based on the sum of the differences in x and z
 	 * coordinates.
 	 * The y coordinate is ignored as they are not important

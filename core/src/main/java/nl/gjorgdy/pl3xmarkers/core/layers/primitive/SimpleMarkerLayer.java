@@ -5,11 +5,15 @@ import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.ISimpleMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.ISimpleMarker;
 import nl.gjorgdy.pl3xmarkers.core.markers.IconMarkerBuilder;
+import nl.gjorgdy.pl3xmarkers.core.markers.MarkerBuilder;
 import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class SimpleMarkerLayer extends MarkerLayer<ISimpleMarker> {
+import java.util.Comparator;
+import java.util.Optional;
+
+public abstract class SimpleMarkerLayer extends StoredMarkerLayer<ISimpleMarker, ISimpleMarkerRepository<? extends ISimpleMarker>> {
 
     public final String iconId;
     public final String key;
@@ -52,6 +56,22 @@ public abstract class SimpleMarkerLayer extends MarkerLayer<ISimpleMarker> {
     public InteractionResult add(int x, int y, int z) {
         boolean added = addInternal(x, y, z);
         return added ? InteractionResult.added("Added " + tooltip + " marker") : InteractionResult.skip();
+    }
+
+    @Override
+    public Optional<? extends ISimpleMarker> getMarker(String key) {
+        return getRepository().stream()
+                .filter(m -> m.getKey().equals(key))
+                .findFirst();
+    }
+
+    @Override
+    public Optional<String> getClosestMarker(int x, int y, int z) {
+        var closestMarker = getRepository().stream()
+                .min((m1, m2) -> Comparator.comparingDouble(m ->
+                                                                    ((ISimpleMarker) m).getPosition().distance(x, y, z)
+                ).compare(m1, m2));
+        return closestMarker.map(ISimpleMarker::getKey);
     }
 
     final protected boolean removeInternal(int x, int y, int z) {
@@ -109,6 +129,22 @@ public abstract class SimpleMarkerLayer extends MarkerLayer<ISimpleMarker> {
         return true;
     }
 
+    @Override
+    public MarkerBuilder<?> createBuilder(ISimpleMarker object) {
+        var pos = object.getPosition();
+        return IconMarkerBuilder.newIconMarker(
+                        toMarkerKey(pos.x(), pos.y(), pos.z()), iconId, pos.x(), pos.z()
+                )
+                .centerIcon(16, 16);
+    }
+
+    @Override
+    @Language("HTML")
+    protected String createTooltip(ISimpleMarker markerEntity) {
+        @Language("HTML") var name = markerEntity.getName();
+        return name != null ? name : tooltip;
+    }
+
     /**
      * Remove a marker
      *
@@ -122,42 +158,7 @@ public abstract class SimpleMarkerLayer extends MarkerLayer<ISimpleMarker> {
     }
 
     @Override
-    public void loadMarker(ISimpleMarker markerEntity) {
-        var pos = markerEntity.getPosition();
-        var icon = IconMarkerBuilder.newIconMarker(
-                        toMarkerKey(pos.x(), pos.y(), pos.z()), iconId, pos.x(), pos.z()
-                )
-                .centerIcon(16, 16);
-        @Language("HTML") var popup = createPopup(markerEntity);
-        if (popup != null) {
-            icon.addPopup(popup);
-        } else {
-            icon.addTooltip(createTooltip(markerEntity));
-        }
-        @Language("HTML") var permanentTooltip = createPermanentTooltip(markerEntity);
-        if (permanentTooltip != null) {
-            icon.addPermanentBottomTooltip(permanentTooltip);
-        }
-        super.addMarker(icon.build());
-    }
-
-    @Language("HTML")
-    protected String createPopup(ISimpleMarker markerEntity) {
-        return null;
-    }
-
-    @Language("HTML")
-    protected String createPermanentTooltip(ISimpleMarker markerEntity) {
-        return null;
-    }
-
-    @Language("HTML")
-    protected String createTooltip(ISimpleMarker markerEntity) {
-        @Language("HTML") var name = markerEntity.getName();
-        return name != null ? name : tooltip;
-    }
-
-    protected ISimpleMarkerRepository<?> getRepository() {
+    protected ISimpleMarkerRepository<? extends ISimpleMarker> getRepository() {
         return Pl3xMarkersCore.storage()
                 .getWorldRepository(worldIdentifier)
                 .getSimpleMarkerRepository(getKey());

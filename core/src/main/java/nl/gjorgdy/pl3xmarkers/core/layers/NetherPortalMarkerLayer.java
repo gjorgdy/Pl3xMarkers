@@ -8,7 +8,9 @@ import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.ISimpleMarker;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.SimpleMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.registries.Icons;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
+import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 public class NetherPortalMarkerLayer extends SimpleMarkerLayer {
 
@@ -17,8 +19,8 @@ public class NetherPortalMarkerLayer extends SimpleMarkerLayer {
     }
 
     @Override
-    protected String createPopup(ISimpleMarker markerEntity) {
-        var pos = markerEntity.getPosition();
+    protected String createPopup(ISimpleMarker object) {
+        var pos = object.getPosition();
         String worldKey = getWorld().getKey();
         boolean isOverworld = WorldHelpers.isOverworld(worldKey);
         // Define the destination
@@ -26,7 +28,7 @@ public class NetherPortalMarkerLayer extends SimpleMarkerLayer {
         int relativeZ = isOverworld ? pos.z() / 8 : pos.z() * 8;
         // Build the pop-up
         return HtmlHelper.TravelPopUp(
-                createTooltip(markerEntity),
+                createTooltip(object),
                 destinationKey(worldKey),
                 relativeX, relativeZ,
                 buttonText(worldKey)
@@ -34,11 +36,17 @@ public class NetherPortalMarkerLayer extends SimpleMarkerLayer {
     }
 
     @Override
-    protected String createPermanentTooltip(ISimpleMarker markerEntity) {
-        if (markerEntity.getName() != null) {
-            return createTooltip(markerEntity);
+    protected @Nullable String createPermanentBottomTooltip(ISimpleMarker object) {
+        if (object.getName() != null) {
+            return createTooltip(object);
         }
         return null;
+    }
+
+    @Override
+    protected String createTooltip(ISimpleMarker markerEntity) {
+        @Language("HTML") var name = markerEntity.getName();
+        return name != null ? name : tooltip;
     }
 
     private String buttonText(String worldKey) {

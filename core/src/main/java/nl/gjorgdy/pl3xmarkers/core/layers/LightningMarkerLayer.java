@@ -7,6 +7,7 @@ import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IMarker;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.markers.IconMarkerBuilder;
+import nl.gjorgdy.pl3xmarkers.core.markers.MarkerBuilder;
 import nl.gjorgdy.pl3xmarkers.core.registries.Icons;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.jspecify.annotations.NonNull;
@@ -31,8 +32,8 @@ public class LightningMarkerLayer extends MarkerLayer<IMarker> {
 	}
 
 	@Override
-	public void loadMarker(IMarker markerEntity) {
-		// ignore
+	public MarkerBuilder<?> createBuilder(IMarker object) {
+		return null;
 	}
 
 	public void show(int x, int y, int z) {

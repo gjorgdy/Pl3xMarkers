@@ -7,6 +7,7 @@ import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IMarker;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.markers.AreaMarkerBuilder;
+import nl.gjorgdy.pl3xmarkers.core.markers.MarkerBuilder;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.fabric.FabricMarkersConfig;
 import nl.gjorgdy.pl3xmarkers.fabric.compat.OpacChunk;
@@ -48,8 +49,8 @@ public class OPACAreaMarkerLayer extends MarkerLayer<IMarker> {
     }
 
 	@Override
-	public void loadMarker(IMarker markerEntity) {
-		// ignore
+	public MarkerBuilder<?> createBuilder(IMarker object) {
+		return null;
 	}
 
 	private OpacClaim getOrCreateClaim(String playerName, @Language("HTML") String name, int color) {
@@ -87,7 +88,7 @@ public class OPACAreaMarkerLayer extends MarkerLayer<IMarker> {
 					.fill(claim.color)
 					.stroke(claim.color);
 			if (FabricMarkersConfig.OPAC_MARKERS_ALWAYS_SHOW_NAME) {
-				markerBuilder.addPermanentTooltip(claim.name);
+				markerBuilder.addPermanentCenteredTooltip(claim.name);
 			} else {
 				markerBuilder.addPopup(claim.name);
 			}

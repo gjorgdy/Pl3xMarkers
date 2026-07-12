@@ -11,7 +11,7 @@ public abstract class PolygonArea {
 	 * @param points the corners of the polygon
 	 * @return the area of the polygon in square blocks
 	 */
-	public static double calculate(List<IPoint> points) {
+	public static double calculate(List<? extends IPoint> points) {
 		int n = points.size();
 		if (n < 3) {
 			return 0.0;

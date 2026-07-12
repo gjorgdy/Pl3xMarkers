@@ -4,6 +4,7 @@ import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IMarker;
 
 import java.util.Collection;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public interface IMarkerRepository<T extends IMarker> {
 
@@ -27,5 +28,15 @@ public interface IMarkerRepository<T extends IMarker> {
 	 */
 	@SuppressWarnings("Unused")
 	void foreach(Consumer<T> action);
+
+	/**
+	 * Returns a sequential {@code Stream} with this collection as its source.
+	 *
+	 * @return a sequential {@code Stream} over the elements in this collection
+	 * @implSpec The default implementation creates a sequential {@code Stream} from the
+	 * 		collection's {@code Spliterator}.
+	 * @since 0.8.0
+	 */
+	Stream<T> stream();
 
 }

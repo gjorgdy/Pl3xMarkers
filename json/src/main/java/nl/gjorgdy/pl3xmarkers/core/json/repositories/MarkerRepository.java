@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public abstract class MarkerRepository<T extends Marker> implements IMarkerRepository<T> {
 
@@ -56,6 +57,11 @@ public abstract class MarkerRepository<T extends Marker> implements IMarkerRepos
 	@Override
 	public void foreach(Consumer<T> action) {
 		data.forEach(action);
+	}
+
+	@Override
+	public Stream<T> stream() {
+		return data.stream();
 	}
 
 	/**

@@ -9,18 +9,21 @@ import nl.gjorgdy.pl3xmarkers.core.helpers.PolygonArea;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IAreaMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IAreaMarker;
 import nl.gjorgdy.pl3xmarkers.core.markers.AreaMarkerBuilder;
+import nl.gjorgdy.pl3xmarkers.core.markers.MarkerBuilder;
 import nl.gjorgdy.pl3xmarkers.core.objects.Boundary;
 import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Optional;
 
-public class AreaMarkerLayer extends MarkerLayer<IAreaMarker> {
+public class AreaMarkerLayer extends StoredMarkerLayer<IAreaMarker, IAreaMarkerRepository<? extends IAreaMarker>> {
 
 	private HashMap<String, Boundary> boundaries;
 
@@ -37,26 +40,16 @@ public class AreaMarkerLayer extends MarkerLayer<IAreaMarker> {
     }
 
 	@Override
-	public void loadMarker(IAreaMarker area) {
+	public MarkerBuilder<?> createBuilder(IAreaMarker area) {
 		super.removeMarker(area);
 		if (boundaries != null) {
 			boundaries.remove(area.getKey());
 		}
 		var points = area.getPoints();
 		if (points == null || points.isEmpty()) {
-			return;
+			return null;
 		}
-        var orderedPoints = ConvexHull.calculate(new ArrayList<>(area.getPoints()));
-		var popupBuilder = new StringBuilder();
-		popupBuilder.append(HtmlHelper.sanitize(area.getName()));
-		if (MarkersConfig.AREA_MARKERS_SHOW_SIZE) {
-			var polygonArea = PolygonArea.calculate(orderedPoints);
-			var areaFormatted = new DecimalFormat("#.#").format(polygonArea);
-			popupBuilder
-					.append("<br><i>")
-					.append(areaFormatted)
-					.append(" b²<i/>");
-		}
+		var orderedPoints = ConvexHull.calculate(new ArrayList<>(area.getPoints()));
 		if (MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED) {
 			boundaries.put(
 				area.getKey(),
@@ -64,18 +57,59 @@ public class AreaMarkerLayer extends MarkerLayer<IAreaMarker> {
 			);
 		}
 		if (!orderedPoints.isEmpty()) {
-			var markerBuilder = AreaMarkerBuilder
-					.newAreaMarker(area.getKey(), orderedPoints)
+			return AreaMarkerBuilder.newAreaMarker(area.getKey(), orderedPoints)
 					.fill(area.getColor())
 					.stroke(area.getColor());
-			if (MarkersConfig.AREA_MARKERS_MARKERS_ALWAYS_SHOW_NAME) {
-				markerBuilder.addPermanentTooltip(popupBuilder.toString());
-			} else {
-				markerBuilder.addPopup(popupBuilder.toString());
-			}
-			addMarker(markerBuilder);
 		}
-    }
+		return null;
+	}
+
+	private String createContent(IAreaMarker area) {
+		var popupBuilder = new StringBuilder();
+		popupBuilder.append(HtmlHelper.sanitize(area.getName()));
+		if (MarkersConfig.AREA_MARKERS_SHOW_SIZE) {
+			var polygonArea = PolygonArea.calculate(boundaries.get(area.getKey()).orderedPoints());
+			var areaFormatted = new DecimalFormat("#.#").format(polygonArea);
+			popupBuilder
+					.append("<br><i>")
+					.append(areaFormatted)
+					.append(" b²<i/>");
+		}
+		return popupBuilder.toString();
+	}
+
+	@Override
+	protected @Nullable String createPermanentCenteredTooltip(IAreaMarker object) {
+		return MarkersConfig.AREA_MARKERS_MARKERS_ALWAYS_SHOW_NAME ? createContent(object) : null;
+	}
+
+	@Override
+	protected @Nullable String createPopup(IAreaMarker object) {
+		return !MarkersConfig.AREA_MARKERS_MARKERS_ALWAYS_SHOW_NAME ? createContent(object) : null;
+	}
+
+	@Override
+	public Optional<? extends IAreaMarker> getMarker(String key) {
+		return getRepository().stream()
+				.filter(m -> m.getKey().equals(key))
+				.findFirst();
+	}
+
+	@Override
+	public Optional<String> getClosestMarker(int x, int y, int z) {
+		getRepository().stream()
+				.min(Comparator.comparingDouble(m -> distanceFromArea(m, x, y, z)))
+				.map(IAreaMarker::getKey);
+		return Optional.empty();
+	}
+
+	private double distanceFromArea(IAreaMarker area, int x, int y, int z) {
+		area.getPoints().stream()
+				.min(Comparator.comparingDouble(m -> m.distance(x, y, z)))
+				.map(m -> m.distance(x, y, z))
+				.orElse(Double.MAX_VALUE);
+		return Double.MAX_VALUE;
+	}
 
     /**
      * Add a new point to an area
@@ -115,7 +149,8 @@ public class AreaMarkerLayer extends MarkerLayer<IAreaMarker> {
 		   .findFirst();
 	}
 
-	private IAreaMarkerRepository<?> getRepository() {
+	@Override
+	protected IAreaMarkerRepository<? extends IAreaMarker> getRepository() {
 		return Pl3xMarkersCore.storage()
 				.getWorldRepository(worldIdentifier)
 				.getAreaMarkerRepository(getKey());
