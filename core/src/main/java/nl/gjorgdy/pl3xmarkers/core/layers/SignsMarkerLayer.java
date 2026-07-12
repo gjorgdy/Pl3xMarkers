@@ -16,7 +16,7 @@ import org.intellij.lang.annotations.Language;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SignsMarkerLayer extends MarkerLayer {
+public class SignsMarkerLayer extends MarkerLayer<ISignMarker> {
 
 	public final String key = Layers.Keys.SIGNS;
 	public final String iconId = Icons.Keys.SIGN;
@@ -27,7 +27,7 @@ public class SignsMarkerLayer extends MarkerLayer {
 
 	@Override
 	public void load() {
-		getRepository().foreach(this::addMarker);
+		getRepository().foreach(this::loadMarker);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class SignsMarkerLayer extends MarkerLayer {
 			super.removeMarker(toMarkerKey(x, y, z));
 			edited = true;
 		}
-		addMarker(
+		loadMarker(
 				getRepository().editOrCreate(x, y, z, text)
 		);
 		return InteractionResult.added(edited ? "Edited sign marker" : "Added sign marker");
@@ -69,7 +69,8 @@ public class SignsMarkerLayer extends MarkerLayer {
 		return InteractionResult.skip();
 	}
 
-	protected <T extends ISignMarker> void addMarker(T markerEntity) {
+	@Override
+	public void loadMarker(ISignMarker markerEntity) {
 		List<String> sanitizedText = new ArrayList<>();
 		var text = markerEntity.getText();
 		if (MarkersConfig.SIGN_MARKERS_FILL_LINES) {

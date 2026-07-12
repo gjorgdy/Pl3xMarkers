@@ -9,7 +9,7 @@ import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class SimpleMarkerLayer extends MarkerLayer {
+public abstract class SimpleMarkerLayer extends MarkerLayer<ISimpleMarker> {
 
     public final String iconId;
     public final String key;
@@ -27,7 +27,7 @@ public abstract class SimpleMarkerLayer extends MarkerLayer {
 
     @Override
     public void load() {
-        getRepository().foreach(this::addMarker);
+        getRepository().foreach(this::loadMarker);
     }
 
     final protected boolean addInternal(int x, int y, int z) {
@@ -36,7 +36,7 @@ public abstract class SimpleMarkerLayer extends MarkerLayer {
         }
         var marker = getRepository().create(x, y, z);
         if (marker != null) {
-            addMarker(marker);
+            loadMarker(marker);
 			return true;
         }
 		return false;
@@ -120,13 +120,8 @@ public abstract class SimpleMarkerLayer extends MarkerLayer {
         return removed ? InteractionResult.removed("Removed " + tooltip + " marker") : InteractionResult.skip();
     }
 
-    private void updateMarker(ISimpleMarker markerEntity) {
-        var pos = markerEntity.getPosition();
-        super.removeMarker(toMarkerKey(pos.x(), pos.y(), pos.z()));
-        addMarker(markerEntity);
-    }
-
-    final protected void addMarker(ISimpleMarker markerEntity) {
+    @Override
+    public void loadMarker(ISimpleMarker markerEntity) {
         var pos = markerEntity.getPosition();
         var icon = IconMarkerBuilder.newIconMarker(
                         toMarkerKey(pos.x(), pos.y(), pos.z()), iconId, pos.x(), pos.z()

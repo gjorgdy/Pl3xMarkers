@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
-public class AreaMarkerLayer extends MarkerLayer {
+public class AreaMarkerLayer extends MarkerLayer<IAreaMarker> {
 
 	private HashMap<String, Boundary> boundaries;
 
@@ -33,11 +33,12 @@ public class AreaMarkerLayer extends MarkerLayer {
 		if (MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED) {
 			boundaries = new HashMap<>();
 		}
-	    getRepository().foreach(this::loadArea);
+	    getRepository().foreach(this::loadMarker);
     }
 
-	private void loadArea(IAreaMarker area) {
-		super.removeMarker(area.getKey());
+	@Override
+	public void loadMarker(IAreaMarker area) {
+		super.removeMarker(area);
 		if (boundaries != null) {
 			boundaries.remove(area.getKey());
 		}
@@ -72,7 +73,7 @@ public class AreaMarkerLayer extends MarkerLayer {
 			} else {
 				markerBuilder.addPopup(popupBuilder.toString());
 			}
-			super.addMarker(markerBuilder);
+			addMarker(markerBuilder);
 		}
     }
 
@@ -82,7 +83,7 @@ public class AreaMarkerLayer extends MarkerLayer {
     public InteractionResult addPoint(@Language("HTML") String label, int color, int x, int y, int z) {
 	    var area = getRepository().getOrCreate(label, color);
 	    if (area.addPoint(x, y, z)) {
-			Pl3xMarkersCore.runParallel(() -> loadArea(area));
+		    Pl3xMarkersCore.runParallel(() -> loadMarker(area));
 		    if (area.getPoints().size() == 1) {
 			    return InteractionResult.added("Created area: " + label);
 		    }
@@ -97,9 +98,9 @@ public class AreaMarkerLayer extends MarkerLayer {
     public InteractionResult removePoint(@Language("HTML") String label, int color, int x, int y, int z) {
 	    var area = getRepository().get(label, color);
 	    if (area != null && area.removePoint(x, y, z)) {
-			Pl3xMarkersCore.runParallel(() -> loadArea(area));
+		    Pl3xMarkersCore.runParallel(() -> loadMarker(area));
 		    if (area.isEmpty()) {
-			    super.removeMarker(area.getKey());
+			    super.removeMarker(area);
 			    getRepository().remove(label, color);
 			    return InteractionResult.removed("Removed area: " + label);
 		    }

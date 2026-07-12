@@ -4,6 +4,7 @@ import net.pl3x.map.core.configuration.PlayersLayerConfig;
 import net.pl3x.map.core.markers.marker.Marker;
 import net.pl3x.map.core.world.World;
 import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IMarker;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.markers.IconMarkerBuilder;
 import nl.gjorgdy.pl3xmarkers.core.registries.Icons;
@@ -14,7 +15,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class LightningMarkerLayer extends MarkerLayer {
+public class LightningMarkerLayer extends MarkerLayer<IMarker> {
 
 	private final ScheduledExecutorService executorService = new ScheduledThreadPoolExecutor(1);
 
@@ -26,6 +27,11 @@ public class LightningMarkerLayer extends MarkerLayer {
 
 	@Override
 	public void load() {
+		// ignore
+	}
+
+	@Override
+	public void loadMarker(IMarker markerEntity) {
 		// ignore
 	}
 

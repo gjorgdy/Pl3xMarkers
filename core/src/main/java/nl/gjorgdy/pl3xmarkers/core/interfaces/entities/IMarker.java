@@ -16,4 +16,11 @@ public interface IMarker {
 	 */
 	String getLayerKey();
 
+	/**
+	 * Gets the key for this marker
+	 *
+	 * @return the key of this marker
+	 */
+	String getKey();
+
 }

@@ -35,6 +35,6 @@ public class JsonStorage implements IStorage {
 	}
 
 	public void write() {
-		worldRepositories.forEach((k, repo) -> repo.write());
+		worldRepositories.forEach((_, repo) -> repo.write());
 	}
 }
