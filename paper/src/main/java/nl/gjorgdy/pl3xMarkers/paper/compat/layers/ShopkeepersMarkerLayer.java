@@ -8,6 +8,7 @@ import nl.gjorgdy.pl3xMarkers.paper.PaperMarkersConfig;
 import nl.gjorgdy.pl3xMarkers.paper.Pl3xMarkersPaper;
 import nl.gjorgdy.pl3xMarkers.paper.compat.helpers.ShopkeeperItemsHelper;
 import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IMarker;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.MarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.markers.IconMarkerBuilder;
 import nl.gjorgdy.pl3xmarkers.core.registries.Icons;
@@ -15,7 +16,7 @@ import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.intellij.lang.annotations.Language;
 import org.jspecify.annotations.NonNull;
 
-public class ShopkeepersMarkerLayer extends MarkerLayer {
+public class ShopkeepersMarkerLayer extends MarkerLayer<IMarker> {
 
 	public ShopkeepersMarkerLayer(@NonNull World world) {
 		super(Layers.Keys.SHOPKEEPERS, Layers.Labels.SHOPKEEPERS, world, PaperMarkersConfig.SHOPKEEPERS_MARKERS_PRIORITY);
@@ -29,6 +30,11 @@ public class ShopkeepersMarkerLayer extends MarkerLayer {
 		} else {
 			plugin.getLogger().warning("Shopkeepers plugin is not enabled, cannot load shopkeeper markers.");
 		}
+	}
+
+	@Override
+	public void loadMarker(IMarker markerEntity) {
+		// ignore
 	}
 
 	public void loadShopkeeper(Shopkeeper shopkeeper) {

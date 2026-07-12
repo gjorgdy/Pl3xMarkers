@@ -71,8 +71,9 @@ public abstract class SimpleMarkerLayer extends MarkerLayer<ISimpleMarker> {
      */
     public InteractionResult setName(int x, int y, int z, String newName) {
         boolean named = setNameInternal(x, y, z, newName);
-        return named ? InteractionResult.added("Renamed " + tooltip + " marker") : InteractionResult.failure(
-                "Could not rename " + tooltip + " marker");
+        return named
+                ? InteractionResult.added("Renamed " + tooltip + " marker to '" + newName + "'")
+                : InteractionResult.failure("Could not rename " + tooltip + " marker");
     }
 
     final protected boolean setNameInternal(int x, int y, int z, String newName) {

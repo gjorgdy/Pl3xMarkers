@@ -1,24 +1,64 @@
 package nl.gjorgdy.pl3xMarkers.paper.listeners;
 
+import net.kyori.adventure.text.TextComponent;
 import nl.gjorgdy.pl3xMarkers.paper.helpers.FeedbackHelper;
 import nl.gjorgdy.pl3xMarkers.paper.helpers.PortalHelper;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.layers.NetherPortalMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.BlockType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.jspecify.annotations.Nullable;
 
 public class NetherPortalListener implements Listener {
 
     @EventHandler
     public void onPortalTeleport(PlayerPortalEvent event) {
         if (event.getCause() == PlayerTeleportEvent.TeleportCause.NETHER_PORTAL) {
-            onNetherPortalTeleport(event.getFrom());
+            onNetherPortalTeleport(event.getFrom(), event.getPlayer());
+        }
+    }
+
+    @EventHandler
+    public void onUseNametag(PlayerInteractEvent event) {
+        if (event.getItem() == null || event.getClickedBlock() == null) {
+            return;
+        }
+        if (event.getItem().getType().equals(Material.NAME_TAG) && event.getClickedBlock().getType().equals(
+                Material.NETHER_PORTAL)) {
+            var loc = event.getClickedBlock().getLocation();
+            var center = PortalHelper.getNetherPortalCenter(loc);
+            var markerLayer = Pl3xMarkersCore.api()
+                    .getWorld(loc.getWorld().getName())
+                    .getLayer(NetherPortalMarkerLayer.class, Layers.Keys.NETHER_PORTALS);
+            if (markerLayer == null) {
+                return;
+            }
+            var nameComponent = event.getItem().getItemMeta().customName();
+            if (nameComponent == null) {
+                return;
+            }
+            if (nameComponent instanceof TextComponent text) {
+                var result = markerLayer.setName(
+                        center.getBlockX(), center.getBlockY(), center.getBlockZ(), text.content()
+                );
+                FeedbackHelper.sendFeedback(result, event.getPlayer());
+                if (event.getHand() != null) {
+                    event.getPlayer().swingMainHand();
+                }
+                if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+                    event.getItem().subtract(1);
+                }
+            }
         }
     }
 
@@ -34,7 +74,7 @@ public class NetherPortalListener implements Listener {
                         nearby.set(location.getBlockX() + x, location.getBlockY() + y, location.getBlockZ() + z);
                         if (nearby.getBlock().getType().asBlockType() == BlockType.NETHER_PORTAL) {
                             var center = PortalHelper.getNetherPortalCenter(nearby);
-                            onNetherPortalBreak(center);
+                            onNetherPortalBreak(center, event.getPlayer());
                             return;
                         }
                     }
@@ -43,11 +83,11 @@ public class NetherPortalListener implements Listener {
         }
         if (blockType == BlockType.NETHER_PORTAL) {
             var center = PortalHelper.getNetherPortalCenter(location);
-            onNetherPortalBreak(center);
+            onNetherPortalBreak(center, event.getPlayer());
         }
     }
 
-    private void onNetherPortalBreak(Location location) {
+    private void onNetherPortalBreak(Location location, @Nullable Player player) {
         var center = PortalHelper.getNetherPortalCenter(location);
         var markerLayer = Pl3xMarkersCore.api()
                 .getWorld(location.getWorld().getName())
@@ -56,10 +96,14 @@ public class NetherPortalListener implements Listener {
             return;
         }
         var result = markerLayer.remove(center.getBlockX(), center.getBlockY(), center.getBlockZ());
-		FeedbackHelper.sendFeedback(result, center);
+        if (player == null) {
+            FeedbackHelper.sendFeedback(result, center);
+        } else {
+            FeedbackHelper.sendFeedback(result, player);
+        }
     }
 
-    private void onNetherPortalTeleport(Location location) {
+    private void onNetherPortalTeleport(Location location, @Nullable Player player) {
         var center = PortalHelper.getNetherPortalCenter(location);
         var markerLayer = Pl3xMarkersCore.api()
                 .getWorld(location.getWorld().getName())
@@ -68,7 +112,11 @@ public class NetherPortalListener implements Listener {
             return;
         }
         var result = markerLayer.add(center.getBlockX(), center.getBlockY(), center.getBlockZ());
-        FeedbackHelper.sendFeedback(result, location);
+        if (player == null) {
+            FeedbackHelper.sendFeedback(result, center);
+        } else {
+            FeedbackHelper.sendFeedback(result, player);
+        }
     }
 
 }
