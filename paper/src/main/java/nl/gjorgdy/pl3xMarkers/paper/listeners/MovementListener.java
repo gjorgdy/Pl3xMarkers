@@ -4,8 +4,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.IBoundary;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.objects.PolygonBoundary;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,9 +16,9 @@ import java.util.UUID;
 
 public class MovementListener implements Listener {
 
-	private final HashMap<UUID, PolygonBoundary> playerBoundaries;
+	private final HashMap<UUID, IBoundary> playerBoundaries;
 
-	public MovementListener(HashMap<UUID, PolygonBoundary> playerBoundaries) {
+	public MovementListener(HashMap<UUID, IBoundary> playerBoundaries) {
 		this.playerBoundaries = playerBoundaries;
 	}
 

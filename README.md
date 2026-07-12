@@ -33,8 +33,9 @@ All without the need for any commands and all fully configurable
 - An area can have a max distance of 512 blocks between its furthest points.
 - The names on the banners need to be an exact match.
 - The placement order does not matter, the points will be connected automatically.
-- You can add or remove points as you wish, the area will adept.
-- For the best results, use at least 4 points.
+- You can add or remove points as you wish, the area will adapt.
+- 2 points in a straight line create a circle.
+- 2 points not in a straight line create a rectangle.
 
 </details>
 
