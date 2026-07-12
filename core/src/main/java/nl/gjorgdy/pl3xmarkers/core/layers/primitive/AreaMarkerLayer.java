@@ -5,27 +5,26 @@ import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.helpers.ConvexHull;
 import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
-import nl.gjorgdy.pl3xmarkers.core.helpers.PolygonArea;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IAreaMarkerRepository;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.IBoundary;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IAreaMarker;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
 import nl.gjorgdy.pl3xmarkers.core.markers.AreaMarkerBuilder;
 import nl.gjorgdy.pl3xmarkers.core.markers.MarkerBuilder;
-import nl.gjorgdy.pl3xmarkers.core.objects.Boundary;
+import nl.gjorgdy.pl3xmarkers.core.objects.CircleBoundary;
 import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
+import nl.gjorgdy.pl3xmarkers.core.objects.PolygonBoundary;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Optional;
+import java.util.*;
 
 public class AreaMarkerLayer extends StoredMarkerLayer<IAreaMarker, IAreaMarkerRepository<? extends IAreaMarker>> {
 
-	private HashMap<String, Boundary> boundaries;
+	private HashMap<String, IBoundary> boundaries;
 
 	public AreaMarkerLayer(@NotNull World world) {
 		super(Layers.Keys.AREAS, Layers.Labels.AREAS, world, MarkersConfig.AREA_MARKERS_PRIORITY);
@@ -49,11 +48,29 @@ public class AreaMarkerLayer extends StoredMarkerLayer<IAreaMarker, IAreaMarkerR
 		if (points == null || points.isEmpty()) {
 			return null;
 		}
+		// If there are 2 points in line, make a circle instead of a polygon
+		if (points.size() == 2 && areInline(points)) {
+			var sorted = points.stream()
+					.sorted(Comparator.comparingInt(IPoint::x).thenComparingInt(IPoint::z))
+					.toList();
+			var center = sorted.get(0).middle(sorted.get(1));
+			var radius = (int) Math.round(sorted.get(0).distance(sorted.get(1)) / 2);
+			if (MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED) {
+				boundaries.put(
+						area.getKey(),
+						new CircleBoundary(center, radius, area)
+				);
+			}
+			return AreaMarkerBuilder.newAreaMarker(area.getKey(), center, radius)
+					.fill(area.getColor())
+					.stroke(area.getColor());
+		}
+
 		var orderedPoints = ConvexHull.calculate(new ArrayList<>(area.getPoints()));
 		if (MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED) {
 			boundaries.put(
 				area.getKey(),
-				new Boundary(area.getMinCorner(), area.getMaxCorner(), orderedPoints, area)
+				new PolygonBoundary(area.getMinCorner(), area.getMaxCorner(), orderedPoints, area)
 			);
 		}
 		if (!orderedPoints.isEmpty()) {
@@ -64,11 +81,26 @@ public class AreaMarkerLayer extends StoredMarkerLayer<IAreaMarker, IAreaMarkerR
 		return null;
 	}
 
+	private boolean areInline(Collection<? extends IPoint> points) {
+		IPoint lastPoint = null;
+		for (var point : points) {
+			if (lastPoint == null) {
+				lastPoint = point;
+				continue;
+			}
+			if (lastPoint.x() != point.x() && lastPoint.z() != point.z()) {
+				return false;
+			}
+			lastPoint = point;
+		}
+		return true;
+	}
+
 	private String createContent(IAreaMarker area) {
 		var popupBuilder = new StringBuilder();
 		popupBuilder.append(HtmlHelper.sanitize(area.getName()));
 		if (MarkersConfig.AREA_MARKERS_SHOW_SIZE) {
-			var polygonArea = PolygonArea.calculate(boundaries.get(area.getKey()).orderedPoints());
+			var polygonArea = boundaries.get(area.getKey()).size();
 			var areaFormatted = new DecimalFormat("#.#").format(polygonArea);
 			popupBuilder
 					.append("<br><i>")
@@ -143,7 +175,7 @@ public class AreaMarkerLayer extends StoredMarkerLayer<IAreaMarker, IAreaMarkerR
 	    return InteractionResult.skip();
     }
 
-	public Optional<Boundary> getContaining(int x, int z) {
+	public Optional<IBoundary> getContaining(int x, int z) {
 		return boundaries.values().stream()
 		   .filter(b -> b.contains(x, z))
 		   .findFirst();

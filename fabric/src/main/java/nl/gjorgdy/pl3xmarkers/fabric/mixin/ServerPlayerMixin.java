@@ -7,8 +7,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.interfaces.IBoundary;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.AreaMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.objects.Boundary;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.fabric.helpers.FeedbackHelper;
 import org.jspecify.annotations.NonNull;
@@ -22,7 +22,7 @@ public abstract class ServerPlayerMixin extends Player {
 	@Unique
 	private final ServerPlayer player = (ServerPlayer) (Object) this;
 	@Unique
-	private Boundary boundary = null;
+	private IBoundary boundary = null;
 
 	public ServerPlayerMixin(Level world, GameProfile profile) {
 		super(world, profile);

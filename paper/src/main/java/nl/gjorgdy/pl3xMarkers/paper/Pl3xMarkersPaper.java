@@ -5,7 +5,7 @@ import nl.gjorgdy.pl3xMarkers.paper.compat.listeners.ShopkeepersListener;
 import nl.gjorgdy.pl3xMarkers.paper.listeners.*;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.json.JsonStorage;
-import nl.gjorgdy.pl3xmarkers.core.objects.Boundary;
+import nl.gjorgdy.pl3xmarkers.core.objects.PolygonBoundary;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @SuppressWarnings("unused") // Called by paper
 public final class Pl3xMarkersPaper extends JavaPlugin {
 
-    private final HashMap<UUID, Boundary> playerBoundaries = new HashMap<>();
+    private final HashMap<UUID, PolygonBoundary> playerBoundaries = new HashMap<>();
 
     private final JsonStorage storage = new JsonStorage("plugins/Pl3xMarkers");
 

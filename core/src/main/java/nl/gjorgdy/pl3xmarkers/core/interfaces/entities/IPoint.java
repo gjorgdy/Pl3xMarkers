@@ -65,6 +65,21 @@ public interface IPoint extends Comparable<IPoint> {
 	}
 
 	/**
+	 * Get the middle between these 2 points.
+	 *
+	 * @param other the other point
+	 * @return the middle of 2 points
+	 */
+	@CheckReturnValue
+	default IPoint middle(IPoint other) {
+		return this.set(
+				(this.x() + other.x()) / 2,
+				(this.y() + other.y()) / 2,
+				(this.z() + other.z()) / 2
+		);
+	}
+
+	/**
 	 * Compare this point to another point. The comparison is based on the sum of the differences in x and z
 	 * coordinates.
 	 * The y coordinate is ignored as they are not important

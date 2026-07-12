@@ -1,12 +1,15 @@
 package nl.gjorgdy.pl3xmarkers.core.objects;
 
+import nl.gjorgdy.pl3xmarkers.core.interfaces.IBoundary;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IAreaMarker;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.IPoint;
 
 import java.util.List;
 
-public record Boundary(IPoint min, IPoint max, List<? extends IPoint> orderedPoints, IAreaMarker areaMarker) {
+public record PolygonBoundary(IPoint min, IPoint max, List<? extends IPoint> orderedPoints,
+                              IAreaMarker areaMarker) implements IBoundary {
 
+	@Override
 	public boolean contains(int x, int z) {
 		boolean xInside = x >= min().x() && x <= max().x();
 		boolean zInside = z >= min().z() && z <= max().z();
@@ -26,6 +29,26 @@ public record Boundary(IPoint min, IPoint max, List<? extends IPoint> orderedPoi
 		}
 
 		return inside;
+	}
+
+	@Override
+	public double size() {
+		int n = orderedPoints.size();
+		if (n < 3) {
+			return 0.0;
+		}
+
+		long sum = 0;
+
+		for (int i = 0; i < n; i++) {
+			IPoint current = orderedPoints.get(i);
+			IPoint next = orderedPoints.get((i + 1) % n);
+
+			sum += (long) current.x() * next.z();
+			sum -= (long) current.z() * next.x();
+		}
+
+		return Math.abs(sum) / 2.0;
 	}
 
 }

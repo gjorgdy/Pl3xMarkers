@@ -27,8 +27,23 @@ public class ConvexHull {
     public static List<IPoint> calculate(List<IPoint> points) {
 	    if (points.isEmpty()) {
 		    return points;
-	    } else if (points.size() < 3) {
+	    } else if (points.size() < 2) {
 		    return minimalArea(points.getFirst());
+	    } else if (points.size() == 2) {
+		    var a = points.get(0);
+		    var b = points.get(1);
+
+		    var minX = Math.min(a.x(), b.x());
+		    var maxX = Math.max(a.x(), b.x());
+		    var minZ = Math.min(a.z(), b.z());
+		    var maxZ = Math.max(a.z(), b.z());
+
+		    return List.of(
+				    a.set(minX, 0, minZ),
+				    a.set(minX, 0, maxZ),
+				    a.set(maxX, 0, maxZ),
+				    a.set(maxX, 0, minZ)
+		    );
 	    }
 
         // Sort points
