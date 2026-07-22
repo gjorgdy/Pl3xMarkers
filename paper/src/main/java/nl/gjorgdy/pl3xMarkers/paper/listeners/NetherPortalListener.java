@@ -5,6 +5,7 @@ import nl.gjorgdy.pl3xMarkers.paper.helpers.FeedbackHelper;
 import nl.gjorgdy.pl3xMarkers.paper.helpers.PortalHelper;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.layers.NetherPortalMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -52,11 +53,13 @@ public class NetherPortalListener implements Listener {
                         center.getBlockX(), center.getBlockY(), center.getBlockZ(), text.content()
                 );
                 FeedbackHelper.sendFeedback(result, event.getPlayer());
-                if (event.getHand() != null) {
-                    event.getPlayer().swingMainHand();
-                }
-                if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
-                    event.getItem().subtract(1);
+                if (result.state().equals(InteractionResult.State.ADDED)) {
+                    if (event.getHand() != null) {
+                        event.getPlayer().swingMainHand();
+                    }
+                    if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+                        event.getItem().subtract(1);
+                    }
                 }
             }
         }

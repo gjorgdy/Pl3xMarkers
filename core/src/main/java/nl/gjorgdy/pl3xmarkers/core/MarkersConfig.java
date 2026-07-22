@@ -38,6 +38,12 @@ public class MarkersConfig extends AbstractConfig {
 	@Key("marker-settings.nether_portals.enabled")
 	@Comment("Enable nether portal markers on the map")
 	public static boolean NETHER_PORTAL_MARKERS_ENABLED = true;
+	@Key("marker-settings.nether_portals.rename")
+	@Comment("Allow nether portal markers to be renamed using name tags")
+	public static boolean NETHER_PORTAL_MARKERS_RENAME = true;
+	@Key("marker-settings.nether_portals.always-show-name")
+	@Comment("Always show the name of nether portals on the map")
+	public static boolean NETHER_PORTAL_MARKERS_ALWAYS_SHOW_NAME = true;
 	@Key("marker-settings.nether_portals.priority")
 	@Comment("The priority for nether portal markers, the lower the number the higher it is on the map")
 	public static int NETHER_PORTAL_MARKERS_PRIORITY = 50;

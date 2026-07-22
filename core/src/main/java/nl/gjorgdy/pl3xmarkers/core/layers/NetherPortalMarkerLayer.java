@@ -6,6 +6,7 @@ import nl.gjorgdy.pl3xmarkers.core.helpers.HtmlHelper;
 import nl.gjorgdy.pl3xmarkers.core.helpers.WorldHelpers;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.ISimpleMarker;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.SimpleMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
 import nl.gjorgdy.pl3xmarkers.core.registries.Icons;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import org.intellij.lang.annotations.Language;
@@ -16,6 +17,14 @@ public class NetherPortalMarkerLayer extends SimpleMarkerLayer {
 
     public NetherPortalMarkerLayer(@NotNull World world) {
         super(Icons.Keys.NETHER_PORTAL, Layers.Keys.NETHER_PORTALS, Layers.Labels.NETHER_PORTALS, Layers.Tooltips.NETHER_PORTALS, world, MarkersConfig.NETHER_PORTAL_MARKERS_PRIORITY);
+    }
+
+    @Override
+    public InteractionResult setName(int x, int y, int z, String newName) {
+        if (!MarkersConfig.NETHER_PORTAL_MARKERS_RENAME) {
+            return InteractionResult.skip();
+        }
+        return super.setName(x, y, z, newName);
     }
 
     @Override
@@ -37,7 +46,7 @@ public class NetherPortalMarkerLayer extends SimpleMarkerLayer {
 
     @Override
     protected @Nullable String createPermanentBottomTooltip(ISimpleMarker object) {
-        if (object.getName() != null) {
+        if (MarkersConfig.NETHER_PORTAL_MARKERS_ALWAYS_SHOW_NAME && object.getName() != null) {
             return createTooltip(object);
         }
         return null;
