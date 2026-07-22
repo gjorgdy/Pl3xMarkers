@@ -14,6 +14,12 @@ public class MarkersConfig extends AbstractConfig {
 	@Key("settings.feedback.area-enter")
 	@Comment("Enable action messages when entering an area")
 	public static boolean FEEDBACK_AREA_ENTER_ENABLED = true;
+	@Key("marker-settings.players.nether-to-overworld")
+	@Comment("Show players in the nether transparently on the overworld map")
+	public static boolean PLAYERS_NETHER_IN_OVERWORLD = true;
+	@Key("marker-settings.players.overworld-to-nether")
+	@Comment("Show players in the overworld transparently on the nether map")
+	public static boolean PLAYERS_OVERWORLD_IN_NETHER = true;
 	@Key("marker-settings.areas.enabled")
 	@Comment("Enable player made areas on the map")
 	public static boolean AREA_MARKERS_ENABLED = true;

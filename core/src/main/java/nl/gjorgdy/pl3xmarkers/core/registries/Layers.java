@@ -44,6 +44,12 @@ public class Layers {
 			new LayerFactory(
 					LightningMarkerLayer::new,
 					world -> MarkersConfig.LIGHTNING_MARKERS_ENABLED && WorldHelpers.isOverworld(world)
+			),
+			new LayerFactory(
+					CrossDimensionPlayerMarkerLayer::new,
+					world ->
+							MarkersConfig.PLAYERS_NETHER_IN_OVERWORLD && WorldHelpers.isOverworld(world)
+									|| MarkersConfig.PLAYERS_OVERWORLD_IN_NETHER && WorldHelpers.isNether(world)
 			)
 	));
 
@@ -69,6 +75,8 @@ public class Layers {
 		public static String SIGNS = "signs";
 		public static String SHOPKEEPERS = "shopkeepers";
 		public static String LIGHTNING = "lightning";
+		public static String NETHER_PLAYERS = "nether_players";
+		public static String OVERWORLD_PLAYERS = "overworld_players";
 	}
 
 	public static class Labels {
@@ -81,6 +89,8 @@ public class Layers {
 		public static String SIGNS = "Signs";
 		public static String SHOPKEEPERS = "Shopkeepers";
 		public static String LIGHTNING = "Lightning Strikes";
+		public static String NETHER_PLAYERS = "Nether Players";
+		public static String OVERWORLD_PLAYERS = "Overworld Players";
 	}
 
 	public static class Tooltips {
