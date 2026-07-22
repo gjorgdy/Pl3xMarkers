@@ -90,6 +90,10 @@ public abstract class SimpleMarkerLayer extends StoredMarkerLayer<ISimpleMarker,
      * @param z z coordinate of marker
      */
     public InteractionResult setName(int x, int y, int z, String newName) {
+        var marker = getMarker(toMarkerKey(x, y, z));
+        if (marker.isPresent() && marker.get().getName() != null && marker.get().getName().equals(newName)) {
+            return InteractionResult.skip();
+        }
         boolean named = setNameInternal(x, y, z, newName);
         return named
                 ? InteractionResult.added("Renamed " + tooltip + " marker to '" + newName + "'")
