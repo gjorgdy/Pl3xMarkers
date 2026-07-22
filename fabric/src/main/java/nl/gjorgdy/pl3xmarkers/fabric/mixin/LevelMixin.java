@@ -1,15 +1,10 @@
 package nl.gjorgdy.pl3xmarkers.fabric.mixin;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
-import nl.gjorgdy.pl3xmarkers.core.layers.NetherPortalMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.layers.SignsMarkerLayer;
-import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.fabric.helpers.FeedbackHelper;
+import nl.gjorgdy.pl3xmarkers.fabric.listeners.BlockListener;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,27 +19,8 @@ public class LevelMixin {
 
     @Inject(method = "setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;II)Z", at = @At("HEAD"))
     public void onBlockChanged(BlockPos pos, BlockState blockState, int updateFlags, int updateLimit, CallbackInfoReturnable<Boolean> cir) {
-        var currentBlockState = level.getBlockState(pos);
-
-        if (currentBlockState.is(Blocks.NETHER_PORTAL) && !blockState.is(Blocks.NETHER_PORTAL)) {
-            var markerLayer = Pl3xMarkersCore.api()
-                    .getWorld(level.dimension().identifier().toString())
-                    .getLayer(NetherPortalMarkerLayer.class, Layers.Keys.NETHER_PORTALS);
-            if (markerLayer == null) {
-                return;
-            }
-            var result = markerLayer.remove(pos.getX(), pos.getY(), pos.getZ());
-            FeedbackHelper.sendFeedback(result, level, pos);
-        }
-
-        if (currentBlockState.is(BlockTags.STANDING_SIGNS) && !blockState.is(BlockTags.STANDING_SIGNS)) {
-            var markerLayer = Pl3xMarkersCore.api()
-                    .getWorld(level.dimension().identifier().toString())
-                    .getLayer(SignsMarkerLayer.class, Layers.Keys.SIGNS);
-            if (markerLayer == null) {
-                return;
-            }
-            var result = markerLayer.remove(pos.getX(), pos.getY(), pos.getZ());
+        var result = BlockListener.onChange(level, pos, level.getBlockState(pos), blockState);
+        if (result != null) {
             FeedbackHelper.sendFeedback(result, level, pos);
         }
     }
