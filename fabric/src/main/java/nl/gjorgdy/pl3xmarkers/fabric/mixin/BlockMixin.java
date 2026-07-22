@@ -69,18 +69,19 @@ public class BlockMixin {
         }
         // area markers
 	    if (level instanceof ServerLevel serverWorld) {
-            var blockEntity = serverWorld.getBlockEntity(
-                state.is(Blocks.LODESTONE) ? pos.above() : pos
-            );
+		    if (state.is(Blocks.LODESTONE)) {
+			    pos = pos.above();
+		    }
+		    var blockEntity = serverWorld.getBlockEntity(pos);
             if (blockEntity instanceof BannerBlockEntity banner) {
-                @Language("HTML") var name = banner.getName().tryCollapseToString();
-	            if (name == null) {
-		            return;
-	            }
 	            var markerLayer = Pl3xMarkersCore.api()
 			            .getWorld(level.dimension().identifier().toString())
 			            .getLayer(AreaMarkerLayer.class, Layers.Keys.AREAS);
 	            if (markerLayer == null) {
+		            return;
+	            }
+	            @Language("HTML") var name = banner.getName().tryCollapseToString();
+	            if (name == null) {
 		            return;
 	            }
 	            var result = markerLayer.removePoint(
