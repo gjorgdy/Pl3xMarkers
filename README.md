@@ -17,6 +17,7 @@
 - Lightning strikes
 - Beacons
 - Signs
+- Cross-dimensional players
 
 All without the need for any commands and all fully configurable
 
