@@ -1,8 +1,6 @@
-﻿Cross-Dimensional
+﻿Shattering Discovery
 ---
 
-- Show players in the nether transparently on the overworld map and vice-versa
-- Fixed area points not being removed when lodestone broken instead of banner 
-- Fixed area points not being removed on being exploded
-- Added config option for nether portal naming and showing
-- Do not change marker name if new name is the same
+- Fixed Nether Portals markers being incorrectly created on Paper causing them to not be removed on break.
+    - Recommended to manually remove all portals with a Y-coordinate of 0 in
+      ``plugins/Pl3xMarkers/[world]/nether_portals.json``
