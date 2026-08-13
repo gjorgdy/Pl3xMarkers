@@ -4,6 +4,7 @@ main: nl.gjorgdy.pl3xMarkers.paper.Pl3xMarkersPaper
 api-version: '1.21'
 authors: [ Gjorgdy ]
 website: https://hexasis.eu/
+folia-supported: true
 loadbefore: [ Pl3xMap ]
 softdepend: [ Shopkeepers ]
 depend: [ Pl3xMap ]
