@@ -14,6 +14,57 @@ public class MarkersConfig extends AbstractConfig {
 	@Key("settings.feedback.area-enter")
 	@Comment("Enable action messages when entering an area")
 	public static boolean FEEDBACK_AREA_ENTER_ENABLED = true;
+	@Key("messages.marker.add")
+	@Comment("Message shown when adding a marker. Use {type} for the marker type")
+	public static String MESSAGE_MARKER_ADD = "Added {type} marker";
+	@Key("messages.marker.rename")
+	@Comment("Message shown when renaming a marker. Use {type} and {name}")
+	public static String MESSAGE_MARKER_RENAME = "Renamed {type} marker to '{name}'";
+	@Key("messages.marker.rename-failed")
+	@Comment("Message shown when renaming a marker fails. Use {type}")
+	public static String MESSAGE_MARKER_RENAME_FAILED = "Could not rename {type} marker";
+	@Key("messages.marker.color")
+	@Comment("Message shown when coloring a marker. Use {type}")
+	public static String MESSAGE_MARKER_COLOR = "Colored {type} marker";
+	@Key("messages.marker.color-failed")
+	@Comment("Message shown when coloring a marker fails. Use {type}")
+	public static String MESSAGE_MARKER_COLOR_FAILED = "Could not color {type} marker";
+	@Key("messages.marker.remove")
+	@Comment("Message shown when removing a marker. Use {type}")
+	public static String MESSAGE_MARKER_REMOVE = "Removed {type} marker";
+	@Key("messages.area.create")
+	@Comment("Message shown when creating an area. Use {label} for its name")
+	public static String MESSAGE_AREA_CREATE = "Created area: {label}";
+	@Key("messages.area.point-add")
+	@Comment("Message shown when adding a point to an area. Use {label} for its name")
+	public static String MESSAGE_AREA_POINT_ADD = "Added point to area: {label}";
+	@Key("messages.area.point-add-failed")
+	@Comment("Message shown when adding a point to an area fails. Use {label} for its name")
+	public static String MESSAGE_AREA_POINT_ADD_FAILED = "Could not add point to area: {label}";
+	@Key("messages.area.remove")
+	@Comment("Message shown when removing an area. Use {label} for its name")
+	public static String MESSAGE_AREA_REMOVE = "Removed area: {label}";
+	@Key("messages.area.point-remove")
+	@Comment("Message shown when removing a point from an area. Use {label} for its name")
+	public static String MESSAGE_AREA_POINT_REMOVE = "Removed point from area: {label}";
+	@Key("messages.area.enter")
+	@Comment("Message shown when entering an area. Use {name} for its name")
+	public static String MESSAGE_AREA_ENTER = "[+] {name}";
+	@Key("messages.area.leave")
+	@Comment("Message shown when leaving an area. Use {name} for its name")
+	public static String MESSAGE_AREA_LEAVE = "[-] {name}";
+	@Key("messages.sign.invalid-text")
+	@Comment("Message shown when sign text is invalid")
+	public static String MESSAGE_SIGN_INVALID_TEXT = "Text should be a String array with a size of 4";
+	@Key("messages.sign.add")
+	@Comment("Message shown when adding a sign marker")
+	public static String MESSAGE_SIGN_ADD = "Added sign marker";
+	@Key("messages.sign.edit")
+	@Comment("Message shown when editing a sign marker")
+	public static String MESSAGE_SIGN_EDIT = "Edited sign marker";
+	@Key("messages.sign.remove")
+	@Comment("Message shown when removing a sign marker")
+	public static String MESSAGE_SIGN_REMOVE = "Removed sign marker";
 	@Key("marker-settings.players.nether-to-overworld")
 	@Comment("Show players in the nether transparently on the overworld map")
 	public static boolean PLAYERS_NETHER_IN_OVERWORLD = true;

@@ -1,6 +1,7 @@
 package nl.gjorgdy.pl3xmarkers.core.layers.primitive;
 
 import net.pl3x.map.core.world.World;
+import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.ISimpleMarkerRepository;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.entities.ISimpleMarker;
@@ -55,7 +56,7 @@ public abstract class SimpleMarkerLayer extends StoredMarkerLayer<ISimpleMarker,
      */
     public InteractionResult add(int x, int y, int z) {
         boolean added = addInternal(x, y, z);
-        return added ? InteractionResult.added("Added " + tooltip + " marker") : InteractionResult.skip();
+        return added ? InteractionResult.added(MarkersConfig.MESSAGE_MARKER_ADD.replace("{type}", tooltip)) : InteractionResult.skip();
     }
 
     @Override
@@ -96,8 +97,8 @@ public abstract class SimpleMarkerLayer extends StoredMarkerLayer<ISimpleMarker,
         }
         boolean named = setNameInternal(x, y, z, newName);
         return named
-                ? InteractionResult.added("Renamed " + tooltip + " marker to '" + newName + "'")
-                : InteractionResult.failure("Could not rename " + tooltip + " marker");
+                ? InteractionResult.added(MarkersConfig.MESSAGE_MARKER_RENAME.replace("{type}", tooltip).replace("{name}", newName))
+                : InteractionResult.failure(MarkersConfig.MESSAGE_MARKER_RENAME_FAILED.replace("{type}", tooltip));
     }
 
     final protected boolean setNameInternal(int x, int y, int z, String newName) {
@@ -119,8 +120,8 @@ public abstract class SimpleMarkerLayer extends StoredMarkerLayer<ISimpleMarker,
      */
     public InteractionResult setColor(int x, int y, int z, int newColor) {
         boolean colored = setColorInternal(x, y, z, newColor);
-        return colored ? InteractionResult.added("Colored " + tooltip + " marker") : InteractionResult.failure(
-                "Could not color " + tooltip + " marker");
+        return colored ? InteractionResult.added(MarkersConfig.MESSAGE_MARKER_COLOR.replace("{type}", tooltip)) : InteractionResult.failure(
+            MarkersConfig.MESSAGE_MARKER_COLOR_FAILED.replace("{type}", tooltip));
     }
 
     final protected boolean setColorInternal(int x, int y, int z, int newColor) {
@@ -158,7 +159,7 @@ public abstract class SimpleMarkerLayer extends StoredMarkerLayer<ISimpleMarker,
      */
     public InteractionResult remove(int x, int y, int z) {
         boolean removed = removeInternal(x, y, z);
-        return removed ? InteractionResult.removed("Removed " + tooltip + " marker") : InteractionResult.skip();
+        return removed ? InteractionResult.removed(MarkersConfig.MESSAGE_MARKER_REMOVE.replace("{type}", tooltip)) : InteractionResult.skip();
     }
 
     @Override

@@ -51,14 +51,14 @@ public class MovementListener implements Listener {
 				.ifPresentOrElse(b ->
 		{
 			player.sendActionBar(
-				Component.text("[+] " + b.areaMarker().getName())
+				Component.text(MarkersConfig.MESSAGE_AREA_ENTER.replace("{name}", b.areaMarker().getName()))
 					.color(TextColor.color(b.areaMarker().getColor()))
 			);
 			playerBoundaries.put(player.getUniqueId(), b);
 		}, () -> {
 			if (boundary != null) {
 				player.sendActionBar(
-					Component.text("[-] " + boundary.areaMarker().getName())
+					Component.text(MarkersConfig.MESSAGE_AREA_LEAVE.replace("{name}", boundary.areaMarker().getName()))
 						.color(TextColor.color(boundary.areaMarker().getColor()))
 				);
 			}

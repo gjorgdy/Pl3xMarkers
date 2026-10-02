@@ -151,11 +151,11 @@ public class AreaMarkerLayer extends StoredMarkerLayer<IAreaMarker, IAreaMarkerR
 	    if (area.addPoint(x, y, z)) {
 		    Pl3xMarkersCore.runParallel(() -> loadMarker(area));
 		    if (area.getPoints().size() == 1) {
-			    return InteractionResult.added("Created area: " + label);
+			    return InteractionResult.added(MarkersConfig.MESSAGE_AREA_CREATE.replace("{label}", label));
 		    }
-		    return InteractionResult.added("Added point to area: " + label);
+		    return InteractionResult.added(MarkersConfig.MESSAGE_AREA_POINT_ADD.replace("{label}", label));
         }
-	    return InteractionResult.failure("Could not add point to area: " + label);
+	    return InteractionResult.failure(MarkersConfig.MESSAGE_AREA_POINT_ADD_FAILED.replace("{label}", label));
     }
 
     /**
@@ -168,9 +168,9 @@ public class AreaMarkerLayer extends StoredMarkerLayer<IAreaMarker, IAreaMarkerR
 		    if (area.isEmpty()) {
 			    super.removeMarker(area);
 			    getRepository().remove(label, color);
-			    return InteractionResult.removed("Removed area: " + label);
+			    return InteractionResult.removed(MarkersConfig.MESSAGE_AREA_REMOVE.replace("{label}", label));
 		    }
-		    return InteractionResult.removed("Removed point from area: " + label);
+		    return InteractionResult.removed(MarkersConfig.MESSAGE_AREA_POINT_REMOVE.replace("{label}", label));
         }
 	    return InteractionResult.skip();
     }
