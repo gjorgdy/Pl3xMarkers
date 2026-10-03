@@ -55,7 +55,7 @@ public class SignsMarkerLayer extends StoredMarkerLayer<ISignMarker, ISignMarker
 	 */
 	public InteractionResult set(int x, int y, int z, @Language("HTML") String[] text) {
 		if (text == null || text.length != 4) {
-			return InteractionResult.failure("Text should be a String array with a size of 4");
+			return InteractionResult.failure(MarkersConfig.MESSAGE_SIGN_INVALID_TEXT);
 		}
 		boolean edited = false;
 		if (hasMarker(toMarkerKey(x, y, z))) {
@@ -65,7 +65,7 @@ public class SignsMarkerLayer extends StoredMarkerLayer<ISignMarker, ISignMarker
 		loadMarker(
 				getRepository().editOrCreate(x, y, z, text)
 		);
-		return InteractionResult.added(edited ? "Edited sign marker" : "Added sign marker");
+		return InteractionResult.added(edited ? MarkersConfig.MESSAGE_SIGN_EDIT : MarkersConfig.MESSAGE_SIGN_ADD);
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class SignsMarkerLayer extends StoredMarkerLayer<ISignMarker, ISignMarker
 		var removed = getRepository().remove(x, y, z);
 		if (removed) {
 			super.removeMarker(toMarkerKey(x, y, z));
-			return InteractionResult.removed("Removed sign marker");
+			return InteractionResult.removed(MarkersConfig.MESSAGE_SIGN_REMOVE);
 		}
 		return InteractionResult.skip();
 	}

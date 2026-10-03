@@ -61,7 +61,7 @@ public abstract class ServerPlayerMixin extends Player {
 					this.boundary = boundary;
 					FeedbackHelper.sendOverlayMessage(
 							player,
-							"[+] " + boundary.areaMarker().getName(),
+							MarkersConfig.MESSAGE_AREA_ENTER.replace("{name}", boundary.areaMarker().getName()),
 							boundary.areaMarker().getColor()
 					);
 				},
@@ -71,7 +71,7 @@ public abstract class ServerPlayerMixin extends Player {
 					}
 					FeedbackHelper.sendOverlayMessage(
 							player,
-							"[-] " + boundary.areaMarker().getName(),
+							MarkersConfig.MESSAGE_AREA_LEAVE.replace("{name}", boundary.areaMarker().getName()),
 							boundary.areaMarker().getColor()
 					);
 					boundary = null;
