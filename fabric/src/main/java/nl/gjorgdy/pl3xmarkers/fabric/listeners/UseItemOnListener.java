@@ -34,10 +34,14 @@ public class UseItemOnListener implements BlockEvents.UseItemOnCallback {
 		if (portalCenter == null) {
 			return null;
 		}
+		if (interactionHand == InteractionHand.OFF_HAND) {
+			return null;
+		}
 		if (itemStack.is(Items.NAME_TAG)) {
 			return useNameTagOnPortal(level, (ServerPlayer) player, interactionHand, itemStack, portalCenter);
+		} else {
+			return usePortal(level, (ServerPlayer) player, interactionHand, portalCenter);
 		}
-		return null;
 	}
 
 	private InteractionResult useNameTagOnPortal(Level level, ServerPlayer player, InteractionHand interactionHand, ItemStack nameTagItem, BlockPos portalCenter) {
@@ -58,6 +62,24 @@ public class UseItemOnListener implements BlockEvents.UseItemOnCallback {
 		FeedbackHelper.sendFeedback(result, player);
 		if (result.state().equals(State.ADDED)) {
 			nameTagItem.consume(1, player);
+			player.swing(interactionHand, true);
+		}
+		if (result.state().equals(State.FEEDBACK)) {
+			player.swing(interactionHand, true);
+		}
+		return InteractionResult.SUCCESS;
+	}
+
+	private InteractionResult usePortal(Level level, ServerPlayer player, InteractionHand interactionHand, BlockPos portalCenter) {
+		var layer = Pl3xMarkersCore.api()
+				.getWorld(level.dimension().identifier().toString())
+				.getLayer(NetherPortalMarkerLayer.class, Layers.Keys.NETHER_PORTALS);
+		if (layer == null) {
+			return InteractionResult.PASS;
+		}
+		var result = layer.interact(portalCenter.getX(), portalCenter.getY(), portalCenter.getZ());
+		FeedbackHelper.sendFeedback(result, player);
+		if (result.state().equals(State.FEEDBACK)) {
 			player.swing(interactionHand, true);
 		}
 		return InteractionResult.SUCCESS;

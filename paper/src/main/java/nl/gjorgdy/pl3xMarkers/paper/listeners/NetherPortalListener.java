@@ -31,11 +31,10 @@ public class NetherPortalListener implements Listener {
 
     @EventHandler
     public void onUseNametag(PlayerInteractEvent event) {
-        if (event.getItem() == null || event.getClickedBlock() == null) {
+        if (event.getClickedBlock() == null) {
             return;
         }
-        if (event.getItem().getType().equals(Material.NAME_TAG) && event.getClickedBlock().getType().equals(
-                Material.NETHER_PORTAL)) {
+        if (event.getClickedBlock().getType().equals(Material.NETHER_PORTAL)) {
             var loc = event.getClickedBlock().getLocation();
             var center = PortalHelper.getNetherPortalCenter(loc);
             if (center == null) {
@@ -47,21 +46,38 @@ public class NetherPortalListener implements Listener {
             if (markerLayer == null) {
                 return;
             }
-            var nameComponent = event.getItem().getItemMeta().customName();
-            if (nameComponent == null) {
-                return;
-            }
-            if (nameComponent instanceof TextComponent text) {
-                var result = markerLayer.setName(
-                        center.getBlockX(), center.getBlockY(), center.getBlockZ(), text.content()
+            if (event.getItem() != null && event.getItem().getType().equals(Material.NAME_TAG)) {
+                var nameComponent = event.getItem().getItemMeta().customName();
+                if (nameComponent == null) {
+                    return;
+                }
+                if (nameComponent instanceof TextComponent text) {
+                    var result = markerLayer.setName(
+                            center.getBlockX(), center.getBlockY(), center.getBlockZ(), text.content()
+                    );
+                    FeedbackHelper.sendFeedback(result, event.getPlayer());
+                    if (result.state().equals(InteractionResult.State.ADDED)) {
+                        if (event.getHand() != null) {
+                            event.getPlayer().swingMainHand();
+                        }
+                        if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
+                            event.getItem().subtract(1);
+                        }
+                    }
+                    if (result.state().equals(InteractionResult.State.FEEDBACK)) {
+                        if (event.getHand() != null) {
+                            event.getPlayer().swingMainHand();
+                        }
+                    }
+                }
+            } else {
+                var result = markerLayer.interact(
+                        center.getBlockX(), center.getBlockY(), center.getBlockZ()
                 );
                 FeedbackHelper.sendFeedback(result, event.getPlayer());
-                if (result.state().equals(InteractionResult.State.ADDED)) {
+                if (result.state().equals(InteractionResult.State.FEEDBACK)) {
                     if (event.getHand() != null) {
                         event.getPlayer().swingMainHand();
-                    }
-                    if (!event.getPlayer().getGameMode().equals(GameMode.CREATIVE)) {
-                        event.getItem().subtract(1);
                     }
                 }
             }

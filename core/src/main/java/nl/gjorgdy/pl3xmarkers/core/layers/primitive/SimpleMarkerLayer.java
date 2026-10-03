@@ -48,6 +48,25 @@ public abstract class SimpleMarkerLayer extends StoredMarkerLayer<ISimpleMarker,
     }
 
     /**
+     * Interact with a marker
+     *
+     * @param x x coordinate of marker
+     * @param y y coordinate of marker
+     * @param z z coordinate of marker
+     */
+    public InteractionResult interact(int x, int y, int z) {
+        var marker = getMarker(toMarkerKey(x, y, z));
+        if (marker.isEmpty()) {
+            return InteractionResult.skip();
+        }
+        var name = marker.map(ISimpleMarker::getName).orElse("");
+        if (name.isEmpty()) {
+            return InteractionResult.skip();
+        }
+        return InteractionResult.feedback(name);
+    }
+
+    /**
      * Add a new marker
      *
      * @param x x coordinate of marker
@@ -91,24 +110,21 @@ public abstract class SimpleMarkerLayer extends StoredMarkerLayer<ISimpleMarker,
      * @param z z coordinate of marker
      */
     public InteractionResult setName(int x, int y, int z, String newName) {
-        var marker = getMarker(toMarkerKey(x, y, z));
-        if (marker.isPresent() && marker.get().getName() != null && marker.get().getName().equals(newName)) {
-            return InteractionResult.skip();
-        }
-        boolean named = setNameInternal(x, y, z, newName);
-        return named
-                ? InteractionResult.added(MarkersConfig.MESSAGE_MARKER_RENAME.replace("{type}", tooltip).replace("{name}", newName))
-                : InteractionResult.failure(MarkersConfig.MESSAGE_MARKER_RENAME_FAILED.replace("{type}", tooltip));
+        return setNameInternal(x, y, z, newName);
     }
 
-    final protected boolean setNameInternal(int x, int y, int z, String newName) {
+    final protected InteractionResult setNameInternal(int x, int y, int z, String newName) {
         var marker = getRepository().getOrCreate(x, y, z);
         if (marker == null) {
-            return false;
+            return InteractionResult.failure(MarkersConfig.MESSAGE_MARKER_RENAME_FAILED.replace("{type}", tooltip));
+        }
+        if (marker.getName() != null && marker.getName().equals(newName)) {
+            return InteractionResult.feedback(marker.getName());
         }
         marker.setName(newName);
         updateMarker(marker);
-        return true;
+        return InteractionResult.added(
+                MarkersConfig.MESSAGE_MARKER_RENAME.replace("{type}", tooltip).replace("{name}", newName));
     }
 
     /**

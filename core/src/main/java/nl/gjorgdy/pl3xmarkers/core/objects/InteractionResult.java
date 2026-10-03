@@ -22,8 +22,13 @@ public record InteractionResult(State state, String message) {
 		return new InteractionResult(State.FAILURE, "");
 	}
 
+	public static InteractionResult feedback(String message) {
+		return new InteractionResult(State.FEEDBACK, message);
+	}
+
 	public enum State {
 		ADDED,
+		FEEDBACK,
 		REMOVED,
 		FAILURE,
 		SKIP
