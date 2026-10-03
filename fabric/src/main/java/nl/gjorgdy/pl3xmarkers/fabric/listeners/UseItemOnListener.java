@@ -9,6 +9,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
@@ -62,10 +63,10 @@ public class UseItemOnListener implements BlockEvents.UseItemOnCallback {
 		FeedbackHelper.sendFeedback(result, player);
 		if (result.state().equals(State.ADDED)) {
 			nameTagItem.consume(1, player);
-			player.swing(interactionHand, true);
+			player.swing(interactionHand, SwingAnimation.DEFAULT, true);
 		}
 		if (result.state().equals(State.FEEDBACK)) {
-			player.swing(interactionHand, true);
+			player.swing(interactionHand, SwingAnimation.DEFAULT, true);
 		}
 		return InteractionResult.SUCCESS;
 	}
@@ -80,7 +81,7 @@ public class UseItemOnListener implements BlockEvents.UseItemOnCallback {
 		var result = layer.interact(portalCenter.getX(), portalCenter.getY(), portalCenter.getZ());
 		FeedbackHelper.sendFeedback(result, player);
 		if (result.state().equals(State.FEEDBACK)) {
-			player.swing(interactionHand, true);
+			player.swing(interactionHand, SwingAnimation.DEFAULT, true);
 		}
 		return InteractionResult.SUCCESS;
 	}

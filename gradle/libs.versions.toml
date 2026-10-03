@@ -1,16 +1,16 @@
 [versions]
-minecraft = "26.2"
+minecraft = "26.3"
 
 # https://fabricmc.net/develop/
-fabricLoader = "0.19.3"
-fabricApi = "0.154.2+26.2"
-fabricLoom = "1.15-SNAPSHOT"
+fabricLoader = "0.19.5"
+fabricApi = "0.161.0+26.3"
+fabricLoom = "1.17-SNAPSHOT"
 
 pl3xmap = "26.2-551"
 openPartiesAndClaims = "fabric-26.2-0.27.7"
 shopkeepers = "2.27.0"
 
-paper = "26.2.build.+"
+paper = "26.3.build.+"
 
 shadow = "9.3.0"
 minotaur="2.+" # https://github.com/modrinth/minotaur

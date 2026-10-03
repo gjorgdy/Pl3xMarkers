@@ -1,6 +1,5 @@
-﻿Feedback Update
+﻿Map the Wilderness
 ---
 
-- Added config options to change the feedback messages ([trassert #11](https://github.com/gjorgdy/Pl3xMarkers/pull/11))
-- Interacting with (clicking on) a portal will show its name in the action bar
-    - The same will now happen when trying to rename a portal to a name it already has
+- Experimental update to 26.3
+    - Based on a [snapshot build of Pl3xMap](https://github.com/granny/Pl3xMap/pull/168)

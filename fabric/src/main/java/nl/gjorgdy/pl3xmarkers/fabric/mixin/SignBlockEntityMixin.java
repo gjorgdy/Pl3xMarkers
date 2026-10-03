@@ -9,10 +9,7 @@ import net.minecraft.server.network.FilteredText;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.SignBlockEntity;
-import net.minecraft.world.level.block.entity.SignText;
+import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.BlockState;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.layers.SignsMarkerLayer;
@@ -23,7 +20,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Mixin(SignBlockEntity.class)
@@ -34,20 +30,20 @@ public abstract class SignBlockEntityMixin extends BlockEntity {
 	}
 
 	@Shadow
-	public abstract SignText getText(boolean isFrontText);
+	public abstract SignText getText(SignTextSlot slot);
 
 	@WrapMethod(method = "updateSignText")
-	private void onChangeText(Player player, boolean frontText, List<FilteredText> lines, Operation<Void> original) {
+	private void onChangeText(Player player, SignTextSlot slot, List<FilteredText> lines, Operation<Void> original) {
 		if (isNotMarkerSign() || level == null) {
-			original.call(player, frontText, lines);
+			original.call(player, slot, lines);
 			return;
 		}
 
-		var textBefore = getText(true).getMessages(false);
-		original.call(player, frontText, lines);
-		var textAfter = getText(true).getMessages(false);
+		var textBefore = getText(slot).getMessages(false);
+		original.call(player, slot, lines);
+		var textAfter = getText(slot).getMessages(false);
 
-		if (Arrays.equals(textBefore, textAfter)) {
+		if (textBefore.equals(textAfter)) {
 			// no changes
 			return;
 		}
@@ -71,7 +67,8 @@ public abstract class SignBlockEntityMixin extends BlockEntity {
 	@Unique
 	@Language("HTML")
 	private String[] getSignTextLines() {
-		return Arrays.stream(getText(true).getMessages(false))
+		return getText(SignTextSlot.FRONT).getMessages(false)
+				.stream()
 				.map(Component::getString)
 				.toArray(String[]::new);
 	}
