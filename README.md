@@ -66,6 +66,14 @@ All without the need for any commands and all fully configurable
 
 </details>
 
+<details>
+<summary>Rename a marker</summary>
+
+1. Rename a name tag in an anvil.
+2. Click on the block the marker is for with the name tag in your hand.
+
+</details>
+
 ## FAQ
 ### Q: The layers are not showing up on my web map, what do I do?
 A: You most likely use custom names for your worlds. Make sure they use the correct suffix structure: ``{worldname}``, ``{worldname}_nether``, ``{worldname}_the_end``

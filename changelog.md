@@ -1,6 +1,7 @@
 ﻿Feedback Update Part 2
 ---
 
+- Added an option to only show named Nether Portals.
 - Added more feedback types for entering and leaving an area;
   - None
   - ActionBar (Default)
