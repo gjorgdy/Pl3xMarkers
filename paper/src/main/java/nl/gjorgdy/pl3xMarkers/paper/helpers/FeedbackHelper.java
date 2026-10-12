@@ -47,6 +47,12 @@ public class FeedbackHelper {
 		});
 	}
 
+	public static void sendOverlayMessage(Player player, String message, int color) {
+		player.sendActionBar(
+				Component.text(message).color(TextColor.color(color))
+		);
+	}
+
 	private static int color(InteractionResult.State state) {
 		return switch (state) {
 			case ADDED -> 0x59ff59;

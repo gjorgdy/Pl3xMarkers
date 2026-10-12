@@ -23,6 +23,8 @@ public abstract class ServerPlayerMixin extends Player {
 	private final ServerPlayer player = (ServerPlayer) (Object) this;
 	@Unique
 	private IBoundary boundary = null;
+	@Unique
+	private int boundaryPresenceLength = 0;
 
 	public ServerPlayerMixin(Level world, GameProfile profile) {
 		super(world, profile);
@@ -44,8 +46,18 @@ public abstract class ServerPlayerMixin extends Player {
 		var worldIdentifier = level().dimension().identifier().toString();
 
 		if (boundary != null && boundary.contains(pos.getX(), pos.getZ())) {
+			boundaryPresenceLength++;
+			// area presence
+			if (boundaryPresenceLength > 40 && MarkersConfig.FEEDBACK_AREA_PRESENCE) {
+				FeedbackHelper.sendOverlayMessage(
+						player,
+						boundary.areaMarker().getName(),
+						boundary.areaMarker().getColor()
+				);
+			}
 			return;
 		}
+		boundaryPresenceLength = 0;
 
 		var markerLayer = Pl3xMarkersCore.api()
 				.getWorld(worldIdentifier)

@@ -1,7 +1,6 @@
 package nl.gjorgdy.pl3xMarkers.paper.listeners;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
+import nl.gjorgdy.pl3xMarkers.paper.helpers.FeedbackHelper;
 import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.interfaces.IBoundary;
@@ -17,6 +16,7 @@ import java.util.UUID;
 public class MovementListener implements Listener {
 
 	private final HashMap<UUID, IBoundary> playerBoundaries;
+	private final HashMap<UUID, Integer> boundaryPresenceLengths = new HashMap<>();
 
 	public MovementListener(HashMap<UUID, IBoundary> playerBoundaries) {
 		this.playerBoundaries = playerBoundaries;
@@ -35,8 +35,19 @@ public class MovementListener implements Listener {
 				event.getTo().getBlockX(),
 				event.getTo().getBlockZ()
 		)) {
+			var boundaryPresenceLength = boundaryPresenceLengths.getOrDefault(player.getUniqueId(), 0);
+			boundaryPresenceLengths.put(player.getUniqueId(), boundaryPresenceLength + 1);
+			// area presence
+			if (boundaryPresenceLength > 40 && MarkersConfig.FEEDBACK_AREA_PRESENCE) {
+				FeedbackHelper.sendOverlayMessage(
+						player,
+						boundary.areaMarker().getName(),
+						boundary.areaMarker().getColor()
+				);
+			}
 			return;
 		}
+		boundaryPresenceLengths.put(player.getUniqueId(), 0);
 
 		var markerLayer = Pl3xMarkersCore.api()
 				.getWorld(event.getTo().getWorld().getName())
@@ -50,16 +61,18 @@ public class MovementListener implements Listener {
 				)
 				.ifPresentOrElse(b ->
 		{
-			player.sendActionBar(
-				Component.text(MarkersConfig.MESSAGE_AREA_ENTER.replace("{name}", b.areaMarker().getName()))
-					.color(TextColor.color(b.areaMarker().getColor()))
+			FeedbackHelper.sendOverlayMessage(
+					player,
+					MarkersConfig.MESSAGE_AREA_ENTER.replace("{name}", b.areaMarker().getName()),
+					b.areaMarker().getColor()
 			);
 			playerBoundaries.put(player.getUniqueId(), b);
 		}, () -> {
 			if (boundary != null) {
-				player.sendActionBar(
-					Component.text(MarkersConfig.MESSAGE_AREA_LEAVE.replace("{name}", boundary.areaMarker().getName()))
-						.color(TextColor.color(boundary.areaMarker().getColor()))
+				FeedbackHelper.sendOverlayMessage(
+						player,
+						MarkersConfig.MESSAGE_AREA_LEAVE.replace("{name}", boundary.areaMarker().getName()),
+						boundary.areaMarker().getColor()
 				);
 			}
 			playerBoundaries.remove(player.getUniqueId());

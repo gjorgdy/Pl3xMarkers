@@ -14,6 +14,9 @@ public class MarkersConfig extends AbstractConfig {
 	@Key("settings.feedback.area-enter")
 	@Comment("Enable action messages when entering an area")
 	public static boolean FEEDBACK_AREA_ENTER_ENABLED = true;
+	@Key("settings.feedback.area-presence")
+	@Comment("Show the name of the area the player is in as an action message")
+	public static boolean FEEDBACK_AREA_PRESENCE = false;
 	@Key("messages.marker.add")
 	@Comment("Message shown when adding a marker. Use {type} for the marker type")
 	public static String MESSAGE_MARKER_ADD = "Added {type} marker";
