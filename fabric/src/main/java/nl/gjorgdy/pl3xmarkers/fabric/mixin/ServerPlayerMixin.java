@@ -38,7 +38,13 @@ public abstract class ServerPlayerMixin extends Player {
 	protected void applyInput() {
 		super.applyInput();
 
-		if (!MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED || !MarkersConfig.AREA_MARKERS_ENABLED) {
+		// If no area feedback is enabled, return early
+		if (
+				(MarkersConfig.FEEDBACK_AREA_ENTER == MarkersConfig.EnterOrLeave.None
+						&& MarkersConfig.FEEDBACK_AREA_LEAVE == MarkersConfig.EnterOrLeave.None
+						&& MarkersConfig.FEEDBACK_AREA_PRESENCE == MarkersConfig.Presence.None)
+						|| !MarkersConfig.AREA_MARKERS_ENABLED
+		) {
 			return;
 		}
 
@@ -48,8 +54,16 @@ public abstract class ServerPlayerMixin extends Player {
 		if (boundary != null && boundary.contains(pos.getX(), pos.getZ())) {
 			boundaryPresenceLength++;
 			// area presence
-			if (boundaryPresenceLength > 40 && MarkersConfig.FEEDBACK_AREA_PRESENCE) {
+			if (boundaryPresenceLength > 40 && MarkersConfig.FEEDBACK_AREA_PRESENCE == MarkersConfig.Presence.ActionBar) {
 				FeedbackHelper.sendOverlayMessage(
+						player,
+						boundary.areaMarker().getName(),
+						boundary.areaMarker().getColor()
+				);
+			}
+			// boss bar
+			if (MarkersConfig.FEEDBACK_AREA_PRESENCE == MarkersConfig.Presence.BossBar) {
+				FeedbackHelper.showBossBar(
 						player,
 						boundary.areaMarker().getName(),
 						boundary.areaMarker().getColor()
@@ -57,6 +71,7 @@ public abstract class ServerPlayerMixin extends Player {
 			}
 			return;
 		}
+		FeedbackHelper.hideBossBar(player);
 		boundaryPresenceLength = 0;
 
 		var markerLayer = Pl3xMarkersCore.api()
@@ -71,21 +86,35 @@ public abstract class ServerPlayerMixin extends Player {
 				boundary ->
 				{
 					this.boundary = boundary;
-					FeedbackHelper.sendOverlayMessage(
-							player,
-							MarkersConfig.MESSAGE_AREA_ENTER.replace("{name}", boundary.areaMarker().getName()),
-							boundary.areaMarker().getColor()
-					);
+					var text = MarkersConfig.MESSAGE_AREA_ENTER.replace("{name}", boundary.areaMarker().getName());
+					switch (MarkersConfig.FEEDBACK_AREA_ENTER) {
+						case ActionBar -> FeedbackHelper.sendOverlayMessage(
+								player, text, boundary.areaMarker().getColor()
+						);
+						case Title -> FeedbackHelper.sendTitle(
+								player, text, boundary.areaMarker().getColor()
+						);
+						case Subtitle -> FeedbackHelper.sendSubTitle(
+								player, text, boundary.areaMarker().getColor()
+						);
+					}
 				},
 				() -> {
 					if (boundary == null) {
 						return;
 					}
-					FeedbackHelper.sendOverlayMessage(
-							player,
-							MarkersConfig.MESSAGE_AREA_LEAVE.replace("{name}", boundary.areaMarker().getName()),
-							boundary.areaMarker().getColor()
-					);
+					var text = MarkersConfig.MESSAGE_AREA_LEAVE.replace("{name}", boundary.areaMarker().getName());
+					switch (MarkersConfig.FEEDBACK_AREA_LEAVE) {
+						case ActionBar -> FeedbackHelper.sendOverlayMessage(
+								player, text, boundary.areaMarker().getColor()
+						);
+						case Title -> FeedbackHelper.sendTitle(
+								player, text, boundary.areaMarker().getColor()
+						);
+						case Subtitle -> FeedbackHelper.sendSubTitle(
+								player, text, boundary.areaMarker().getColor()
+						);
+					}
 					boundary = null;
 				}
 		);

@@ -24,7 +24,7 @@ import java.util.*;
 
 public class AreaMarkerLayer extends StoredMarkerLayer<IAreaMarker, IAreaMarkerRepository<? extends IAreaMarker>> {
 
-	private HashMap<String, IBoundary> boundaries;
+	private final HashMap<String, IBoundary> boundaries = new HashMap<>();
 
 	public AreaMarkerLayer(@NotNull World world) {
 		super(Layers.Keys.AREAS, Layers.Labels.AREAS, world, MarkersConfig.AREA_MARKERS_PRIORITY);
@@ -32,9 +32,6 @@ public class AreaMarkerLayer extends StoredMarkerLayer<IAreaMarker, IAreaMarkerR
 
     @Override
     public void load() {
-		if (MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED) {
-			boundaries = new HashMap<>();
-		}
 	    getRepository().foreach(this::loadMarker);
     }
 
@@ -55,7 +52,7 @@ public class AreaMarkerLayer extends StoredMarkerLayer<IAreaMarker, IAreaMarkerR
 					.toList();
 			var center = sorted.get(0).middle(sorted.get(1));
 			var radius = (int) Math.round(sorted.get(0).distance(sorted.get(1)) / 2);
-			if (MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED) {
+			if (MarkersConfig.FEEDBACK_AREA_ENTER != MarkersConfig.EnterOrLeave.None && MarkersConfig.FEEDBACK_AREA_LEAVE != MarkersConfig.EnterOrLeave.None) {
 				boundaries.put(
 						area.getKey(),
 						new CircleBoundary(center, radius, area)
@@ -67,7 +64,7 @@ public class AreaMarkerLayer extends StoredMarkerLayer<IAreaMarker, IAreaMarkerR
 		}
 
 		var orderedPoints = ConvexHull.calculate(new ArrayList<>(area.getPoints()));
-		if (MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED) {
+		if (MarkersConfig.FEEDBACK_AREA_ENTER != MarkersConfig.EnterOrLeave.None && MarkersConfig.FEEDBACK_AREA_LEAVE != MarkersConfig.EnterOrLeave.None) {
 			boundaries.put(
 				area.getKey(),
 				new PolygonBoundary(area.getMinCorner(), area.getMaxCorner(), orderedPoints, area)

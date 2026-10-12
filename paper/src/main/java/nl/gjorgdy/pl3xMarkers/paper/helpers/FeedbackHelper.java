@@ -1,14 +1,21 @@
 package nl.gjorgdy.pl3xMarkers.paper.helpers;
 
+import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.title.TitlePart;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 public class FeedbackHelper {
+
+	public static HashMap<UUID, BossBar> playerBossBars = new HashMap<>();
 
 	public static void sendFeedback(InteractionResult result, Player player) {
 		if (result.state() == InteractionResult.State.SKIP || Pl3xMarkersCore.isFeedbackDisabled()) {
@@ -50,6 +57,38 @@ public class FeedbackHelper {
 	public static void sendOverlayMessage(Player player, String message, int color) {
 		player.sendActionBar(
 				Component.text(message).color(TextColor.color(color))
+		);
+	}
+
+	public static void sendTitle(Player player, String message, int color) {
+		player.sendTitlePart(TitlePart.TITLE, Component.text(message).color(TextColor.color(color)));
+		player.sendTitlePart(TitlePart.SUBTITLE, Component.empty());
+	}
+
+	public static void sendSubTitle(Player player, String message, int color) {
+		player.sendTitlePart(TitlePart.TITLE, Component.empty());
+		player.sendTitlePart(TitlePart.SUBTITLE, Component.text(message).color(TextColor.color(color)));
+	}
+
+	public static void showBossBar(Player player, String message, int color) {
+		playerBossBars.computeIfAbsent(player.getUniqueId(), _ -> {
+			                               var bar = BossBar.bossBar(
+					                               Component.text(message).color(TextColor.color(color)),
+					                               0,
+					                               BossBar.Color.PURPLE,
+					                               BossBar.Overlay.PROGRESS
+			                               );
+			                               player.showBossBar(bar);
+			                               return bar;
+		                               }
+		);
+	}
+
+	public static void hideBossBar(Player player) {
+		playerBossBars.computeIfPresent(player.getUniqueId(), (_, bar) -> {
+			                                player.hideBossBar(bar);
+			                                return null;
+		                                }
 		);
 	}
 

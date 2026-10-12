@@ -24,7 +24,12 @@ public class MovementListener implements Listener {
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent event) {
-		if (!MarkersConfig.FEEDBACK_AREA_ENTER_ENABLED || !MarkersConfig.AREA_MARKERS_ENABLED) {
+		if (
+				(MarkersConfig.FEEDBACK_AREA_ENTER == MarkersConfig.EnterOrLeave.None
+						&& MarkersConfig.FEEDBACK_AREA_LEAVE == MarkersConfig.EnterOrLeave.None
+						&& MarkersConfig.FEEDBACK_AREA_PRESENCE == MarkersConfig.Presence.None)
+						|| !MarkersConfig.AREA_MARKERS_ENABLED
+		) {
 			return;
 		}
 
@@ -38,8 +43,15 @@ public class MovementListener implements Listener {
 			var boundaryPresenceLength = boundaryPresenceLengths.getOrDefault(player.getUniqueId(), 0);
 			boundaryPresenceLengths.put(player.getUniqueId(), boundaryPresenceLength + 1);
 			// area presence
-			if (boundaryPresenceLength > 40 && MarkersConfig.FEEDBACK_AREA_PRESENCE) {
+			if (boundaryPresenceLength > 40 && MarkersConfig.FEEDBACK_AREA_PRESENCE == MarkersConfig.Presence.ActionBar) {
 				FeedbackHelper.sendOverlayMessage(
+						player,
+						boundary.areaMarker().getName(),
+						boundary.areaMarker().getColor()
+				);
+			}
+			if (MarkersConfig.FEEDBACK_AREA_PRESENCE == MarkersConfig.Presence.BossBar) {
+				FeedbackHelper.showBossBar(
 						player,
 						boundary.areaMarker().getName(),
 						boundary.areaMarker().getColor()
@@ -48,6 +60,7 @@ public class MovementListener implements Listener {
 			return;
 		}
 		boundaryPresenceLengths.put(player.getUniqueId(), 0);
+		FeedbackHelper.hideBossBar(player);
 
 		var markerLayer = Pl3xMarkersCore.api()
 				.getWorld(event.getTo().getWorld().getName())
@@ -61,19 +74,45 @@ public class MovementListener implements Listener {
 				)
 				.ifPresentOrElse(b ->
 		{
-			FeedbackHelper.sendOverlayMessage(
-					player,
-					MarkersConfig.MESSAGE_AREA_ENTER.replace("{name}", b.areaMarker().getName()),
-					b.areaMarker().getColor()
-			);
+			var text = MarkersConfig.MESSAGE_AREA_ENTER.replace("{name}", b.areaMarker().getName());
+			switch (MarkersConfig.FEEDBACK_AREA_ENTER) {
+				case ActionBar -> FeedbackHelper.sendOverlayMessage(
+						player,
+						text,
+						b.areaMarker().getColor()
+				);
+				case Title -> FeedbackHelper.sendTitle(
+						player,
+						text,
+						b.areaMarker().getColor()
+				);
+				case Subtitle -> FeedbackHelper.sendSubTitle(
+						player,
+						text,
+						b.areaMarker().getColor()
+				);
+			}
 			playerBoundaries.put(player.getUniqueId(), b);
 		}, () -> {
 			if (boundary != null) {
-				FeedbackHelper.sendOverlayMessage(
-						player,
-						MarkersConfig.MESSAGE_AREA_LEAVE.replace("{name}", boundary.areaMarker().getName()),
-						boundary.areaMarker().getColor()
-				);
+				var text = MarkersConfig.MESSAGE_AREA_LEAVE.replace("{name}", boundary.areaMarker().getName());
+				switch (MarkersConfig.FEEDBACK_AREA_LEAVE) {
+					case ActionBar -> FeedbackHelper.sendOverlayMessage(
+							player,
+							text,
+							boundary.areaMarker().getColor()
+					);
+					case Title -> FeedbackHelper.sendTitle(
+							player,
+							text,
+							boundary.areaMarker().getColor()
+					);
+					case Subtitle -> FeedbackHelper.sendSubTitle(
+							player,
+							text,
+							boundary.areaMarker().getColor()
+					);
+				}
 			}
 			playerBoundaries.remove(player.getUniqueId());
 		});

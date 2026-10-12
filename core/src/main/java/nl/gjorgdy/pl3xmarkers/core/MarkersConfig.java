@@ -1,6 +1,9 @@
 package nl.gjorgdy.pl3xmarkers.core;
 
 import net.pl3x.map.core.configuration.AbstractConfig;
+import org.jspecify.annotations.NonNull;
+
+import java.nio.file.Path;
 
 public class MarkersConfig extends AbstractConfig {
 
@@ -11,12 +14,9 @@ public class MarkersConfig extends AbstractConfig {
 	@Key("settings.feedback.sound")
 	@Comment("Enable sound effects when adding/removing markers or points")
 	public static boolean FEEDBACK_SOUNDS_ENABLED = true;
-	@Key("settings.feedback.area-enter")
-	@Comment("Enable action messages when entering an area")
-	public static boolean FEEDBACK_AREA_ENTER_ENABLED = true;
-	@Key("settings.feedback.area-presence")
-	@Comment("Show the name of the area the player is in as an action message")
-	public static boolean FEEDBACK_AREA_PRESENCE = false;
+	public static EnterOrLeave FEEDBACK_AREA_ENTER = EnterOrLeave.ActionBar;
+	public static EnterOrLeave FEEDBACK_AREA_LEAVE = EnterOrLeave.ActionBar;
+	public static Presence FEEDBACK_AREA_PRESENCE = Presence.None;
 	@Key("messages.marker.add")
 	@Comment("Message shown when adding a marker. Use {type} for the marker type")
 	public static String MESSAGE_MARKER_ADD = "Added {type} marker";
@@ -143,8 +143,39 @@ public class MarkersConfig extends AbstractConfig {
 	@Key("marker-settings.lightning.lifetime")
 	@Comment("The lifetime of a lightning strike marker in seconds")
 	public static int LIGHTNING_MARKERS_LIFETIME = 3;
+	@Key("settings.feedback.area-on-enter")
+	@Comment("Show the name of the area the player enters. Options: None, ActionBar, Title, Subtitle")
+	public static String FEEDBACK_AREA_ENTER_STRING = "ActionBar";
+	@Key("settings.feedback.area-on-leave")
+	@Comment("Show the name of the area the player leaves. Options: None, ActionBar, Title, Subtitle")
+	public static String FEEDBACK_AREA_LEAVE_STRING = "ActionBar";
+	@Key("settings.feedback.area-presence")
+	@Comment("Show the name of the area the player is in. Options: None, ActionBar, BossBar")
+	public static String FEEDBACK_AREA_PRESENCE_STRING = "None";
 
 	public static void reload() {
 		CONFIG.reload(Pl3xMarkersCore.getMainDir().resolve("config.yml"), MarkersConfig.class);
+	}
+
+	@Override
+	protected void reload(@NonNull Path path, @NonNull Class<? extends AbstractConfig> clazz) {
+		super.reload(path, clazz);
+		// interpret the enums
+		FEEDBACK_AREA_PRESENCE = Presence.valueOf(FEEDBACK_AREA_PRESENCE_STRING);
+		FEEDBACK_AREA_ENTER = EnterOrLeave.valueOf(FEEDBACK_AREA_ENTER_STRING);
+		FEEDBACK_AREA_LEAVE = EnterOrLeave.valueOf(FEEDBACK_AREA_LEAVE_STRING);
+	}
+
+	public enum EnterOrLeave {
+		None,
+		ActionBar,
+		Title,
+		Subtitle
+	}
+
+	public enum Presence {
+		None,
+		ActionBar,
+		BossBar
 	}
 }

@@ -1,6 +1,13 @@
-﻿Feedback Update
+﻿Feedback Update Part 2
 ---
 
-- Added config options to change the feedback messages ([trassert #11](https://github.com/gjorgdy/Pl3xMarkers/pull/11))
-- Interacting with (clicking on) a portal will show its name in the action bar
-    - The same will now happen when trying to rename a portal to a name it already has
+- Added more feedback types for entering and leaving an area;
+  - None
+  - ActionBar (Default)
+  - Title
+  - Subtitle
+- Added 'persistent feedback' which shows while in an area;
+  - None (Default)
+  - ActionBar
+  - BossBar
+- These new options replace the existing true/false option for the area enter feedback.
