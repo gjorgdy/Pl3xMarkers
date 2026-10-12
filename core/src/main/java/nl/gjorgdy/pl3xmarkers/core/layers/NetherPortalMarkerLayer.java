@@ -20,6 +20,16 @@ public class NetherPortalMarkerLayer extends SimpleMarkerLayer {
     }
 
     @Override
+    public void loadMarker(ISimpleMarker markerEntity) {
+        if (MarkersConfig.NETHER_PORTAL_MARKERS_ONLY_SHOW_NAMED) {
+            if (markerEntity.getName() == null || markerEntity.getName().isEmpty()) {
+                return;
+            }
+        }
+        super.loadMarker(markerEntity);
+    }
+
+    @Override
     public InteractionResult setName(int x, int y, int z, String newName) {
         if (!MarkersConfig.NETHER_PORTAL_MARKERS_RENAME) {
             return InteractionResult.skip();

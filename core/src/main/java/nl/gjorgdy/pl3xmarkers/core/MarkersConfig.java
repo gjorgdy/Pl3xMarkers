@@ -95,6 +95,9 @@ public class MarkersConfig extends AbstractConfig {
 	@Key("marker-settings.nether_portals.always-show-name")
 	@Comment("Always show the name of nether portals on the map")
 	public static boolean NETHER_PORTAL_MARKERS_ALWAYS_SHOW_NAME = true;
+	@Key("marker-settings.nether_portals.only-show-named")
+	@Comment("Only show nether portals if they are named")
+	public static boolean NETHER_PORTAL_MARKERS_ONLY_SHOW_NAMED = false;
 	@Key("marker-settings.nether_portals.priority")
 	@Comment("The priority for nether portal markers, the lower the number the higher it is on the map")
 	public static int NETHER_PORTAL_MARKERS_PRIORITY = 50;
