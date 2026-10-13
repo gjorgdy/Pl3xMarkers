@@ -1,4 +1,5 @@
 ﻿Names on Frames
 ---
 
-- Added naming for End Portals like it exists for Nether Portals 
+- Added naming to End Portal markers
+- Added naming to End Gateway markers

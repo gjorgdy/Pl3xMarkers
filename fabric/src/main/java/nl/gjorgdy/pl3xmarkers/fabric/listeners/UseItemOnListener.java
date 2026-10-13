@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.portal.PortalShape;
 import net.minecraft.world.phys.BlockHitResult;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.layers.EndGatewayMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.EndPortalMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.NetherPortalMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.primitive.SimpleMarkerLayer;
@@ -59,6 +60,18 @@ public class UseItemOnListener implements BlockEvents.UseItemOnCallback {
 				return useEndPortal(level, (ServerPlayer) player, interactionHand, endPortalCenter);
 			}
 		}
+		if (level.getBlockState(blockPos).is(Blocks.END_GATEWAY)) {
+			if (interactionHand == InteractionHand.OFF_HAND) {
+				return null;
+			}
+			if (itemStack.is(Items.NAME_TAG)) {
+				return useNameTagOnEndGateway(level, (ServerPlayer) player, interactionHand, itemStack,
+				                              blockPos
+				);
+			} else {
+				return useEndGateway(level, (ServerPlayer) player, interactionHand, blockPos);
+			}
+		}
 		return null;
 	}
 
@@ -73,6 +86,13 @@ public class UseItemOnListener implements BlockEvents.UseItemOnCallback {
 		var layer = Pl3xMarkersCore.api()
 				.getWorld(level.dimension().identifier().toString())
 				.getLayer(EndPortalMarkerLayer.class, Layers.Keys.END_PORTALS);
+		return useNameTagOnPortal(layer, player, interactionHand, nameTagItem, portalCenter);
+	}
+
+	private InteractionResult useNameTagOnEndGateway(Level level, ServerPlayer player, InteractionHand interactionHand, ItemStack nameTagItem, BlockPos portalCenter) {
+		var layer = Pl3xMarkersCore.api()
+				.getWorld(level.dimension().identifier().toString())
+				.getLayer(EndGatewayMarkerLayer.class, Layers.Keys.END_GATEWAYS);
 		return useNameTagOnPortal(layer, player, interactionHand, nameTagItem, portalCenter);
 	}
 
@@ -110,6 +130,13 @@ public class UseItemOnListener implements BlockEvents.UseItemOnCallback {
 		var layer = Pl3xMarkersCore.api()
 				.getWorld(level.dimension().identifier().toString())
 				.getLayer(EndPortalMarkerLayer.class, Layers.Keys.END_PORTALS);
+		return usePortal(layer, player, interactionHand, portalCenter);
+	}
+
+	private InteractionResult useEndGateway(Level level, ServerPlayer player, InteractionHand interactionHand, BlockPos portalCenter) {
+		var layer = Pl3xMarkersCore.api()
+				.getWorld(level.dimension().identifier().toString())
+				.getLayer(EndGatewayMarkerLayer.class, Layers.Keys.END_GATEWAYS);
 		return usePortal(layer, player, interactionHand, portalCenter);
 	}
 

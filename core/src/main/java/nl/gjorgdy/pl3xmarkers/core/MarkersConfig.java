@@ -159,6 +159,15 @@ public class MarkersConfig extends AbstractConfig {
 	@Key("marker-settings.end_gateways.enabled")
 	@Comment("Enable end gateway markers on the map")
 	public static boolean END_GATEWAY_MARKERS_ENABLED = true;
+	@Key("marker-settings.end_gateways.rename")
+	@Comment("Allow end gateway markers to be renamed using name tags")
+	public static boolean END_GATEWAY_MARKERS_RENAME = true;
+	@Key("marker-settings.end_gateways.always-show-name")
+	@Comment("Always show the name of end gateways on the map")
+	public static boolean END_GATEWAY_MARKERS_ALWAYS_SHOW_NAME = true;
+	@Key("marker-settings.end_gateways.only-show-named")
+	@Comment("Only show end gateways if they are named")
+	public static boolean END_GATEWAY_MARKERS_ONLY_SHOW_NAMED = false;
 	@Key("marker-settings.end_gateways.priority")
 	@Comment("The priority for end gateway markers, the lower the number the higher it is on the map")
 	public static int END_GATEWAY_MARKERS_PRIORITY = 50;
