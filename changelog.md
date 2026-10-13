@@ -1,14 +1,4 @@
-﻿Feedback Update Part 2
+﻿Names on Frames
 ---
 
-- Added an option to only show named Nether Portals.
-- Added more feedback types for entering and leaving an area;
-  - None
-  - ActionBar (Default)
-  - Title
-  - Subtitle
-- Added 'persistent feedback' which shows while in an area;
-  - None (Default)
-  - ActionBar
-  - BossBar
-- These new options replace the existing true/false option for the area enter feedback.
+- Added naming for End Portals like it exists for Nether Portals 

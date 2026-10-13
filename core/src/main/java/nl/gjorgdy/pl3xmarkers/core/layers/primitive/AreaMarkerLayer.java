@@ -24,10 +24,11 @@ import java.util.*;
 
 public class AreaMarkerLayer extends StoredMarkerLayer<IAreaMarker, IAreaMarkerRepository<? extends IAreaMarker>> {
 
-	private final HashMap<String, IBoundary> boundaries = new HashMap<>();
+	private final HashMap<String, IBoundary> boundaries;
 
 	public AreaMarkerLayer(@NotNull World world) {
 		super(Layers.Keys.AREAS, Layers.Labels.AREAS, world, MarkersConfig.AREA_MARKERS_PRIORITY);
+		boundaries = new HashMap<>();
     }
 
     @Override
@@ -38,9 +39,7 @@ public class AreaMarkerLayer extends StoredMarkerLayer<IAreaMarker, IAreaMarkerR
 	@Override
 	public MarkerBuilder<?> createBuilder(IAreaMarker area) {
 		super.removeMarker(area);
-		if (boundaries != null) {
-			boundaries.remove(area.getKey());
-		}
+		boundaries.remove(area.getKey());
 		var points = area.getPoints();
 		if (points == null || points.isEmpty()) {
 			return null;
@@ -52,24 +51,20 @@ public class AreaMarkerLayer extends StoredMarkerLayer<IAreaMarker, IAreaMarkerR
 					.toList();
 			var center = sorted.get(0).middle(sorted.get(1));
 			var radius = (int) Math.round(sorted.get(0).distance(sorted.get(1)) / 2);
-			if (MarkersConfig.FEEDBACK_AREA_ENTER != MarkersConfig.EnterOrLeave.None && MarkersConfig.FEEDBACK_AREA_LEAVE != MarkersConfig.EnterOrLeave.None) {
-				boundaries.put(
-						area.getKey(),
-						new CircleBoundary(center, radius, area)
-				);
-			}
+			boundaries.put(
+					area.getKey(),
+					new CircleBoundary(center, radius, area)
+			);
 			return AreaMarkerBuilder.newAreaMarker(area.getKey(), center, radius)
 					.fill(area.getColor())
 					.stroke(area.getColor());
 		}
 
 		var orderedPoints = ConvexHull.calculate(new ArrayList<>(area.getPoints()));
-		if (MarkersConfig.FEEDBACK_AREA_ENTER != MarkersConfig.EnterOrLeave.None && MarkersConfig.FEEDBACK_AREA_LEAVE != MarkersConfig.EnterOrLeave.None) {
-			boundaries.put(
+		boundaries.put(
 				area.getKey(),
 				new PolygonBoundary(area.getMinCorner(), area.getMaxCorner(), orderedPoints, area)
-			);
-		}
+		);
 		if (!orderedPoints.isEmpty()) {
 			return AreaMarkerBuilder.newAreaMarker(area.getKey(), orderedPoints)
 					.fill(area.getColor())
@@ -97,7 +92,11 @@ public class AreaMarkerLayer extends StoredMarkerLayer<IAreaMarker, IAreaMarkerR
 		var popupBuilder = new StringBuilder();
 		popupBuilder.append(HtmlHelper.sanitize(area.getName()));
 		if (MarkersConfig.AREA_MARKERS_SHOW_SIZE) {
-			var polygonArea = boundaries.get(area.getKey()).size();
+			var boundary = boundaries.get(area.getKey());
+			if (boundary == null) {
+				return popupBuilder.toString();
+			}
+			var polygonArea = boundary.size();
 			var areaFormatted = new DecimalFormat("#.#").format(polygonArea);
 			popupBuilder
 					.append("<br><i>")

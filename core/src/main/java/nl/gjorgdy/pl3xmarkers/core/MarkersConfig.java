@@ -113,6 +113,15 @@ public class MarkersConfig extends AbstractConfig {
 	@Key("marker-settings.end_portals.enabled")
 	@Comment("Enable end portal markers on the map")
 	public static boolean END_PORTAL_MARKERS_ENABLED = true;
+	@Key("marker-settings.end_portals.rename")
+	@Comment("Allow end portal markers to be renamed using name tags")
+	public static boolean END_PORTAL_MARKERS_RENAME = true;
+	@Key("marker-settings.end_portals.always-show-name")
+	@Comment("Always show the name of end portals on the map")
+	public static boolean END_PORTAL_MARKERS_ALWAYS_SHOW_NAME = true;
+	@Key("marker-settings.end_portals.only-show-named")
+	@Comment("Only show end portals if they are named")
+	public static boolean END_PORTAL_MARKERS_ONLY_SHOW_NAMED = false;
 	@Key("marker-settings.end_portals.priority")
 	@Comment("The priority for end portal markers, the lower the number the higher it is on the map")
 	public static int END_PORTAL_MARKERS_PRIORITY = 50;

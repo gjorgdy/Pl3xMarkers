@@ -17,9 +17,12 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.portal.PortalShape;
 import net.minecraft.world.phys.BlockHitResult;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
+import nl.gjorgdy.pl3xmarkers.core.layers.EndPortalMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.layers.NetherPortalMarkerLayer;
+import nl.gjorgdy.pl3xmarkers.core.layers.primitive.SimpleMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.registries.Layers;
 import nl.gjorgdy.pl3xmarkers.fabric.helpers.FeedbackHelper;
+import nl.gjorgdy.pl3xmarkers.fabric.helpers.PortalHelper;
 import nl.gjorgdy.pl3xmarkers.fabric.interfaces.NetherPortalInterface;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -30,29 +33,55 @@ public class UseItemOnListener implements BlockEvents.UseItemOnCallback {
 
 	@Override
 	public @Nullable InteractionResult useItemOn(@NonNull ItemStack itemStack, @NonNull BlockState blockState, @NonNull Level level, @NonNull BlockPos blockPos, @NonNull Player player, @NonNull InteractionHand interactionHand, @NonNull BlockHitResult blockHitResult) {
-		var portalCenter = getPortalCenter(level, blockPos, blockState);
-		if (portalCenter == null) {
-			return null;
+		var netherPortalCenter = getNetherPortalCenter(level, blockPos, blockState);
+		if (netherPortalCenter != null) {
+			if (interactionHand == InteractionHand.OFF_HAND) {
+				return null;
+			}
+			if (itemStack.is(Items.NAME_TAG)) {
+				return useNameTagOnNetherPortal(level, (ServerPlayer) player, interactionHand, itemStack,
+				                                netherPortalCenter
+				);
+			} else {
+				return useNetherPortal(level, (ServerPlayer) player, interactionHand, netherPortalCenter);
+			}
 		}
-		if (interactionHand == InteractionHand.OFF_HAND) {
-			return null;
+		var endPortalCenter = getEndPortalCenter(level, blockPos, blockState);
+		if (endPortalCenter != null) {
+			if (interactionHand == InteractionHand.OFF_HAND) {
+				return null;
+			}
+			if (itemStack.is(Items.NAME_TAG)) {
+				return useNameTagOnEndPortal(level, (ServerPlayer) player, interactionHand, itemStack,
+				                             endPortalCenter
+				);
+			} else {
+				return useEndPortal(level, (ServerPlayer) player, interactionHand, endPortalCenter);
+			}
 		}
-		if (itemStack.is(Items.NAME_TAG)) {
-			return useNameTagOnPortal(level, (ServerPlayer) player, interactionHand, itemStack, portalCenter);
-		} else {
-			return usePortal(level, (ServerPlayer) player, interactionHand, portalCenter);
-		}
+		return null;
 	}
 
-	private InteractionResult useNameTagOnPortal(Level level, ServerPlayer player, InteractionHand interactionHand, ItemStack nameTagItem, BlockPos portalCenter) {
+	private InteractionResult useNameTagOnNetherPortal(Level level, ServerPlayer player, InteractionHand interactionHand, ItemStack nameTagItem, BlockPos portalCenter) {
+		var layer = Pl3xMarkersCore.api()
+				.getWorld(level.dimension().identifier().toString())
+				.getLayer(NetherPortalMarkerLayer.class, Layers.Keys.NETHER_PORTALS);
+		return useNameTagOnPortal(layer, player, interactionHand, nameTagItem, portalCenter);
+	}
+
+	private InteractionResult useNameTagOnEndPortal(Level level, ServerPlayer player, InteractionHand interactionHand, ItemStack nameTagItem, BlockPos portalCenter) {
+		var layer = Pl3xMarkersCore.api()
+				.getWorld(level.dimension().identifier().toString())
+				.getLayer(EndPortalMarkerLayer.class, Layers.Keys.END_PORTALS);
+		return useNameTagOnPortal(layer, player, interactionHand, nameTagItem, portalCenter);
+	}
+
+	private InteractionResult useNameTagOnPortal(SimpleMarkerLayer layer, ServerPlayer player, InteractionHand interactionHand, ItemStack nameTagItem, BlockPos portalCenter) {
 		var customName = nameTagItem.getCustomName();
 		if (customName == null) {
 			return InteractionResult.PASS;
 		}
 		String name = customName.getString();
-		var layer = Pl3xMarkersCore.api()
-				.getWorld(level.dimension().identifier().toString())
-				.getLayer(NetherPortalMarkerLayer.class, Layers.Keys.NETHER_PORTALS);
 		if (layer == null) {
 			return InteractionResult.PASS;
 		}
@@ -70,10 +99,21 @@ public class UseItemOnListener implements BlockEvents.UseItemOnCallback {
 		return InteractionResult.SUCCESS;
 	}
 
-	private InteractionResult usePortal(Level level, ServerPlayer player, InteractionHand interactionHand, BlockPos portalCenter) {
+	private InteractionResult useNetherPortal(Level level, ServerPlayer player, InteractionHand interactionHand, BlockPos portalCenter) {
 		var layer = Pl3xMarkersCore.api()
 				.getWorld(level.dimension().identifier().toString())
 				.getLayer(NetherPortalMarkerLayer.class, Layers.Keys.NETHER_PORTALS);
+		return usePortal(layer, player, interactionHand, portalCenter);
+	}
+
+	private InteractionResult useEndPortal(Level level, ServerPlayer player, InteractionHand interactionHand, BlockPos portalCenter) {
+		var layer = Pl3xMarkersCore.api()
+				.getWorld(level.dimension().identifier().toString())
+				.getLayer(EndPortalMarkerLayer.class, Layers.Keys.END_PORTALS);
+		return usePortal(layer, player, interactionHand, portalCenter);
+	}
+
+	private InteractionResult usePortal(SimpleMarkerLayer layer, ServerPlayer player, InteractionHand interactionHand, BlockPos portalCenter) {
 		if (layer == null) {
 			return InteractionResult.PASS;
 		}
@@ -86,13 +126,20 @@ public class UseItemOnListener implements BlockEvents.UseItemOnCallback {
 	}
 
 	@Nullable
-	private BlockPos getPortalCenter(LevelAccessor level, BlockPos pos, BlockState blockState) {
+	private BlockPos getNetherPortalCenter(LevelAccessor level, BlockPos pos, BlockState blockState) {
 		if (!blockState.is(Blocks.NETHER_PORTAL)) {
 			return null;
 		}
 		Direction.Axis axis = blockState.getValue(BlockStateProperties.HORIZONTAL_AXIS);
 		var portal = (NetherPortalInterface) PortalShape.findAnyShape(level, pos, axis);
 		return portal.pl3xMarkers$getPortalCenter();
+	}
+
+	private BlockPos getEndPortalCenter(LevelAccessor level, BlockPos pos, BlockState blockState) {
+		if (!blockState.is(Blocks.END_PORTAL)) {
+			return null;
+		}
+		return PortalHelper.getEndPortalCenter((Level) level, pos);
 	}
 
 }

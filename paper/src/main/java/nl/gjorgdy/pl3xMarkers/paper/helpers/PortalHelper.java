@@ -41,7 +41,11 @@ public class PortalHelper {
         return null;
     }
 
+    @Nullable
     public static Location getEndPortalCenter(Location location) {
+        if (location.getBlock().getType().asBlockType() != BlockType.END_PORTAL) {
+            return null;
+        }
         // if there is no portal block north, move south
         if (location.clone().add(-1, 0, 0).getBlock().getType().asBlockType() != BlockType.END_PORTAL) {
             location.add(1, 0, 0);
@@ -55,7 +59,6 @@ public class PortalHelper {
             location.add(0, 0, 1);
         }
         // if there is no portal block west, move east
-
         if (location.clone().add(0, 0, 1).getBlock().getType().asBlockType() != BlockType.END_PORTAL) {
             location.add(0, 0, -1);
         }
