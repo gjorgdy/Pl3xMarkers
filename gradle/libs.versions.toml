@@ -6,8 +6,8 @@ fabricLoader = "0.19.5"
 fabricApi = "0.161.0+26.3"
 fabricLoom = "1.17-SNAPSHOT"
 
-pl3xmap = "26.2-551"
-openPartiesAndClaims = "fabric-26.2-0.27.7"
+pl3xmap = "26.3-557"
+openPartiesAndClaims = "fabric-26.3-0.32.8"
 shopkeepers = "2.27.0"
 
 paper = "26.3.build.+"
