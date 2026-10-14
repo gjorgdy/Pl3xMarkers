@@ -4,11 +4,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.protocol.game.ClientboundSoundEntityPacket;
+import net.minecraft.network.protocol.game.*;
+import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Util;
+import net.minecraft.world.BossEvent;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
@@ -50,6 +53,44 @@ public class FeedbackHelper {
 		player.sendOverlayMessage(
 				Component.nullToEmpty(message).toFlatList(Style.EMPTY.withColor(color)).getFirst()
 		);
+	}
+
+	public static void sendTitle(ServerPlayer player, String message, int color) {
+		player.connection.send(new ClientboundSetTitlesAnimationPacket(20, 60, 20));
+		player.connection.send(
+				new ClientboundSetTitleTextPacket(
+						Component.nullToEmpty(message).toFlatList(Style.EMPTY.withColor(color)).getFirst()
+				)
+		);
+	}
+
+	public static void sendSubTitle(ServerPlayer player, String message, int color) {
+		player.connection.send(new ClientboundSetTitlesAnimationPacket(20, 60, 20));
+		player.connection.send(
+				new ClientboundSetTitleTextPacket(Component.empty())
+		);
+		player.connection.send(
+				new ClientboundSetSubtitleTextPacket(
+						Component.nullToEmpty(message).toFlatList(Style.EMPTY.withColor(color)).getFirst()
+				)
+		);
+	}
+
+	public static void showBossBar(ServerPlayer player, String message, int color) {
+		var bossEvent = Util.make(new ServerBossEvent(
+				                          player.getUUID(),
+				                          Component.nullToEmpty(message).toFlatList(Style.EMPTY.withColor(color)).getFirst(),
+				                          BossEvent.BossBarColor.WHITE,
+				                          BossEvent.BossBarOverlay.NOTCHED_6
+		                          ),
+		                          (_) -> {}
+		);
+		bossEvent.setProgress(0.0F);
+		bossEvent.addPlayer(player);
+	}
+
+	public static void hideBossBar(ServerPlayer player) {
+		player.connection.send(ClientboundBossEventPacket.createRemovePacket(player.getUUID()));
 	}
 
 	private static void playDirectSound(ServerPlayer player, SoundEvent soundEvent) {

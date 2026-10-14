@@ -3,6 +3,7 @@ package nl.gjorgdy.pl3xMarkers.paper.listeners;
 import net.kyori.adventure.text.TextComponent;
 import nl.gjorgdy.pl3xMarkers.paper.helpers.FeedbackHelper;
 import nl.gjorgdy.pl3xMarkers.paper.helpers.PortalHelper;
+import nl.gjorgdy.pl3xmarkers.core.MarkersConfig;
 import nl.gjorgdy.pl3xmarkers.core.Pl3xMarkersCore;
 import nl.gjorgdy.pl3xmarkers.core.layers.NetherPortalMarkerLayer;
 import nl.gjorgdy.pl3xmarkers.core.objects.InteractionResult;
@@ -18,6 +19,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.jspecify.annotations.Nullable;
 
 public class NetherPortalListener implements Listener {
@@ -31,7 +33,7 @@ public class NetherPortalListener implements Listener {
 
     @EventHandler
     public void onUseNametag(PlayerInteractEvent event) {
-        if (event.getClickedBlock() == null) {
+        if (event.getClickedBlock() == null || event.getHand() == EquipmentSlot.OFF_HAND || !MarkersConfig.NETHER_PORTAL_MARKERS_RENAME) {
             return;
         }
         if (event.getClickedBlock().getType().equals(Material.NETHER_PORTAL)) {
